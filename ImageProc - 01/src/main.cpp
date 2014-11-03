@@ -35,7 +35,7 @@ CMatrix<float> addGausNoise(CMatrix<float> matrix, int factor) {
 	return matrix;
 }
 
-int main(int argc, char** args) {
+void main1() {
 	// Define image
 	CMatrix<float> aImage;
 
@@ -55,6 +55,23 @@ int main(int argc, char** args) {
 
 	// Write noisy image to PGM file
 	aImage.writeToPGM("lena-noisy.pgm");
+}
+
+void main2() {
+	// Define image
+	CMatrix<float> aImage;
+
+	// Read image from a PGM file
+	aImage.readFromPGM("4x4.pgm");
+
+
+	cout
+}
+
+int main(int argc, char** args) {
+	//main1();
+
+	main2();
 
 	return 0;
 }
