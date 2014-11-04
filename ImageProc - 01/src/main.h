@@ -18,6 +18,8 @@ int mainPSNR();
 
 int mainFilterBox();
 
+int mainFilterGaus();
+
 int main50Img();
 
 CMatrix<float> addGausNoise(CMatrix<float> matrix, int factor);
