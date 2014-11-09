@@ -20,6 +20,8 @@ int mainFilterBox();
 
 int mainFilterGaus();
 
+int mainFilterRecursive();
+
 int main50Img();
 
 CMatrix<float> addGausNoise(CMatrix<float> matrix, int factor);

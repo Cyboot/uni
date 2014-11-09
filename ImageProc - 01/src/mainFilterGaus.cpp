@@ -10,26 +10,52 @@ float gaus(float x, float sigma) {
 }
 
 CMatrix<float> computerFilterXGaus(CMatrix<float> img, int factor) {
+	const int FACTOR_DELTA = 5;
+
 	CMatrix<float> result = img;
 
 	for (int y = 0; y < img.ySize(); ++y) {
 		for (int x = 0; x < img.xSize(); ++x) {
 
 			float weightAVG = 0;
-			for (int dx = -factor*3; dx <= factor*3; dx++) {
-				int index = x + dx;
+			float sumAVG = 0;
+			for (int dx = -factor * FACTOR_DELTA; dx <= factor * FACTOR_DELTA;
+					dx++) {
+				int indexX = x + dx;
 
 				//Neumann Boundary cond --> mirror
-				if (index < 0)
-					index = -index;
-				if (index > img.xSize())
-					index = img.xSize() * 2 - index;
+				if (indexX < 0)
+					indexX = -indexX - 1;
+				if (indexX >= img.xSize())
+					indexX = img.xSize() * 2 - indexX - 1;
 
-				weightAVG += (img(index, y) / 255.0) * gaus(dx, factor);
+				for (int dy = -factor * FACTOR_DELTA;
+						dy <= factor * FACTOR_DELTA; dy++) {
+					int indexY = y + dy;
+
+					//Neumann Boundary cond --> mirror
+					if (indexY < 0)
+						indexY = -indexY - 1;
+					if (indexY >= img.ySize())
+						indexY = img.ySize() * 2 - indexY - 1;
+
+					float color = img(indexX, indexY);
+					float gausWeight = gaus(sqrt(dx * dx + dy * dy), factor);
+					sumAVG += gausWeight;
+
+					weightAVG += (color / 255.0) * gausWeight;
+				}
 			}
 
 			//set pixel to avg of surrounding pixel
-			result(x, y) = weightAVG * 255;
+			result(x, y) = weightAVG / sumAVG * 255;
+			if (result(x, y) < 0)
+				result(x, y) = 0;
+			if (result(x, y) > 255)
+				result(x, y) = 255;
+
+//			cout << x << ":" << y << " = " << img(x, y) << " >> "
+//					<< result(x, y) << endl;
 		}
 	}
 
@@ -43,16 +69,16 @@ CMatrix<float> computerFilterYGaus(CMatrix<float> img, int factor) {
 		for (int y = 0; y < img.ySize(); ++y) {
 
 			float weightAVG = 0;
-			for (int dy = -factor*3; dy <= factor*3; dy++) {
-				int index = y + dy;
+			for (int dy = -factor * 3; dy <= factor * 3; dy++) {
+				int indexY = y + dy;
 
 				//Neumann Boundary cond --> mirror
-				if (index < 0)
-					index = -index;
-				if (index > img.ySize())
-					index = img.ySize() * 2 - index;
+				if (indexY < 0)
+					indexY = -indexY;
+				if (indexY > img.ySize())
+					indexY = img.ySize() * 2 - indexY;
 
-				weightAVG += (img(x, index) / 255.0) * gaus(dy, factor);
+				weightAVG += (img(x, indexY) / 255.0) * gaus(dy, factor);
 			}
 
 			//set pixel to avg of surrounding pixel
@@ -65,12 +91,12 @@ CMatrix<float> computerFilterYGaus(CMatrix<float> img, int factor) {
 
 int mainFilterGaus() {
 	CMatrix<float> orignImage, filterImage;
-	orignImage.readFromPGM("chinaToilet.pgm");
+	orignImage.readFromPGM("small.pgm");
 
-	filterImage = computerFilterXGaus(orignImage, 1);
-	filterImage = computerFilterYGaus(filterImage, 1);
+	filterImage = computerFilterXGaus(orignImage, 3);
+//	filterImage = computerFilterYGaus(filterImage, 1);
 
-	filterImage.writeToPGM("chinaToilet-gausfilter.pgm");
+	filterImage.writeToPGM("gaus-result.pgm");
 
 	cout << "Gaus-Filter finish!" << endl;
 

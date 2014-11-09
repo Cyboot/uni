@@ -3,7 +3,8 @@
 int main(int argc, char** args) {
 //	return main50Img();
 
-	return mainFilterGaus();
+	return mainFilterRecursive();
+//	return mainFilterGaus();
 
 //	return mainPSNR();
 //	return mainNoise();
