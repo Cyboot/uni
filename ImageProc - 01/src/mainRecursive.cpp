@@ -126,7 +126,7 @@ int mainFilterRecursive() {
 	CMatrix<float> originImage, noisyImage;
 	originImage.readFromPGM("lena.pgm");
 
-	noisyImage = filterRecursive(originImage, 0.5f);
+	noisyImage = filterRecursive(originImage, 2);
 
 	noisyImage.writeToPGM("small-recursive.pgm");
 
