@@ -32,8 +32,8 @@ CMatrix<float> lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 	CMatrix<float> iy = deriveY(img0);
 	CMatrix<float> it = deriveT(img0, img1);
 
-	for (int x = 1; x < img0.xSize(); ++x) {
-		for (int y = 1; y < img0.ySize(); ++y) {
+	for (int y = 0; y < img0.ySize(); ++y) {
+		for (int x = 0; x < img0.xSize(); ++x) {
 			float u = 0;
 
 			float sum_xt = 0;
@@ -43,7 +43,7 @@ CMatrix<float> lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 			float sum_x2 = 0;
 
 			//left and right from Pixel
-			for (int dx = -1; dx <= 1; ++dx) {
+			for (int dx = -2; dx <= 2; ++dx) {
 				int xIndex = indexX(ix, x + dx);
 
 				float derv_X = ix(xIndex, y);
@@ -59,7 +59,7 @@ CMatrix<float> lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 			}
 
 			//up and down from Pixel
-			for (int dy = -1; dy <= 1; ++dy) {
+			for (int dy = -2; dy <= 2; ++dy) {
 				int yIndex = indexY(iy, y + dy);
 
 				float derv_X = ix(x, yIndex);
@@ -74,33 +74,45 @@ CMatrix<float> lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 				sum_xy += derv_X * derv_Y;
 			}
 
-			sum_xt /= 3 * 3;
-			sum_yt /= 3 * 3;
-			sum_xy /= 3 * 3;
-			sum_y2 /= 3 * 3;
-			sum_x2 /= 3 * 3;
+			sum_xt /= 5 + 5;
+			sum_yt /= 5 + 5;
+			sum_xy /= 5 + 5;
+			sum_y2 /= 5 + 5;
+			sum_x2 /= 5 + 5;
 
-			float zaehler = sum_xt + (sum_yt * sum_xt / sum_y2);
-			float nenner = (sum_xy * sum_xy / sum_y2) + sum_x2;
+//			float zaehler = sum_xt + (sum_yt * sum_xt / sum_y2);
+//			float nenner = (sum_xy * sum_xy / sum_y2) + sum_x2;
 
-			u = zaehler / nenner;
+			float alpha = 1 / (sum_x2 * sum_y2 - sum_xy * sum_xy);
 
-			resultX(x, y) = u;
+			float first = alpha * sum_y2 * sum_xt;
+			float second = alpha * (-sum_xy) * sum_yt;
+			u = first + second;
 
-//			cout << x << ":" << y << "  =>  " << u << endl;
+//			u = zaehler / nenner;
+
+			if (isnan(u)) {
+//				cout << "Big u: " << u << endl;
+				u = 0;
+			}
+
+			u = -u;
+
+			resultX(x, y) = u * 127;
+			cout << x << ":" << y << "  =>  " << u << endl;
 		}
-		resultX = normalize(resultX);
-		resultX.writeToPGM("img/moveX.pgm");
 	}
+	resultX = normalize(resultX);
+	resultX.writeToPGM("img/moveX.pgm");
 
 }
 
 void mainLucasKanade() {
 	CMatrix<float> img0, img1;
-	img0.readFromPGM("img/img0.pgm");
-	img1.readFromPGM("img/img1.pgm");
-//	img0.readFromPGM("img/cropped-street_000009.pgm");
-//	img1.readFromPGM("img/cropped-street_000010.pgm");
+//	img0.readFromPGM("img/img0.pgm");
+//	img1.readFromPGM("img/img1.pgm");
+	img0.readFromPGM("img/cropped-street_000009.pgm");
+	img1.readFromPGM("img/cropped-street_000010.pgm");
 
 // Test: diffence between Images (in Time)
 //	normalize(deriveT(img0,img1)).writeToPGM("img/diff.pgm");
