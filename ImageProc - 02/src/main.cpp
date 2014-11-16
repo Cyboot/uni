@@ -1,14 +1,23 @@
 #include "main.h"
-
+#include <sys/time.h>
 
 int main(int argc, char** args) {
-//	mainDerive();
+	clock_t t1 = clock();
+
+	//	mainDerive();
 	mainLucasKanade();
 
+	clock_t t2 = clock();
+
+	long millis = (t2 - t1) * (1000.0 / CLOCKS_PER_SEC);
+	cout << "took " << millis << " ms" << endl;
 
 	return 0;
 }
 
+// ######################################################################################
+// #######################     Utility Funktionen     ###################################
+// ######################################################################################
 
 /** Neumann Boundary Condition in X */
 int indexX(CMatrix<float> img, int indexX) {
