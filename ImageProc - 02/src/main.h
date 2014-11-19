@@ -25,4 +25,8 @@ int indexX(CMatrix<float> img, int indexX);
 
 /** Neumann Boundary Condition in Y */
 int indexY(CMatrix<float> img, int indexY);
+
+
+float gaus(float x, float sigma);
+
 #endif /* MAIN_H_ */

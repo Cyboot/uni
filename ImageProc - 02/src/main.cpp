@@ -19,6 +19,13 @@ int main(int argc, char** args) {
 // #######################     Utility Funktionen     ###################################
 // ######################################################################################
 
+float gaus(float x, float sigma) {
+	float base = 1 / (sigma * sqrt(2 * M_PI));
+	float exponent = -x * x / (2 * sigma * sigma);
+
+	return base * exp(exponent);
+}
+
 /** Neumann Boundary Condition in X */
 int indexX(CMatrix<float> img, int indexX) {
 	if (indexX < 0)
