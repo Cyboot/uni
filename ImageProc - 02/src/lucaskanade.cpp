@@ -29,8 +29,11 @@ void lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 	CMatrix<float> resultX(img0.xSize(), img0.ySize());
 
 	CMatrix<float> ix = deriveX(img0);
+	ix.writeToPGM("img/ix.pgm");
 	CMatrix<float> iy = deriveY(img0);
+	iy.writeToPGM("img/iy.pgm");
 	CMatrix<float> it = deriveT(img0, img1);
+	it.writeToPGM("img/it.pgm");
 
 	for (int y = 0; y < img0.ySize(); ++y) {
 		for (int x = 0; x < img0.xSize(); ++x) {
@@ -44,7 +47,7 @@ void lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 			float sum_y2 = 0;
 			float sum_x2 = 0;
 
-			int factor = 3;
+			int factor = 1;
 
 			//up and down from Pixel
 			for (int dy = -factor; dy <= factor; ++dy) {
@@ -54,6 +57,7 @@ void lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 					int xIndex = indexX(ix, x + dx);
 
 					float gausWeight = gaus(sqrt(dx * dx + dy * dy), 2);
+					gausWeight = 1;
 					gaus_sum += gausWeight;
 
 					float derv_X = ix(xIndex, yIndex);
@@ -75,27 +79,25 @@ void lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 //			sum_y2 /= pow(2 * factor + 1, 2) * gaus_sum;
 //			sum_x2 /= pow(2 * factor + 1, 2) * gaus_sum;
 
-			// equation from Tutor 2
-//			float zaehler = sum_xt + (sum_yt * sum_xt / sum_y2);
-//			float nenner = (sum_xy * sum_xy / sum_y2) + sum_x2;
-//			u = zaehler / nenner;
-
 // equation with inverse matrix
 			float alpha = 1 / (sum_x2 * sum_y2 - sum_xy * sum_xy);
 			float first = alpha * sum_y2 * sum_xt;
 			float second = alpha * (-sum_xy) * sum_yt;
 			u = first + second;
 
+//			cout << x << ":" << y << "  =>  " << u << endl;
+			if (x == 1 && y == 1) {
+			}
+
 			if (isnan(u)) {
 				u = 0;
 			}
 
-			u = -u;
+//			u = -u;
 
 			resultX(x, y) = u * 127;
-			cout << x << ":" << y << "  =>  " << u << endl;
 		}
-		cout << y << "/" << img0.ySize() << endl;
+//		cout << y << "/" << img0.ySize() << endl;
 	}
 	resultX = normalize(resultX);
 	resultX.writeToPGM("img/moveX.pgm");
@@ -104,13 +106,13 @@ void lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 
 void mainLucasKanade() {
 	CMatrix<float> img0, img1;
-	img0.readFromPGM("img/bigW0.pgm");
-	img1.readFromPGM("img/bigW1.pgm");
+	img0.readFromPGM("img/grad0.pgm");
+	img1.readFromPGM("img/grad1.pgm");
 //	img0.readFromPGM("img/cropped-street_000009.pgm");
 //	img1.readFromPGM("img/cropped-street_000010.pgm");
 
 // Test: diffence between Images (in Time)
-	normalize(deriveT(img0,img1)).writeToPGM("img/diff.pgm");
+	normalize(deriveT(img0, img1)).writeToPGM("img/diff.pgm");
 
 	lucasKanade(img0, img1);
 

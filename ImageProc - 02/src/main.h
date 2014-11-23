@@ -16,7 +16,9 @@
 using namespace std;
 
 void mainDerive();
+void mainDenoise();
 void mainLucasKanade();
+void mainHornSchunk();
 
 CMatrix<float> normalize(CMatrix<float> img);
 
