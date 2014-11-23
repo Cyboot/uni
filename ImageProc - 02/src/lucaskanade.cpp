@@ -47,7 +47,7 @@ void lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 			float sum_y2 = 0;
 			float sum_x2 = 0;
 
-			int factor = 1;
+			int factor = 5;
 
 			//up and down from Pixel
 			for (int dy = -factor; dy <= factor; ++dy) {
@@ -57,7 +57,6 @@ void lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 					int xIndex = indexX(ix, x + dx);
 
 					float gausWeight = gaus(sqrt(dx * dx + dy * dy), 2);
-					gausWeight = 1;
 					gaus_sum += gausWeight;
 
 					float derv_X = ix(xIndex, yIndex);
@@ -93,11 +92,11 @@ void lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 				u = 0;
 			}
 
-//			u = -u;
+			u = -u;
 
 			resultX(x, y) = u * 127;
 		}
-//		cout << y << "/" << img0.ySize() << endl;
+		cout << y << "/" << img0.ySize() << endl;
 	}
 	resultX = normalize(resultX);
 	resultX.writeToPGM("img/moveX.pgm");
@@ -106,8 +105,8 @@ void lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 
 void mainLucasKanade() {
 	CMatrix<float> img0, img1;
-	img0.readFromPGM("img/grad0.pgm");
-	img1.readFromPGM("img/grad1.pgm");
+	img0.readFromPGM("img/car0.pgm");
+	img1.readFromPGM("img/car1.pgm");
 //	img0.readFromPGM("img/cropped-street_000009.pgm");
 //	img1.readFromPGM("img/cropped-street_000010.pgm");
 
