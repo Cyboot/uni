@@ -3,7 +3,7 @@
 float omega = 1.95;
 float alpha = 5000;
 
-float calcU(CMatrix<float> ix, CMatrix<float> iy, CMatrix<float> it, float* u, float* v, int x,
+float calcU(const CMatrix<float>& ix, const CMatrix<float>& iy, const CMatrix<float>& it,const  float* u,const  float* v, int x,
 		int y) {
 	float left = 0, right = 0, up = 0, down = 0;
 
@@ -47,7 +47,7 @@ float calcU(CMatrix<float> ix, CMatrix<float> iy, CMatrix<float> it, float* u, f
 	return (1 - omega) * valueBefore + omega * valueNow;
 }
 
-float calcV(CMatrix<float> ix, CMatrix<float> iy, CMatrix<float> it, float* u, float* v, int x,
+float calcV(const CMatrix<float>& ix, const CMatrix<float>& iy, const CMatrix<float>& it,const  float* u,const  float* v, int x,
 		int y) {
 	float left = 0, right = 0, up = 0, down = 0;
 
@@ -95,10 +95,10 @@ void mainHornSchunk() {
 	CMatrix<float> img0, img1;
 //	img0.readFromPGM("img/big0.pgm");
 //	img1.readFromPGM("img/big1.pgm");
-//	img0.readFromPGM("img/car0.pgm");
-//	img1.readFromPGM("img/car1.pgm");
-	img0.readFromPGM("img/cropped-street_000009.pgm");
-	img1.readFromPGM("img/cropped-street_000010.pgm");
+	img0.readFromPGM("img/car0.pgm");
+	img1.readFromPGM("img/car1.pgm");
+//	img0.readFromPGM("img/cropped-street_000009.pgm");
+//	img1.readFromPGM("img/cropped-street_000010.pgm");
 	img0.readFromPGM("img/yos008.pgm");
 	img1.readFromPGM("img/yos009.pgm");
 
@@ -107,8 +107,8 @@ void mainHornSchunk() {
 	iy = deriveY(img0);
 	it = deriveT(img0, img1);
 
-	float u[img0.xSize() * img0.ySize()];
-	float v[img0.xSize() * img0.ySize()];
+	float* u = new float[img0.xSize() * img0.ySize()];
+	float* v = new float[img0.xSize() * img0.ySize()];
 	for (int i = 0; i < img0.xSize() * img0.ySize(); ++i) {
 		u[i] = 0;
 		v[i] = 0;
