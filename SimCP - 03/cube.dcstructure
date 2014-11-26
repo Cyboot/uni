@@ -1,0 +1,75 @@
+//
+// DefCol Studio structure file
+// cube_2.dcstructure
+//
+
+structure {
+  vertex 0.0000 0.0000 0.0000
+  vertex 0.5000 0.0000 0.0000
+  vertex 1.0000 0.0000 0.0000
+  vertex 0.0000 0.5000 0.0000
+  vertex 0.5000 0.5000 0.0000
+  vertex 1.0000 0.5000 0.0000
+  vertex 0.0000 1.0000 0.0000
+  vertex 0.5000 1.0000 0.0000
+  vertex 1.0000 1.0000 0.0000
+  vertex 0.0000 0.0000 0.5000
+  vertex 0.5000 0.0000 0.5000
+  vertex 1.0000 0.0000 0.5000
+  vertex 0.0000 0.5000 0.5000
+  vertex 0.5000 0.5000 0.5000
+  vertex 1.0000 0.5000 0.5000
+  vertex 0.0000 1.0000 0.5000
+  vertex 0.5000 1.0000 0.5000
+  vertex 1.0000 1.0000 0.5000
+  vertex 0.0000 0.0000 1.0000
+  vertex 0.5000 0.0000 1.0000
+  vertex 1.0000 0.0000 1.0000
+  vertex 0.0000 0.5000 1.0000
+  vertex 0.5000 0.5000 1.0000
+  vertex 1.0000 0.5000 1.0000
+  vertex 0.0000 1.0000 1.0000
+  vertex 0.5000 1.0000 1.0000
+  vertex 1.0000 1.0000 1.0000
+
+  tetra 0 4 1 10
+  tetra 4 0 3 12
+  tetra 12 10 4 0
+  tetra 10 12 4 13
+  tetra 10 12 9 0
+  tetra 2 4 10 1
+  tetra 4 2 14 5
+  tetra 14 10 2 4
+  tetra 10 14 13 4
+  tetra 10 14 2 11
+  tetra 6 4 16 7
+  tetra 4 6 12 3
+  tetra 12 16 6 4
+  tetra 16 12 13 4
+  tetra 16 12 6 15
+  tetra 8 4 7 16
+  tetra 4 8 5 14
+  tetra 14 16 4 8
+  tetra 16 14 4 13
+  tetra 16 14 17 8
+  tetra 18 22 10 19
+  tetra 22 18 12 21
+  tetra 12 10 18 22
+  tetra 10 12 13 22
+  tetra 10 12 18 9
+  tetra 20 22 19 10
+  tetra 22 20 23 14
+  tetra 14 10 22 20
+  tetra 10 14 22 13
+  tetra 10 14 11 20
+  tetra 24 22 25 16
+  tetra 22 24 21 12
+  tetra 12 16 22 24
+  tetra 16 12 22 13
+  tetra 16 12 15 24
+  tetra 26 22 16 25
+  tetra 22 26 14 23
+  tetra 14 16 26 22
+  tetra 16 14 13 22
+  tetra 16 14 26 17
+}
