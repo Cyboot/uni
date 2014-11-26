@@ -47,7 +47,7 @@ void lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 			float sum_y2 = 0;
 			float sum_x2 = 0;
 
-			int factor = 5;
+			int factor = 4;
 
 			//up and down from Pixel
 			for (int dy = -factor; dy <= factor; ++dy) {
@@ -105,10 +105,10 @@ void lucasKanade(CMatrix<float> img0, CMatrix<float> img1) {
 
 void mainLucasKanade() {
 	CMatrix<float> img0, img1;
-	img0.readFromPGM("img/car0.pgm");
-	img1.readFromPGM("img/car1.pgm");
-//	img0.readFromPGM("img/cropped-street_000009.pgm");
-//	img1.readFromPGM("img/cropped-street_000010.pgm");
+//	img0.readFromPGM("img/car0.pgm");
+//	img1.readFromPGM("img/car1.pgm");
+	img0.readFromPGM("img/cropped-street_000009.pgm");
+	img1.readFromPGM("img/cropped-street_000010.pgm");
 
 // Test: diffence between Images (in Time)
 	normalize(deriveT(img0, img1)).writeToPGM("img/diff.pgm");
