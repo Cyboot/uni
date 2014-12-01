@@ -1,7 +1,7 @@
 #include "main.h"
 
 float omega = 1.95;
-float alpha = 5000;
+float alpha = 1000;
 
 float calcU(const CMatrix<float>& ix, const CMatrix<float>& iy, const CMatrix<float>& it,const  float* u,const  float* v, int x,
 		int y) {
@@ -97,10 +97,10 @@ void mainHornSchunk() {
 //	img1.readFromPGM("img/big1.pgm");
 	img0.readFromPGM("img/car0.pgm");
 	img1.readFromPGM("img/car1.pgm");
-//	img0.readFromPGM("img/cropped-street_000009.pgm");
-//	img1.readFromPGM("img/cropped-street_000010.pgm");
-	img0.readFromPGM("img/yos008.pgm");
-	img1.readFromPGM("img/yos009.pgm");
+	img0.readFromPGM("img/cropped-street_000009.pgm");
+	img1.readFromPGM("img/cropped-street_000010.pgm");
+//	img0.readFromPGM("img/yos008.pgm");
+//	img1.readFromPGM("img/yos009.pgm");
 
 	CMatrix<float> ix, iy, it;
 	ix = deriveX(img0);
@@ -114,7 +114,7 @@ void mainHornSchunk() {
 		v[i] = 0;
 	}
 
-	for (int iteration = 0; iteration < 5; ++iteration) {
+	for (int iteration = 0; iteration < 6; ++iteration) {
 
 		for (int y = 0; y < img0.ySize(); ++y) {
 			for (int x = 0; x < img0.xSize(); ++x) {

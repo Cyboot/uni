@@ -5,9 +5,9 @@ int main(int argc, char** args) {
 	clock_t t1 = clock();
 
 	//	mainDerive();
-//	mainLucasKanade();
+	mainLucasKanade();
 //	mainDenoise();
-	mainHornSchunk();
+//	mainHornSchunk();
 
 	clock_t t2 = clock();
 

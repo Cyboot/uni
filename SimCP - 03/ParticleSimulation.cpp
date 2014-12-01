@@ -19,7 +19,7 @@ const DclFloat  TIMESTEP = 0.002;
 // Elasticity of collision with walls
 const DclFloat  WORLD_ELASTICITY = 1.0;
 
-const DclFloat  SPRING_CONSTANT = 10000.0;
+const DclFloat  SPRING_CONSTANT = 1000.0;
 const DclFloat  SPRING_DAMPING_CONSTANT = 1.0;
 
 const Integration INTEGRATION = RungeKutta4;
@@ -109,7 +109,15 @@ void  addForces(Particle& particle)
 
 void  addSpringForces(Mesh& m, Spring& spring)
 {
-  Particle& particle1 = m.vectorParticles[spring.p1], &particle2 = m.vectorParticles[spring.p2];
+	Particle& particle1 = m.vectorParticles[spring.p1];
+	Particle& particle2 = m.vectorParticles[spring.p2];
+
+	DclVector direction = particle1.position - particle2.position;
+	double lengthDiff = direction.length() - spring.initialLength;
+	direction.normalize();
+
+	particle1.force -= direction * lengthDiff * SPRING_CONSTANT;
+	particle2.force += direction * lengthDiff * SPRING_CONSTANT;
 
   // TODO: Compute spring force
   //particle1.force -= ...
