@@ -7,7 +7,9 @@ int main(int argc, char** args) {
 	//	mainDerive();
 //	mainLucasKanade();
 //	mainDenoise();
-	mainHornSchunk();
+//	mainHornSchunk();
+
+	mainSolution();
 
 	clock_t t2 = clock();
 

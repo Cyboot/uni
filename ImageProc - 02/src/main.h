@@ -19,6 +19,7 @@ void mainDerive();
 void mainDenoise();
 void mainLucasKanade();
 void mainHornSchunk();
+int mainSolution();
 
 CMatrix<float> normalize(CMatrix<float> img);
 
