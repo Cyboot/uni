@@ -1,0 +1,8 @@
+Links
+	http://www.w3.org/TR/owl2-syntax/#Class_Expressions
+	
+	
+Paper:
+	W3C OWL 2 Web Ontology Language http://www.w3.org/TR/owl2-syntax/#Class_Expressions
+	Manchester Syntax for OWL 1.1 http://ceur-ws.org/Vol-496/owled2008dc_paper_11.pdf
+	Refinement operator http://ftp.cs.wisc.edu/machine-learning/shavlik-group/ilp07wip/ilp07_lehmann-a.pdf

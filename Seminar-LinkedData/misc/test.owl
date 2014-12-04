@@ -1,0 +1,275 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY test "http://www.timweb.de/owl/test.owl#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.timweb.de/owl/test.owl#"
+     xml:base="http://www.timweb.de/owl/test.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:test="http://www.timweb.de/owl/test.owl#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://www.timweb.de/owl/test.owl"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#studies -->
+
+    <owl:ObjectProperty rdf:about="&test;studies">
+        <rdfs:range rdf:resource="&test;Module"/>
+        <rdfs:domain rdf:resource="&test;Student"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#teaches -->
+
+    <owl:ObjectProperty rdf:about="&test;teaches">
+        <rdfs:domain rdf:resource="&test;Lecturer"/>
+        <rdfs:range rdf:resource="&test;Module"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#first_name -->
+
+    <owl:DatatypeProperty rdf:about="&test;first_name">
+        <rdfs:domain rdf:resource="&test;Person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#last_name -->
+
+    <owl:DatatypeProperty rdf:about="&test;last_name">
+        <rdfs:domain rdf:resource="&test;Person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#staffID -->
+
+    <owl:DatatypeProperty rdf:about="&test;staffID">
+        <rdfs:domain rdf:resource="&test;Lecturer"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#studentID -->
+
+    <owl:DatatypeProperty rdf:about="&test;studentID">
+        <rdfs:domain rdf:resource="&test;Student"/>
+        <rdfs:range rdf:resource="&xsd;integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#CSModul -->
+
+    <owl:Class rdf:about="&test;CSModul">
+        <rdfs:subClassOf rdf:resource="&test;Module"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#FullStudent -->
+
+    <owl:Class rdf:about="&test;FullStudent">
+        <rdfs:subClassOf rdf:resource="&test;Student"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#HalfStudent -->
+
+    <owl:Class rdf:about="&test;HalfStudent">
+        <rdfs:subClassOf rdf:resource="&test;Student"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#Lecturer -->
+
+    <owl:Class rdf:about="&test;Lecturer">
+        <rdfs:subClassOf rdf:resource="&test;Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#MathModule -->
+
+    <owl:Class rdf:about="&test;MathModule">
+        <rdfs:subClassOf rdf:resource="&test;Module"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#Module -->
+
+    <owl:Class rdf:about="&test;Module"/>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#Person -->
+
+    <owl:Class rdf:about="&test;Person"/>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#Student -->
+
+    <owl:Class rdf:about="&test;Student">
+        <rdfs:subClassOf rdf:resource="&test;Person"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#CS101 -->
+
+    <owl:NamedIndividual rdf:about="&test;CS101">
+        <rdf:type rdf:resource="&test;CSModul"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#CS103 -->
+
+    <owl:NamedIndividual rdf:about="&test;CS103">
+        <rdf:type rdf:resource="&test;CSModul"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#Lecturer1 -->
+
+    <owl:NamedIndividual rdf:about="&test;Lecturer1">
+        <rdf:type rdf:resource="&test;Lecturer"/>
+        <staffID rdf:datatype="&xsd;integer">123456</staffID>
+        <first_name rdf:datatype="&xsd;string">Larisa</first_name>
+        <last_name rdf:datatype="&xsd;string">Lastname</last_name>
+        <teaches rdf:resource="&test;CS103"/>
+        <teaches rdf:resource="&test;M201"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#Lecturer2 -->
+
+    <owl:NamedIndividual rdf:about="&test;Lecturer2">
+        <rdf:type rdf:resource="&test;Lecturer"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#M201 -->
+
+    <owl:NamedIndividual rdf:about="&test;M201">
+        <rdf:type rdf:resource="&test;MathModule"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#M204 -->
+
+    <owl:NamedIndividual rdf:about="&test;M204">
+        <rdf:type rdf:resource="&test;MathModule"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#STudent2 -->
+
+    <owl:NamedIndividual rdf:about="&test;STudent2">
+        <rdf:type rdf:resource="&test;Student"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.timweb.de/owl/test.owl#Student1 -->
+
+    <owl:NamedIndividual rdf:about="&test;Student1">
+        <rdf:type rdf:resource="&test;Student"/>
+        <studies rdf:resource="&test;CS103"/>
+        <studies rdf:resource="&test;M204"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="&test;CSModul"/>
+            <rdf:Description rdf:about="&test;Lecturer"/>
+            <rdf:Description rdf:about="&test;MathModule"/>
+            <rdf:Description rdf:about="&test;Student"/>
+        </owl:members>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+

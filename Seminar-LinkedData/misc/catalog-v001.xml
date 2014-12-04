@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base="">
+        <uri id="Automatically generated entry, Timestamp=1417471452558" name="duplicate:http://www.co-ode.org/ontologies/pizza/2005/10/18/pizza.owl" uri="pizza.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1417471452558" name="duplicate:http://www.co-ode.org/ontologies/pizza/2005/10/18/pizza.owl" uri="pizza2.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1417471452558" name="http://www.co-ode.org/roberts/family-tree.owl" uri="family.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1417471452558" name="http://www.timweb.de/owl/test.owl" uri="test.owl"/>
+    </group>
+</catalog>
