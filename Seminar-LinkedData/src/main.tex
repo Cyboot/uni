@@ -28,6 +28,7 @@ knowlege base.\cite{paper2}
 
 \begin{figure*}
 \centering
+\label{venn}
 \epsfig{file=img/venn.png, width = 14 cm}
 \caption{recall precision}
 \end{figure*}
@@ -256,11 +257,9 @@ SELECT ?p (COUNT(*) AS ?count ) WHERE {
 %=====================================================================================
 \section{Heuristics}
 % Paper 1
-\subsection{Finding the right Heuristic}
-
-
 \begin{table*}[ht]
 \centering
+\label{table-heuristic}
 \caption{Heuristics}
 \begin{tabular}{p{3.5 cm} p{3.5 cm} p{2 cm} p{2 cm} p{2 cm} p{2 cm}} \hline
 \textbf{Illustration} & \textbf{accuracy \& recall} & \textbf{pred. acc.} &
@@ -270,31 +269,75 @@ SELECT ?p (COUNT(*) AS ?count ) WHERE {
 \raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img1.png}}
 & 
 \begin{tabular}{l l}accuracy& 0\%\\\\ recall & 0\%\end{tabular}
-& 0 \% & 0 \% & 0 \% & 0 \% \\ \hline 
+& 80 \% & 0 \% & 0 \% & 0 \% \\ \hline 
 
 \raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img2.png}}
 &
 \begin{tabular}{l l}accuracy& 50\%\\\\ recall & 100\%\end{tabular}
-& 0 \% & 0 \% & 0 \% & 0 \% \\ \hline 
+& 90 \% & 66.7 \% & 75 \% & 50 \% \\ \hline 
 
 \raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img3.png}}
 & 
 \begin{tabular}{l l}accuracy& 16.7\%\\\\ recall & 100\%\end{tabular}
-& 0 \% & 0 \% & 0 \% & 0 \% \\ \hline 
+& 50 \% & 28.6 \% & 58.3 \% & 16.7 \% \\ \hline 
 
 
 \raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img4.png}}
 & 
 \begin{tabular}{l l}accuracy& 90\%\\\\ recall & 90\%\end{tabular}
-& 0 \% & 0 \% & 0 \% & 0 \% \\ \hline 
+& 98 \% & 90 \% & 90 \% & 81.8 \% \\ \hline 
 
 \raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img5.png}}
 & 
 \begin{tabular}{l l}accuracy& 50\%\\\\ recall & 100\%\end{tabular}
-& 0 \% & 0 \% & 0 \% & 0 \% \\ \hline 
+& 95 \% & 66.7 \% & 75 \% & 50 \% \\ \hline 
 
 \end{tabular}
 \end{table*}
+
+\subsection{Finding the right heuristic}
+A heuristic measures how well a given class expression fits the learning
+problem. \cite{paper1}
+To test an algorithm we must have positive and negative examples. As we want to
+descibe class $A$ with $C$ we can consider every instance of $A$ as a positive
+and everything else as negative examples.
+The predictive accuracy can be described as:\vspace{6pt}\\
+\centerline{
+$
+predacc(C) = 1 - \frac{|R(A) \setminus R(C)| + |R(C) \setminus R(A)|}{n} \quad n
+= |Ind(K)| $
+}\vspace{6pt}
+Here, Ind(K) stands for the set of individuals in the knowlege base. $R(A)
+\setminus R(C)$ are the false negatives whereas $R(C) \setminus R(A)$ are the
+false positives. \\
+As you can see in Figure \ref{venn} for the term \emph{precision} we
+consider the intersection of $A$ and $C$ ($R(A) \cap R(C)$) and the false
+positive. In other words, how many individals are rightfull considered with our
+class expression $C$.\\
+For the other term \emph{recall} we consider again the intersection of $A$ and
+$C$ and the false negative. This score tells us how many individuals of $A$ we
+can describe with our class expression $C$.
+
+Table \ref{table-heuristic} compares the score of four different heuristics.
+They are:
+\begin{itemize}
+  \item{\textbf{pred. acc.}} The formula for the predictive accuracy was shown
+  above.
+  \item{\textbf{F-Measure}} The F-Measure is defined as harmonic mean of
+  precision and recall. It can be weighted by a factor $\beta$, \cite{paper1} choose 3 for
+  $\beta$ for learning super classes, wich gives recall a higher weight than
+  precision.\\
+  $F\mymathhyphen Measure = \frac{\beta + 1}{\frac{\beta}{rec} +
+  \frac{1}{acc}}$
+  \item{\textbf{A-Measure}} For the A-Measure we choose the arithmetic mean of
+  precision and recall.\\
+  $A\mymathhyphen Measure = \frac{prec \times acc }{2}$
+  \item{\textbf{Jaccard}} The Jaccard index is well known to compare two sets.
+  It is defined as the size of the intersection divided by the size of the union
+  of the sets. $Jaccard(A,B) = \frac{|A \cap C|}{|A \cup C|}$
+\end{itemize}
+
+
 
 %=====================================================================================
 %=====================================================================================
@@ -311,21 +354,8 @@ SELECT ?p (COUNT(*) AS ?count ) WHERE {
 %=====================================================================================
 %=====================================================================================
 %=====================================================================================
-\section{Evaluation Heuristics}
+\section{Evaluation}
 % Paper 1 
-- more
-
-- more
-
-- more
-
-
-
-%=====================================================================================
-%=====================================================================================
-%=====================================================================================
-\section{Evaluation on Ontology Enrichment}
-% Paper 2
 - more
 
 - more
