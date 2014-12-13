@@ -32,6 +32,11 @@ knowlege base.\cite{paper2}
 \caption{recall precision}
 \end{figure*}
 
+
+
+%=====================================================================================
+%=====================================================================================
+%=====================================================================================
 \section{Class Learning}
 % Paper 1
 \subsection*{Motivation}
@@ -124,25 +129,137 @@ takesPartIn.Meeting$
 \caption{Tree\cite{paper1}}
 \end{figure}
 
+%=====================================================================================
+%=====================================================================================
+%=====================================================================================
 \section{Enrichment with OWL Axioms}
 % Paper 2
-- more
+OWL offers many different types of axioms for a method to enrich the knowlege
+base. 
+\begin{figure}
+\label{3-Phase}
+\centering
+\epsfig{file=img/3-phase-enrichment.png, width = 8 cm}
+\caption{3-Phase Enrichment Workflow\cite{paper2}}
+\end{figure}
+Figure \ref{3-Phase} shows the 3 steps in the enrichment workflow as described
+in \cite{paper2}:
+\begin{enumerate}
+  \item The first phase is about obtaining general information about the
+  knowlege base, in particular axioms, which define the class hierarchy are
+  obtained. The schema queried via SPARQL, but is loaded only once.
+  \item In the second phase data is again obtained via SPARQL. These background
+  checks allows the method to learn and test new axioms. Examples for axiom
+  types are explained in the following text.
+  \item The score of axiom candidates is computed and the result is returned.
+\end{enumerate}
 
-- more
+The algorithm for suggestion of new axioms is based on checking and counting RDF
+triples. In the following example we want to learn if the class $A$ is an
+appropiate domain of a predicate $p$. For that we count the triples that match
+this statement to obtain a score. 
 
-- more
+\begin{example}
+Lets look at the predicate \texttt{onto:attendsMeeting} and check if we can find
+a suitable candidate for a domain. Note that \texttt{onto:Manager} is a subclass
+of \texttt{onto:Employee}.
+\end{example}
+\begin{lstlisting}[morekeywords={onto, rdf, rdfs}, caption=Triples written in
+turtle syntax] @PREFIX onto: <http://ontology-to-enrich.com/>.
+onto:Software_Engineer		
+		onto:attendsMeeting 	onto:TeamMeeting;
+		rdf:type				onto:Employee.
+onto:Software_Architekt		
+		onto:attendsMeeting 	onto:TeamMeeting;
+		rdf:type				onto:Employee.
+onto:Project_Manager		
+		onto:attendsMeeting 	onto:ManagerMeeting;
+		rdf:type				onto:Manager.
+		
+onto:Manager   rdfs:subClassOf	onto:Employee.
+\end{lstlisting}
+Looking at this example we would abtain a score of 33.3 \% (1 out of 3) for the
+class \texttt{onto:Manager} and 100 \% (3 out of 3) for the class
+\texttt{onto:Employee}.\\
+Obviously this extrem simple and straightforward method of calculating the score
+for the domain of a predicate $p$ has some limitation.
+Mainly the method doesn't discriminate between a score calculated by having 100
+out of 100 correct observations or only 3 out of 3. Different methods, for
+example the Wald method \cite{wald-methods}, overcome that problem. 
+More involved heuristics are shown in the next section. 
+
+\subsection*{Obtaining Axioms via SPARQL queries}
+This section explains how SPARQL queries are used to extract information in step
+2 of the enrichment workflow.
+
+\subsubsection*{Subclass and Disjointness of classes}
+This query evaluates all individuals (\texttt{?ind}) and checks if they are
+instance of the user defined class definition in \texttt{\$class}. In this query
+higher count indicates a better candidate for a superclass. 
+Lower value indicates a disjointness.
+ 
+\begin{lstlisting} 
+SELECT ?type (COUNT(?ind ) AS ?count ) WHERE {
+	?ind a <$class >.
+	?ind a ?type .
+} GROUP BY ?type
+\end{lstlisting}
+
+\subsubsection*{Subsumption and Disjointness of properties}
+A pretty simular query can be used to learn subsumption and disjointness of
+predicates.
+
+\begin{lstlisting} 
+SELECT ?p (COUNT(? s ) AS ?count ) WHERE {
+	?s ?p ?o .
+	?s <$property> ?o .
+} GROUP BY ?p
+\end{lstlisting}
+
+\subsubsection*{Domain and Range of properties}
+A query for the domain of a property counts the occurrences subjects of type
+\texttt{?type} having the property \texttt{\$property}.
+
+\begin{lstlisting} 
+SELECT ?type COUNT(DISTINCT ?ind ) WHERE {
+	?ind <$property> ?o .
+	?ind a ?type .
+} GROUP BY ?type
+\end{lstlisting}
+
+The query for the range of \texttt{\$property} is analog. It can be also
+distinguished between object and data properties. Here only the queries for
+object properties are listed.
+\begin{lstlisting} 
+SELECT ?type (COUNT(DISTINCT ?ind ) AS ?cnt ) WHERE {
+	?s <$property> ? ind .
+	?ind a ?type .
+} GROUP BY ?type
+\end{lstlisting}
+
+
+\subsubsection*{Inverse of Properties}
+To check if a property is inverse we check the \texttt{\$property} with subject
+and object and in swapped position. As always we count how often the expression
+holds.
+\begin{lstlisting} 
+SELECT ?p (COUNT(*) AS ?count ) WHERE {
+	?s <$property> ?o .
+	?o ?p ?s .
+} GROUP BY ?p
+\end{lstlisting}
 
 
 
-
-
-
+%=====================================================================================
+%=====================================================================================
+%=====================================================================================
 \section{Heuristics}
 % Paper 1
 \subsection{Finding the right Heuristic}
 
 
-\begin{table*}
+\begin{table*}[ht]
 \centering
 \caption{Heuristics}
 \begin{tabular}{p{3.5 cm} p{3.5 cm} p{2 cm} p{2 cm} p{2 cm} p{2 cm}} \hline
@@ -176,11 +293,12 @@ takesPartIn.Meeting$
 \begin{tabular}{l l}accuracy& 50\%\\\\ recall & 100\%\end{tabular}
 & 0 \% & 0 \% & 0 \% & 0 \% \\ \hline 
 
-
 \end{tabular}
 \end{table*}
 
-
+%=====================================================================================
+%=====================================================================================
+%=====================================================================================
 \subsection{Efficient heuristic computation}
 - more
 
@@ -190,7 +308,9 @@ takesPartIn.Meeting$
 
 
 
-
+%=====================================================================================
+%=====================================================================================
+%=====================================================================================
 \section{Evaluation Heuristics}
 % Paper 1 
 - more
@@ -201,7 +321,9 @@ takesPartIn.Meeting$
 
 
 
-
+%=====================================================================================
+%=====================================================================================
+%=====================================================================================
 \section{Evaluation on Ontology Enrichment}
 % Paper 2
 - more

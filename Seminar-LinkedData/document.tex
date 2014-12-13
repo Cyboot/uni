@@ -1,5 +1,25 @@
 \documentclass{acm_proc_article-sp}
 
+\usepackage{color}
+\usepackage{listings}
+
+\definecolor{blue}{rgb}{0.25,0.35,1}
+\definecolor{green}{rgb}{0.15,0.8,0.15}
+\lstset{
+language=sql,
+frame=single,
+xleftmargin=0.15cm,
+morecomment=[l]{@},
+commentstyle=\color{green},  
+basicstyle=\ttfamily\scriptsize\singlespacing,
+keywordstyle=\color{blue}\bfseries,
+stepnumber=1,
+numbersep=10pt,
+tabsize=4,
+showspaces=false,
+showstringspaces=false}
+
+
 \begin{document}
 
 \title{Semantic Enrichment in OWL Knowledge Bases}
