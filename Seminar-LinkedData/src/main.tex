@@ -1,30 +1,30 @@
 \section{Enrichment Overview}
 % Paper 2
 The term enrichment in this context describes the extension of the (semantic)
-schema of a knowlege base. The process of knowlege base enrichment increases the
-semantic richness and the expressiveness of the knowlege base. 
+schema of a knowledge base. The process of knowledge base enrichment increases the
+semantic richness and the expressiveness of the knowledge base. 
 The goal of the enrichment progress is to find axioms, witch can be added to the
 existing ontology. A special case is to find definition of classes and
 subclasses. This is closely related to the Inductive Logic Programming (ILP) as
 it is described later in this article.
 Ontology enrichment methods usually depend on machine learning or on applying
-heuristics to find additional axioms in the knowlege graph.\cite{paper2}
+heuristics to find additional axioms in the knowledge graph.\cite{paper2}
 
-As stated before, knowlege base enrichment usually work on existing data to
+As stated before, knowledge base enrichment usually work on existing data to
 improve the semantic schema. This supports the so called \emph{grass-root}
-approach for creating ontologies. Here whole ontologie structure is not created
-upfront, but evolves over time and with every part of data that is added to the
-knowlege base.\cite{paper2}
+approach for creating ontologies. Here the whole ontology structure is not
+created upfront, but evolves over time and with every part of data that is added to the
+knowledge base.\cite{paper2}
 
-% Liste approaches
-- description logic: least common subsumer
-- top-down, refinement operator for ALER 
-- combine in YINYANG tool 
-
-% Paper2: p60
-- knowlege base completetion (well-defined sense) classes <-> subclasses 
-
-- CELOE (heuristics and adaptation), described later
+% % Liste approaches
+% - description logic: least common subsumer
+% - top-down, refinement operator for ALER 
+% - combine in YINYANG tool 
+% 
+% % Paper2: p60
+% - knowledge base completetion (well-defined sense) classes <-> subclasses 
+% 
+% - CELOE (heuristics and adaptation), described later
 
 \begin{figure*}
 \centering
@@ -40,14 +40,14 @@ knowlege base.\cite{paper2}
 %=====================================================================================
 \section{Class Learning}
 % Paper 1
-\subsection*{Motivation}
-The class learning approach is one method of enrichment of knowlege bases. It
+\subsection{Motivation}
+The class learning approach is one method of enrichment of knowledge bases. It
 aims at finding new definition of classes to extend the semantic schema. For the
 motivation of the method consider the following example.
 
 \newdef{example}{Example}
 \begin{example}
-For this example consider a knowlegde base containing a class \emph{President of
+For this example consider a knowledge base containing a class \emph{President of
 the United States} with instance data like Abraham Lincoln, John F. Kennedy,
 Bill Clinton and Barack Obama. A class Learning algorithm may suggest that the
 President class is equivalent to the following two class expressions:
@@ -57,16 +57,16 @@ President class is equivalent to the following two class expressions:
 statement more specific.}
 \end{example}
 
-These suggestions would then be presented to a knwolege engineer who than can
-decide if they are plausible and should be added to the knowlege graph. Should
+These suggestions would then be presented to a knowledge engineer who than can
+decide if they are plausible and should be added to the knowledge graph. Should
 the engineer for instance choose the second statement he could check if there
 are instances of the class president, where the individual is not of type
 American citizen. This could indicate an error or missing information in the
-knowlege graph witch could be fixed by this semi-automated approach by the
-knowlege engineer.
+knowledge graph witch could be fixed by this semi-automated approach by the
+knowledge engineer.
 
 
-\subsection*{Learning Problem}
+\subsection{Learning Problem}
 The problem of learning class definitions for given data depend on the so called
 inductive reasoning as opposed to inference or deductive reasoning. \cite{paper1}
 Inductive Reasoning is also a key concept in Inductive Logic Programming.
@@ -82,22 +82,22 @@ This means that the learned expression $C$ is a description of the individuals
 of $A$. In our president example, the individuals are the presidents John F.
 Kennedy, Barack Obama etc. whereas $C$ can be one of the suggested expression.
 In many cases there will be no exact solution for $C$, but rather an
-approximotion. This can be the case, if the knowlege base contains false class
+approximation. This can be the case, if the knowledge base contains false class
 assignments or missing information. In our example the birthplace of Thomas
 Jefferson might be missing in the ontology. However, if most of the other
 presidents have the correct birthplace the learning algorithm may still suggest
-the expressions. Again, missing information may be completed by the knowlege
+the expressions. Again, missing information may be completed by the knowledge
 engineer.
 
-In a complexe knowlege base a class learning algorithm may find many new class
+In a complex knowledge base a class learning algorithm may find many new class
 definition and often different expression for the same class. Based on Occam's
 razor \cite{occam-razor} simple solutions are preferred over complex ones,
-because they are more readable an thus easier for the knowlege engineer to
-evalueate. Simplicity is measured in an straight forward way: the lenght of an
-expression, which consists of role, concept and quatifiers.
+because they are more readable an thus easier for the knowledge engineer to
+evaluate. Simplicity is measured in an straight forward way: the length of an
+expression, which consists of role, concept and quantifiers.
 The algorithm is biased towards shorter expressions. \cite{paper1}
 
-\subsection*{Algorithm}
+\subsection{Algorithm}
 One algorithm for solving the learning problem is called CELOE (Class
 Expression Learning for Ontology Engineering). It is described in \cite{paper1}.
 An brief overview of CELOE is given in Figure 2.
@@ -108,16 +108,16 @@ An brief overview of CELOE is given in Figure 2.
 \caption{CELOE\cite{paper1}}
 \end{figure}
 The algorithm follows the ``generate and test'' approach which is the common
-concept in ILP. 
+concept in ILP. \cite{Foundation_ILP} 
 In the learning process many class expression are created and tested against the
-background knowlege. Each of these class expressions is evalued using diffenrent
-heuristics, which are described in detail in a separate section.
+background knowledge. Each of these class expressions is evaluated using
+different heuristics, which are described in detail in a separate section.
 
-To find appropiate class expression to describe existing classes CELOE uses a so
+To find appropriate class expression to describe existing classes CELOE uses a so
 called \emph{refinement operator}. The idea of these operator is based on the
 work in \cite{refinement1},\cite{refinement2} and \cite{refinement3}. Refinement
 operators are used to search in the space of expressions. It can be seen as a
-top-downl algorithm as it is illustrated in Figure 3.
+top-down algorithm as it is illustrated in Figure 3.
 As an example consider the following path ($\leadsto$ indicates a refinement
 step):\vspace{6pt}\\
 $T \leadsto Person \leadsto Person \sqcap takesPartIn.T \leadsto Person \sqcap
@@ -130,12 +130,53 @@ takesPartIn.Meeting$
 \caption{Tree\cite{paper1}}
 \end{figure}
 
+
+%===============================================================================
+%===========================     TABLE     =====================================
+% ==============================================================================
+\begin{table*}[ht]
+\centering
+\label{table-heuristic}
+\caption{Heuristics}
+\begin{tabular}{p{3.5 cm} p{3.5 cm} p{2 cm} p{2 cm} p{2 cm} p{2 cm}} \hline
+\textbf{Illustration} & \textbf{accuracy \& recall} & \textbf{pred. acc.} &
+\textbf{F-Measure} & \textbf{A-Measure} & \textbf{Jaccard}\\
+\hline\hline
+
+\raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img1.png}}
+& 
+\begin{tabular}{l l}accuracy& 0\%\\\\ recall & 0\%\end{tabular}
+& 80 \% & 0 \% & 0 \% & 0 \% \\ \hline 
+
+\raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img2.png}}
+&
+\begin{tabular}{l l}accuracy& 50\%\\\\ recall & 100\%\end{tabular}
+& 90 \% & 66.7 \% & 75 \% & 50 \% \\ \hline 
+
+\raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img3.png}}
+& 
+\begin{tabular}{l l}accuracy& 16.7\%\\\\ recall & 100\%\end{tabular}
+& 50 \% & 28.6 \% & 58.3 \% & 16.7 \% \\ \hline 
+
+
+\raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img4.png}}
+& 
+\begin{tabular}{l l}accuracy& 90\%\\\\ recall & 90\%\end{tabular}
+& 98 \% & 90 \% & 90 \% & 81.8 \% \\ \hline 
+
+\raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img5.png}}
+& 
+\begin{tabular}{l l}accuracy& 50\%\\\\ recall & 100\%\end{tabular}
+& 95 \% & 66.7 \% & 75 \% & 50 \% \\ \hline 
+
+\end{tabular}
+\end{table*}
 %=====================================================================================
 %=====================================================================================
 %=====================================================================================
 \section{Enrichment with OWL Axioms}
 % Paper 2
-OWL offers many different types of axioms for a method to enrich the knowlege
+OWL offers many different types of axioms for a method to enrich the knowledge
 base. 
 \begin{figure}
 \label{3-Phase}
@@ -147,7 +188,7 @@ Figure \ref{3-Phase} shows the 3 steps in the enrichment workflow as described
 in \cite{paper2}:
 \begin{enumerate}
   \item The first phase is about obtaining general information about the
-  knowlege base, in particular axioms, which define the class hierarchy are
+  knowledge base, in particular axioms, which define the class hierarchy are
   obtained. The schema queried via SPARQL, but is loaded only once.
   \item In the second phase data is again obtained via SPARQL. These background
   checks allows the method to learn and test new axioms. Examples for axiom
@@ -157,7 +198,7 @@ in \cite{paper2}:
 
 The algorithm for suggestion of new axioms is based on checking and counting RDF
 triples. In the following example we want to learn if the class $A$ is an
-appropiate domain of a predicate $p$. For that we count the triples that match
+appropriate domain of a predicate $p$. For that we count the triples that match
 this statement to obtain a score. 
 
 \begin{example}
@@ -179,17 +220,17 @@ onto:Project_Manager
 		
 onto:Manager   rdfs:subClassOf	onto:Employee.
 \end{lstlisting}
-Looking at this example we would abtain a score of 33.3 \% (1 out of 3) for the
+Looking at this example we would obtain a score of 33.3 \% (1 out of 3) for the
 class \texttt{onto:Manager} and 100 \% (3 out of 3) for the class
 \texttt{onto:Employee}.\\
-Obviously this extrem simple and straightforward method of calculating the score
+Obviously this extreme simple and straightforward method of calculating the score
 for the domain of a predicate $p$ has some limitation.
 Mainly the method doesn't discriminate between a score calculated by having 100
 out of 100 correct observations or only 3 out of 3. Different methods, for
 example the Wald method \cite{wald-methods}, overcome that problem. 
 More involved heuristics are shown in the next section. 
 
-\subsection*{Obtaining Axioms via SPARQL queries}
+\subsection{Obtaining Axioms via SPARQL queries}
 This section explains how SPARQL queries are used to extract information in step
 2 of the enrichment workflow.
 
@@ -207,7 +248,7 @@ SELECT ?type (COUNT(?ind ) AS ?count ) WHERE {
 \end{lstlisting}
 
 \subsubsection*{Subsumption and Disjointness of properties}
-A pretty simular query can be used to learn subsumption and disjointness of
+A somewhat similar query can be used to learn subsumption and disjointness of
 predicates.
 
 \begin{lstlisting} 
@@ -257,49 +298,13 @@ SELECT ?p (COUNT(*) AS ?count ) WHERE {
 %=====================================================================================
 \section{Heuristics}
 % Paper 1
-\begin{table*}[ht]
-\centering
-\label{table-heuristic}
-\caption{Heuristics}
-\begin{tabular}{p{3.5 cm} p{3.5 cm} p{2 cm} p{2 cm} p{2 cm} p{2 cm}} \hline
-\textbf{Illustration} & \textbf{accuracy \& recall} & \textbf{pred. acc.} &
-\textbf{F-Measure} & \textbf{A-Measure} & \textbf{Jaccard}\\
-\hline\hline
 
-\raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img1.png}}
-& 
-\begin{tabular}{l l}accuracy& 0\%\\\\ recall & 0\%\end{tabular}
-& 80 \% & 0 \% & 0 \% & 0 \% \\ \hline 
-
-\raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img2.png}}
-&
-\begin{tabular}{l l}accuracy& 50\%\\\\ recall & 100\%\end{tabular}
-& 90 \% & 66.7 \% & 75 \% & 50 \% \\ \hline 
-
-\raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img3.png}}
-& 
-\begin{tabular}{l l}accuracy& 16.7\%\\\\ recall & 100\%\end{tabular}
-& 50 \% & 28.6 \% & 58.3 \% & 16.7 \% \\ \hline 
-
-
-\raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img4.png}}
-& 
-\begin{tabular}{l l}accuracy& 90\%\\\\ recall & 90\%\end{tabular}
-& 98 \% & 90 \% & 90 \% & 81.8 \% \\ \hline 
-
-\raisebox{-.5\height}{\includegraphics[scale=0.3] {img/table-img5.png}}
-& 
-\begin{tabular}{l l}accuracy& 50\%\\\\ recall & 100\%\end{tabular}
-& 95 \% & 66.7 \% & 75 \% & 50 \% \\ \hline 
-
-\end{tabular}
-\end{table*}
 
 \subsection{Finding the right heuristic}
 A heuristic measures how well a given class expression fits the learning
 problem. \cite{paper1}
 To test an algorithm we must have positive and negative examples. As we want to
-descibe class $A$ with $C$ we can consider every instance of $A$ as a positive
+describe class $A$ with $C$ we can consider every instance of $A$ as a positive
 and everything else as negative examples.
 The predictive accuracy can be described as:\vspace{6pt}\\
 \centerline{
@@ -307,12 +312,12 @@ $
 predacc(C) = 1 - \frac{|R(A) \setminus R(C)| + |R(C) \setminus R(A)|}{n} \quad n
 = |Ind(K)| $
 }\vspace{6pt}
-Here, Ind(K) stands for the set of individuals in the knowlege base. $R(A)
+Here, Ind(K) stands for the set of individuals in the knowledge base. $R(A)
 \setminus R(C)$ are the false negatives whereas $R(C) \setminus R(A)$ are the
 false positives. \\
 As you can see in Figure \ref{venn} for the term \emph{precision} we
 consider the intersection of $A$ and $C$ ($R(A) \cap R(C)$) and the false
-positive. In other words, how many individals are rightfull considered with our
+positive. In other words, how many individuals are rightful considered with our
 class expression $C$.\\
 For the other term \emph{recall} we consider again the intersection of $A$ and
 $C$ and the false negative. This score tells us how many individuals of $A$ we
@@ -343,19 +348,42 @@ They are:
 %=====================================================================================
 %=====================================================================================
 \subsection{Efficient heuristic computation}
-- more
-
-- more
-
-- more
-
+For big knowledge base the performance and efficiency of the algorithm is
+crucial. To compute and test class expression retrieval operations are often
+required. To minimize the cost and improve performance \cite{paper1} provide
+three optimisations:
+\begin{itemize}
+  \item{\textbf{Reduction of instance checks}} 
+  The obvious choice is to reduce the number of instance checks required to test
+  expressions. Assuming that we want to learn an equivalence axiom for class A
+  with the super class A'. Instead of checking every individual of the knowledge
+  graph we can restrict our retrieval operation to instances of A'.
+  
+  \item{\textbf{Approximate and closed world reasoning}} 
+  To deal with the very high number of instance checks against the knowledge
+  base CELOE uses a special reasoner.\cite{paper1} It uses an approximate and
+  incomplete reasoning for fast instance checks (FIC). The reasoner depends on
+  the first run on a standard OWL reasoner to check instances and property
+  relationships. The result of this first reasoning is stored in memory for fast
+  (but approximated) instance checks. The reasoner follows a closed world
+  assumption.
+  
+  \item{\textbf{Stochastic coverage computation}} 
+  This optimisation again reduces the necessary instance checks. Looking at the
+  different heuristics, we can see that $|R(A)|$ needs to be computed only once
+  whereas e.g. the expensive expression $R(A) \cap R(C)$ is computed for every
+  different $C$. To improve performance we can try to approximate the result by
+  testing randomly drawn objects an checking if we are sufficiently confident
+  that our estimation is within a certain bound.
+  
+  
+\end{itemize}
 
 
 %=====================================================================================
 %=====================================================================================
 %=====================================================================================
 \section{Evaluation}
-% Paper 1 
 - more
 
 - more
