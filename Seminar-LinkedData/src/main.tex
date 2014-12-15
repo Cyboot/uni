@@ -384,10 +384,92 @@ three optimisations:
 %=====================================================================================
 %=====================================================================================
 \section{Evaluation}
-- more
+To evaluate the methods of class learning, the authors of \cite{paper1} tested
+their algorithm on a variety of real world ontologies of different sizes and
+domains. The goal of the evaluation consisted of 3 parts: determine the
+influence of reasoning and heuristics on suggestions, test the performance and
+efficiency on large real world ontologies and to test the accuracy of
+approximations described in section 5.2.
 
-- more
+To perform the evaluation, the authors in \cite{paper1} wrote a dedicated plugin
+for the Protégé editor. The plugin first looks for classes with enough
+instances. For each of these classes they ran the CELOE algorithm to generate
+suggestions for definitions, here they tested two different reasoner and the
+previously described five heuristics. The results of these tests were
+categorized in three main categories: (1) the suggestion improves the ontology
+(improvement), (2) the suggestion does not improve the ontology and therefor
+should not be added to the ontology (not), (3) adding the suggestion results in a modelling
+error (error).
+A small part of the results is shown in Table \ref{table-eval}, the full
+evaluation results are shown in \cite{paper1}.
+\begin{table}[ht]
+\centering
+\label{table-eval}
+\caption{Evaluation}
+\begin{tabular}{|p{3.3 cm} p{1 cm} p{1 cm} p{1.3 cm} |} \hline
+\textbf{Reasoner/heuristic} & \textbf{Improv.} & \textbf{Not acc.}
+& \textbf{missed Improv.} \\\hline
 
-- more
+Pellet/F-Measure 		& 16.70 & 64.66 & 14.95 \\
+Pellet/A-Measure 		& 16.70 & 64.66 & 14.95 \\
+Pellet/pred.acc. 		& 16.59 & 64.93 & 15.22 \\\hline
+Pellet FIC/F-Measure 	& 36.60 & 52.62 & 1.90 \\
+Pellet FIC/A-Measure 	& 36.19 & 52.84 & 1.63 \\
+Pellet FIC/pred.acc. 	& 32.99 & 52.58 & 4.35 \\
+\hline
+\end{tabular}
+\end{table}
+The second evaluation results were based on the performance of the approximation
+reasoner as described in section 5.2. The tests showed that an approximation
+lead to significant preformance improvement, this is especially the case for
+larger ontologies. The time required to test a class expression showed smaller
+variations and a performance gain of serveral orders of magnitudes has been
+achieved. The approximation has schon to be very accurate and had hardly any
+infuence on the learning algorithm.
+
+Prelimatary Evaluation has also been done in \cite{paper2} for OWL axiom
+enrichment. The authors choosed DBpedia to test their algorithms. Table
+\ref{table-eval-paper2} shows a small subset of the results.
+In \cite{paper2} the evaluation is discussed in great detail. For example the
+three newly discovered symmetic object properties are:
+\texttt{dbo:neighboringMunicipaly},\texttt{dbo:sisterCollege} and
+\texttt{dbo:currentPartner}.
+
+
+\begin{table}[ht]
+\centering
+\label{table-eval-paper2}
+\caption{Evaluation combined of Object and data property}
+\begin{tabular}{| l l p{1.2 cm} l|} \hline
+\textbf{axiom type} & \textbf{recall} & \textbf{new axioms}
+& \textbf{precision} \\\hline
+
+SubClassOf 			& 180/185 	& 155  & 75 \% \\
+EquivalentClasses 	& 0/0 		& 1812 & 50 \% \\
+DisjointClasses		& 0/0 		& 2449 & 100 \% \\
+PropertyDomain		& 833/942 	& 1298 & 54 \% \\
+PropertyRange		& 291/1032 	& 500  & 46 \% \\
+SymmetricProperty	& 0/0 		& 3    & 100 \% \\
+
+\hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
