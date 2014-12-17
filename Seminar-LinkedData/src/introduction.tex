@@ -1,27 +1,38 @@
 \section{Introduction}
 % evtl: Semantic Web Stack
 
-- semantic web: growing, bigger knowledge graphs
+While the availability and size of knowlege bases has grown dramaticly in the
+last few years, there is still often a signifacantly lack of sophisticated
+schema.
+Enrichment of schema information based on already existing data is the main
+content of this article.
+To illustrate the benefits of of a sophisticated schema together with reliable
+instance data consider the following example.
 
-- Open data Initiative, Protoge ontologie etc
--> hard to maintain, debug / find error inconsitencies
+\begin{example}
+Imagine a knowlege base containing famous persons like Barack Obama, Mahatma
+Gandhi, Elvis Presley etc. and a property called \texttt{birthPlace}. An
+algorithm may find out that every of these person contains this property and
+therefore the \texttt{birthPlace} can be a functional property with the domain
+\texttt{Person}.
+\vspace{-0.55 cm}
+\begin{verbatim}
+OBjectProperty: birthPlace
+  Domain: Person
+  Range: Place
+  SubPropertyOf: hasBeenAt
+\end{verbatim}
+\end{example}
+\vspace{-0.4 cm}
 
-- lack sophisticated schema (only schema no instances, only facts)
+Adding such axiom to the knowlege base can have several benefits\cite{paper2}:
+(1) Axioms can servere as documentation for the right usage of the schema, (2) adding
+additional schema can improve consistency and help to debug missing or incorrect
+information, (3) additional (implicit) information can be inferred, in our
+example every person also \texttt{hasBeenAt} their \texttt{birthPlace}.
+Adding new axioms and finding/fixing missing information can be done in an
+semi-automated approach. A knowlege engineer can then decide if new axioms are
+fitting and existing data must be adjusted.
 
-- combination good schema + instance data  --> powerful reasoning, consistency,
-improved query
-
-- Example: Person birthplace
-  + Benefits
-  + missing info
-  + semi-automated
-
-
-
-
-
-% \begin{figure}
-% \centering
-% \epsfig{file=img/example1.png, width = 8cm}
-% \caption{A sample black and white graphic (.eps format).}
-% \end{figure}
+In summary, the combination of a good schema with large instance data allows for
+powerful reasoning, improved query ability and simplified consistency checking. 
