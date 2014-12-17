@@ -1,17 +1,17 @@
 \section{Enrichment Overview}
 % Paper 2
-The term enrichment in this context describes the extension of the (semantic)
+In this context the term enrichment describes the extension of the (semantic)
 schema of a knowledge base. The process of knowledge base enrichment increases the
-semantic richness and the expressiveness of the knowledge base. 
-The goal of the enrichment progress is to find axioms, witch can be added to the
+semantic richness and the expressiveness of an ontology. 
+The goal of the enrichment progress is to find axioms, which can be added to an
 existing ontology. A special case is to find definition of classes and
-subclasses. This is closely related to the Inductive Logic Programming (ILP) as
-it is described later in this article.
+subclasses. This process is closely related to the Inductive Logic Programming
+(ILP) as it is described later in this article.
 Ontology enrichment methods usually depend on machine learning or on applying
 heuristics to find additional axioms in the knowledge graph.\cite{paper2}
 
 As stated before, knowledge base enrichment usually work on existing data to
-improve the semantic schema. This supports the so called \emph{grass-root}
+improve the semantic schema. It supports the so called \emph{grass-root}
 approach for creating ontologies. Here the whole ontology structure is not
 created upfront, but evolves over time and with every part of data that is added to the
 knowledge base.\cite{paper2}
@@ -30,7 +30,8 @@ knowledge base.\cite{paper2}
 \centering
 \label{venn}
 \epsfig{file=img/venn.png, width = 14 cm}
-\caption{recall precision}
+\caption{This figure visualises the class $A$ and the expression to test $C$ as
+a Venn diagram. It also shows the the terms \emph{recall} and \emph{precision}.}
 \end{figure*}
 
 
@@ -51,18 +52,19 @@ For this example consider a knowledge base containing a class \emph{President of
 the United States} with instance data like Abraham Lincoln, John F. Kennedy,
 Bill Clinton and Barack Obama. A class Learning algorithm may suggest that the
 President class is equivalent to the following two class expressions:
-\\\hspace*{12pt}\texttt{Person and born in the USA}\\
-\hspace*{12pt}\texttt{American citizen and born in the USA}\footnote{The class
-'American citizen' is here a subclass of 'Person', witch makes the second
+\\\hspace*{12pt}\texttt{1) Person and born in the USA}\\
+\hspace*{12pt}\texttt{2) American citizen and born in the USA}\footnote{The
+class 'American citizen' is here a subclass of 'Person', which makes the second
 statement more specific.}
 \end{example}
 
 These suggestions would then be presented to a knowledge engineer who than can
-decide if they are plausible and should be added to the knowledge graph. Should
-the engineer for instance choose the second statement he could check if there
-are instances of the class president, where the individual is not of type
-American citizen. This could indicate an error or missing information in the
-knowledge graph witch could be fixed by this semi-automated approach by the
+decide if they are plausible and therefore should be added to the knowledge
+graph or should be discarded.
+Should the engineer for instance choose the second statement, he could check if
+there are instances of the class \emph{President}, where the individual is not
+of type American citizen. This could indicate an error or missing information in the
+knowledge graph which could then be fixed in this semi-automated approach by the
 knowledge engineer.
 
 
