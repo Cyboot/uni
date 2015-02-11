@@ -1,21 +1,19 @@
 \section{Introduction}
-% evtl: Semantic Web Stack
-
-While the availability and size of knowledge bases has grown dramatically in the
-last few years, there is still often a significantly lack of sophisticated
-schema.\ref{paper1}
-Enrichment of schema information based on already existing data is the main
-content of this report.
-To illustrate the benefits of of a sophisticated schema together with reliable
-instance data consider the following example.
+While the availability and size of knowledge bases has grown exponentially over
+the last few years, there is often a significantly lack of sophisticated
+schema.
+Enrichment of schema information, based on already existing data, is the main
+subject of this report.
+To illustrate the benefits of a sophisticated schema together with reliable
+instance data, consider the following example.
 
 \begin{example}
-Imagine a knowlege base containing famous persons like Barack Obama, Mahatma
+Imagine a knowledge base containing famous persons like Barack Obama, Mahatma
 Gandhi, Elvis Presley etc. and a property called \texttt{birthPlace}. An
-algorithm may find out that every of these person contains this property and
-therefore the \texttt{birthPlace} can be a functional property with the domain
-\texttt{Person}.
-\vspace{0.55 cm}
+algorithm may find out that every of the person instances contain this property
+and therefore \texttt{birthPlace} can be seen as a functional property with the
+domain \texttt{Person} and the range \texttt{Place}.\\
+\vspace{0.90 cm}
 \begin{verbatim}
 OBjectProperty: birthPlace
   Domain: Person
@@ -25,15 +23,17 @@ OBjectProperty: birthPlace
 \end{example}
 \vspace{-0.4 cm}
 
-Adding such axiom to the knowlege base can have several benefits\cite{paper2}:
-(1) Axioms can servere as documentation for the right usage of the schema, (2) adding
-additional schema can improve consistency and help to debug missing or incorrect
-information, (3) additional (implicit) information can be inferred, in our
-example every person also \texttt{hasBeenAt} their \texttt{birthPlace}.
-Adding new axioms and finding/fixing missing information can be done in an
-semi-automated approach. A knowlege engineer can then decide if new axioms are
-fitting and existing data must be adjusted.\\
-In summary, the combination of a good schema with large instance data allows for
+Adding such an axiom to the knowledge base can have several benefits:
+(1) Axioms can serve as documentation for the right usage of the
+schema, (2) adding additional schema can improve consistency and help to debug missing or incorrect
+information, (3) additional (implicit) information can be inferred. In our
+example you can observe that every person also \texttt{hasBeenAt} their
+\texttt{birthPlace}.
+Adding new axioms and finding/fixing missing information can be done in a
+semi-automated approach. A knowledge engineer can decide if new axioms are
+correct and improve the semantic schema. He than can add the axiom and adjust
+potentially incorrect or missing data. \cite{paper2}
+In summary, the combination of a solid schema with large instance data allows
 powerful reasoning, improved query ability and simplified consistency checking. 
 
 After a short description of the term \emph{enrichment} this reports explains
