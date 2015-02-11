@@ -1,11 +1,11 @@
 \section{Introduction}
 % evtl: Semantic Web Stack
 
-While the availability and size of knowlege bases has grown dramaticly in the
-last few years, there is still often a signifacantly lack of sophisticated
-schema.
+While the availability and size of knowledge bases has grown dramatically in the
+last few years, there is still often a significantly lack of sophisticated
+schema.\ref{paper1}
 Enrichment of schema information based on already existing data is the main
-content of this article.
+content of this report.
 To illustrate the benefits of of a sophisticated schema together with reliable
 instance data consider the following example.
 
@@ -15,7 +15,7 @@ Gandhi, Elvis Presley etc. and a property called \texttt{birthPlace}. An
 algorithm may find out that every of these person contains this property and
 therefore the \texttt{birthPlace} can be a functional property with the domain
 \texttt{Person}.
-\vspace{-0.55 cm}
+\vspace{0.55 cm}
 \begin{verbatim}
 OBjectProperty: birthPlace
   Domain: Person
@@ -32,7 +32,12 @@ information, (3) additional (implicit) information can be inferred, in our
 example every person also \texttt{hasBeenAt} their \texttt{birthPlace}.
 Adding new axioms and finding/fixing missing information can be done in an
 semi-automated approach. A knowlege engineer can then decide if new axioms are
-fitting and existing data must be adjusted.
-
+fitting and existing data must be adjusted.\\
 In summary, the combination of a good schema with large instance data allows for
 powerful reasoning, improved query ability and simplified consistency checking. 
+
+After a short description of the term \emph{enrichment} this reports explains
+the ideas of the class learning algorithms by Lehman et al. Afterwards the
+concept behind semantic enrichment with OWL axioms is explained. The last
+chapter focuses on different heuristic used in the previously described methods.
+The last part of the reports consists of a short evaluation and related work.
