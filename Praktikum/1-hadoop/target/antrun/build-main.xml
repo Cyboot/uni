@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <property name="mvn.version" value="1.1"/>
+  <property name="mvn.projectname" value="1-hadoop"/>
+  <property name="extra" value="-jar-with-dependencies"/>
+  <ant antfile="build.xml" target="ssh-copy"/>
+</target>
+</project>

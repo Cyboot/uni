@@ -1,0 +1,12 @@
+ConfigurationPrinter.class
+ex1\FriendMapper.class
+ex1\Ex1Main.class
+StubDriver.class
+LoggingDriver.class
+ex1\FriendReducer.class
+wordcount\WordCountReducer.class
+wordcount\WordCountDriver.class
+LoggingIdentityMapper.class
+StubReducer.class
+StubMapper.class
+wordcount\WordCountMapper.class

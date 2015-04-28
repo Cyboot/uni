@@ -17,18 +17,24 @@ public class WordCountDriver extends Configured implements Tool {
 
 	@Override
 	public int run(String[] args) throws Exception {
+		for (String string : args) {
+			System.out.println("arg: " + string);
+		}
 		/*
 		 * Validate that two arguments were passed from the command line.
 		 */
-		if (args.length != 3) {
-			System.out.printf("Usage: WordCountDriver <input dir> <output dir> <num of reducers>\n");
+		if (args.length != 4) {
+			System.out
+					.printf("Usage: WordCountDriver <input dir> <output dir> <num of reducers>\n");
 			System.exit(-1);
 		}
+		System.out.println("Arguments");
 
 		// Configuration processed by ToolRunner
 		Configuration conf = getConf();
 		// Notify Hadoop that application uses GenericOptionsParser
-		// This is not required but prevents that a warning is printed during execution
+		// This is not required but prevents that a warning is printed during
+		// execution
 		conf.set("mapreduce.client.genericoptionsparser.used", "true");
 
 		// Create a Job using the processed conf
@@ -37,9 +43,9 @@ public class WordCountDriver extends Configured implements Tool {
 		// Define Input and Output Format
 		job.setInputFormatClass(TextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
-		
-		FileInputFormat.setInputPaths(job, new Path(args[0]));
-		FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+		FileInputFormat.setInputPaths(job, new Path(args[1]));
+		FileOutputFormat.setOutputPath(job, new Path(args[2]));
 
 		// Define Map Output Classes (Key, Value)
 		// We don't have to define this as it is the same as the Job Output.
@@ -58,7 +64,7 @@ public class WordCountDriver extends Configured implements Tool {
 		job.setCombinerClass(WordCountReducer.class);
 
 		// Set the Number of Reduce Tasks
-		job.setNumReduceTasks(Integer.parseInt(args[2]));
+		job.setNumReduceTasks(Integer.parseInt(args[3]));
 
 		/*
 		 * Specify the jar file that contains your driver, mapper, and reducer.
@@ -68,8 +74,8 @@ public class WordCountDriver extends Configured implements Tool {
 		job.setJarByClass(WordCountDriver.class);
 
 		/*
-		 * Specify an easily-decipherable name for the job.
-		 * This job name will appear in reports and logs.
+		 * Specify an easily-decipherable name for the job. This job name will
+		 * appear in reports and logs.
 		 */
 		job.setJobName("WordCount");
 
