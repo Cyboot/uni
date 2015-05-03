@@ -1,4 +1,4 @@
-package ex1;
+package ex2;
 
 import java.io.IOException;
 
@@ -6,7 +6,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class FriendReducer extends Reducer<Text, LongWritable, Text, LongWritable> {
+public class UserLikeReducer extends Reducer<Text, LongWritable, Text, LongWritable> {
 
 	@Override
 	protected void reduce(Text key, Iterable<LongWritable> values, Context context)
