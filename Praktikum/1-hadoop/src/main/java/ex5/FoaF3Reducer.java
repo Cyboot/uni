@@ -14,14 +14,19 @@ public class FoaF3Reducer extends Reducer<Text, Text, Text, Text> {
 	@Override
 	protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException,
 			InterruptedException {
+		// join all the Lists
 		Set<String> commonFriends = new HashSet<String>();
 		for (Text user : values) {
 			commonFriends.addAll(Arrays.asList(user.toString().split(",")));
 		}
 
+		// exclude the user himself (A is not friend of A)
+		commonFriends.remove(key.toString());
+
+		// transform the Set into a comma-seperated List
 		String commaJoinedList = StringUtils.join(commonFriends, ',');
 
-		context.write(key, new Text(commaJoinedList));
-	};
-
+		// emit the final result: User (Key) and a List with friends of friends
+		context.write(key, new Text("" + StringUtils.countMatches(commaJoinedList, ",")));
+	}
 }

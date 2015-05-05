@@ -14,13 +14,14 @@ public class FoaF1Reducer extends Reducer<Text, Text, Text, Text> {
 	protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException,
 			InterruptedException {
 		Set<String> friendSet = new HashSet<String>();
-		for (Text user : values) {
-			friendSet.add(user.toString());
+		for (Text friend : values) {
+			friendSet.add(friend.toString());
 		}
 
+		// combine all friends of the user to a Comma-separated List
 		String commaJoinedList = StringUtils.join(friendSet, ',');
 
+		// emit User (Key) with all his friends (Value)
 		context.write(key, new Text(commaJoinedList));
-	};
-
+	}
 }

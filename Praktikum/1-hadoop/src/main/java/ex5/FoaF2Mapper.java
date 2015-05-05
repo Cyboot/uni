@@ -10,9 +10,10 @@ public class FoaF2Mapper extends Mapper<Object, Text, Text, Text> {
 	@Override
 	protected void map(Object key, Text value, Context context) throws IOException,
 			InterruptedException {
-		String friendRaw = value.toString().replace("\t", "");
+		// split the current line from TextOutputFormat
+		String friendList = value.toString().replace("\t", ",");
 
-		String[] friends = friendRaw.split(",");
+		String[] friends = friendList.split(",");
 		String user = friends[0];
 
 		for (String friend : friends) {
@@ -20,12 +21,19 @@ public class FoaF2Mapper extends Mapper<Object, Text, Text, Text> {
 			if (friend.equals(user))
 				continue;
 
-			String commonKey = getConcatKey(user, friend);
+			String compositeKey = getConcatKey(user, friend);
 
-			context.write(new Text(commonKey), new Text(friendRaw));
+			// emit composite Key (Key) and all common friends as List (Value)
+			// Example A: B, C -> AB: A, B, C & AC: A, B, C
+			context.write(new Text(compositeKey), new Text(friendList));
 		}
 	}
 
+	/**
+	 * create a concat key out of two friends
+	 * 
+	 * @return the composite key in alphabetical order
+	 */
 	private String getConcatKey(String user, String friend) {
 		return friend.compareTo(user) > 0 ? friend + "," + user : user + "," + friend;
 	}

@@ -8,12 +8,11 @@ import org.apache.hadoop.mapreduce.Mapper;
 public class FoaF1Mapper extends Mapper<Object, Text, Text, Text> {
 
 	@Override
-	protected void map(Object key, Text value, Context context)
-			throws IOException, InterruptedException {
+	protected void map(Object key, Text value, Context context) throws IOException,
+			InterruptedException {
 		String[] splits = value.toString().split(" ");
 
 		if (splits != null && splits.length >= 3) {
-
 			// check if the predicate is a foaf:knows edge
 			// also check the user
 			if (checkEdge(splits)) {
