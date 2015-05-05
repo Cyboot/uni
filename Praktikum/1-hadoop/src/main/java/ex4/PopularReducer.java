@@ -7,7 +7,6 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
 public class PopularReducer extends Reducer<Text, LongWritable, Text, LongWritable> {
-
 	private int	threshold;
 
 	@Override

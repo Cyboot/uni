@@ -15,7 +15,6 @@ public class PopularMapper extends Mapper<Object, Text, Text, LongWritable> {
 		String[] splits = value.toString().split(" ");
 
 		if (splits != null && splits.length >= 3) {
-
 			// check if the predicate is a foaf:knows edge
 			// also check the user
 			if (checkEdge(splits)) {

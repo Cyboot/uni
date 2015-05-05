@@ -12,6 +12,7 @@ public class AvgLikeMapper extends Mapper<Object, Text, NullWritable, LongWritab
 	@Override
 	protected void map(Object key, Text value, Context context) throws IOException,
 			InterruptedException {
+		// split the line again into Key-Value
 		String[] splits = value.toString().split("\t");
 
 		long parsed = Long.parseLong(splits[1]);

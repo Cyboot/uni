@@ -15,9 +15,7 @@ public class UserLikeMapper extends Mapper<Object, Text, Text, LongWritable> {
 		String[] splits = value.toString().split(" ");
 
 		if (splits != null && splits.length >= 3) {
-
-			// check if the predicate is a foaf:knows edge
-			// also check the user
+			// check if the predicate is a sib:like edge
 			if (checkEdge(splits)) {
 				// emit the person with value 1
 				context.write(new Text(splits[0]), ONE);

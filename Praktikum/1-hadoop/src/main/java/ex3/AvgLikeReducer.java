@@ -19,10 +19,10 @@ public class AvgLikeReducer extends Reducer<NullWritable, LongWritable, NullWrit
 			nrUsers++;
 		}
 
+		// calculate average
 		double avg = ((double) sum) / nrUsers;
 
 		String msg = "Avg: " + String.format("%.2f", avg) + " (" + nrUsers + " Users)";
-
 		context.write(key, new Text(msg));
 	};
 }

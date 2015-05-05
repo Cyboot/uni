@@ -11,7 +11,7 @@ public class UserLikeReducer extends Reducer<Text, LongWritable, Text, LongWrita
 	@Override
 	protected void reduce(Text key, Iterable<LongWritable> values, Context context)
 			throws IOException, InterruptedException {
-
+		// calculate the sum
 		long sum = 0;
 		for (LongWritable val : values) {
 			sum += val.get();

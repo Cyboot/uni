@@ -27,13 +27,12 @@ public class Ex3Main extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 		Configuration conf = getConf();
 		Job job = Job.getInstance(conf);
-		conf.set("mapred.job.tracker", "local");
 
 		// Define Input and Output Format
 		job.setInputFormatClass(TextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
 
-		// delte outputpath2
+		// delete outputpath2
 		Utils.deleteOutputDirectory(conf, OUTPUT_PATH2);
 
 		// use the output path of previous job as Input

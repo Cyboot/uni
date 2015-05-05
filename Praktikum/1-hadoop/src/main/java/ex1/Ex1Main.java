@@ -24,8 +24,13 @@ public class Ex1Main extends Configured implements Tool {
 	@Override
 	public int run(String[] args) throws Exception {
 		Configuration conf = getConf();
-		conf.set("RELEVANT_USER", RELEVANT_USER);
-		conf.set("mapreduce.client.genericoptionsparser.used", "true");
+
+		String relevantUser = RELEVANT_USER;
+		if (args.length > 0) {
+			relevantUser = args[0];
+		}
+		// set the relevant user into the config
+		conf.set("RELEVANT_USER", relevantUser);
 
 		Job job = Job.getInstance(conf);
 
