@@ -1,6 +1,15 @@
 \documentclass{article}
 \usepackage{relsize}
 
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+ 
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Exercise Sheet 1}
+\rhead{Tim Schmiedl}
+\rfoot{Page \thepage}
+
 \begin{document}
 \title{Data Analysis and Query Languages \\
  Exercise Sheet 1}
@@ -19,23 +28,101 @@ $SIM(S_1,S_3) = \frac{2}{7} \;\;\;\;\;\;\;\; d(S_1,S_3) = \frac{5}{7}$
 
 \vspace{1cm}
 \subsection*{b) Prove Jaccard distance}
+To prove:
 $\mathlarger{
+1 - \frac{| X \cap Y |}{| X \cup Y |}
+=
 \frac{|(X \setminus Y) \cup (Y \setminus X) |}{| X \cup Y |}
 }$
 
+
+\vspace{0.5cm}
+$\mathlarger{1 - \frac{| X \cap Y |}{| X \cup Y |}}$\\
+\\\\
+$\mathlarger{\Leftrightarrow \frac{| X \cup Y |}{| X \cup Y |} - \frac{| X \cap Y
+|}{| X \cup Y|}}$\\
+\\\\
+$\mathlarger{\Leftrightarrow \frac{| X \cup Y | - | X \cap Y
+|}{| X \cup Y|}}$\\
+\\\\
+$\mathlarger{\Leftrightarrow \frac{|( X \cup Y)  \setminus  (X \cap Y)
+|}{| X \cup Y|}}$\\
+\\\\
+$\mathlarger{\Leftrightarrow \frac{|(X \setminus Y) \cup (Y \setminus X)
+|}{| X \cup Y|}}$\\
+
 \vspace{1cm}
 \section*{Exercise 2}
+\subsection*{a) All 4-shingles}
+ijk\textvisiblespace, jk\textvisiblespace l, k\textvisiblespace
+lm, \textvisiblespace lmn, lmn\textvisiblespace, mn\textvisiblespace
+o, n\textvisiblespace op, \textvisiblespace opq
+
+\vspace{1cm}
+\subsection*{a) k-Shingles in RAM}
+$4 GB = 2^{32} \;bytes$\\
+$27 \; chars \Rightarrow 27^{k} possible \; shingles$\\
+$in \; memory: 27^{k} * 4 \; byte \Rightarrow k \approx 6,3$\\
 
 
+$\Rightarrow$ 6-shingles 
 
 \vspace{1cm}
 \section*{Exercise 3}
+\subsection*{Signature Matrix}
 
-
-
+\begin{tabular}{ l | l l l l }
+   & $S_1$ & $S_2$ & $S_3$ & $S_4$ \\                 
+  \hline      
+$h_1$   & 2 & 1 & 1 & 2 \\                 
+$h_2$   & 1 & 2 & 2 & 1 \\                 
+$h_3$   & 1 & 2 & 4 & 1 \\                 
+$h_4$   & 1 & 2 & 2 & 1 \\                 
+$h_5$   & 1 & 2 & 2 & 1 \\                 
+$h_6$   & 1 & 4 & 5 & 1 \\                 
+\end{tabular}
+\vspace{0.5cm}\\
+\begin{tabular}{ l | l l l l }
+SIM & 1-3 & 1-4 & 2-3 & 2-4 \\
+  \hline                       
+set & 0 & $\frac{3}{4}$ & $\frac{3}{4}$ & 0\\
+signature & 0 & 1 & $\frac{2}{3}$ & 0\\
+\end{tabular}
 \vspace{1cm}
-\section*{Exercise 4}
 
+\subsection*{b) LSH}
+$h_{b1}(S_1) = 3 * 2 + 1 = 7$\\
+$h_{b2}(S_1) = 3 * 1 + 1 = 4$\\
+$h_{b3}(S_1) = 3 * 1 + 1 = 4$\\\\
+$h_{b1}(S_2) = 5$\\
+$h_{b2}(S_2) = 8$\\
+$h_{b3}(S_2) = 10$\\\\
+$h_{b1}(S_2) = 5$\\
+$h_{b2}(S_2) = 14$\\
+$h_{b3}(S_2) = 11$\\\\
+$h_{b1}(S_2) = 7$\\
+$h_{b2}(S_2) = 4$\\
+$h_{b3}(S_2) = 4$\\\\
+
+\section*{Exercise 4}
+\subsection*{a) see code}
+\subsection*{a) Wikipedia similarities}
+
+\begin{tabular}{ l | l | l | l |}
+& Article 1 & Article 2 & Similarity score [0,1] \\
+  \hline          
+Top 1 & Enrico Fermi & Niels Bohr & 0,269  \\             
+Top 2 & Alexander Fleming & Ivan Pavlov & 0,269  \\             
+Top 3 & Paul McCartney & John Lennon & 0,258  \\             
+Top 4 & Niels Bohr & Max Planck & 0,250  \\             
+Top 5 & Stevie Wonder & Ray Charles & 0,245  \\             
+Top 6 & Albert Einstein & Niels Bohr & 0,242  \\             
+Top 7 & Bob Dylan & Paul McCartney & 0,242  \\             
+Top 8 & Bob Dylan & Elvis Presley & 0,238 \\             
+Top 9 & Paul Dirac & Max Planck & 0,235 \\             
+Top 10& Robert Plant & Ray Charles & 0,234 \\             
+  \hline  
+\end{tabular}
 
 
 \end{document}
