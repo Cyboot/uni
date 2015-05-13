@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<project name="hadoop" basedir=".">
+	<property name="ssh.hostname" value="192.168.0.103" />
+	<property name="ssh.user" value="cloudera" />
+	<property name="ssh.passwd" value="cloudera" />
+
+	<!-- ### Properties passed from Maven ### -->
+	<property name="version" value="${mvn.version}"/>
+	<property name="name" value="${mvn.projectname}"/>
+	<property name="extra" value=""/>
+	
+	<property name="jar" value="${name}-${version}${extra}.jar"/>
+	<property name="dir" value="~"/>
+
+
+	<!-- Copy files via SSH to remote Server -->
+	<target name="ssh-copy">
+		<echo message="deploying ${jar} file to ${ssh.user}@${ssh.hostname}" />
+		<scp file="target/${jar}" todir="${ssh.user}@${ssh.hostname}:~/${jar}" 
+			password="${ssh.passwd}" trust="true" />
+	</target>
+</project>
