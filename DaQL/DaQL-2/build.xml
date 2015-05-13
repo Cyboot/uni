@@ -1,0 +1,117 @@
+<!-- University of Freiburg
+	Lecture Data Analysis and Query Languages
+	Summer Semester 2015 -->
+<project default="run">
+	<!-- Global properties of the project. 
+		Please do not change this.-->
+	<property name="src-dir" location="./src" />
+	<property name="test-dir" location="./test" />
+	<property name="bin-dir" location="./bin" />
+	<property name="lib-dir" location="./lib" />
+	<property name="dist-dir" location="." />
+	<property name="junit-jar" location="./lib/junit.jar" />
+	<property name="checkstyle-jar" location="./lib/checkstyle-5.3-all.jar" />
+	<property name="checkstyle-config" location="./lib/checkstyle_config.xml" />
+	<property name="manifest-file" value="${src-dir}/MANIFEST.MF" />
+	<property name="root-package" value="daql" />
+	
+	<!--Change the following two properties for each exercise-->
+	<property name="Main-Class" value="${root-package}.ProgrammingTask2" />
+	<property name="jar-name" value="ProgrammingTask2" />
+	<!--*****************************************************-->	
+	<!--property name="properties" value="daql-ss15" /-->
+	<!--property file="${properties}.properties"/-->
+
+
+	<!-- This statemenst adds third party libraries to the classpath. -->
+	<path id="classpath.base">
+		<fileset dir="${lib-dir}" includes="**/*.jar" />
+	</path>
+
+	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+	<!--  Ideally, you'll never have to touch anything below.  -->
+	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+	<path id="classpath.run">
+		<pathelement location="${bin-dir}" />
+		<path refid="classpath.base" />
+	</path>
+	
+	<path id="classpath.test">
+		<pathelement location="${junit-jar}" />
+		<pathelement location="${test-dir}" />
+		<pathelement location="${bin-dir}" />
+		<path refid="classpath.base" />
+	</path>
+
+	<target name="checkstyle">
+		<taskdef resource="checkstyletask.properties" classpath="${checkstyle-jar}" />
+		<checkstyle config="${checkstyle-config}" failOnViolation="true">
+			<fileset dir="${src-dir}" includes="*/*.java" />
+			<fileset dir="${test-dir}" includes="*/*.java" />
+			<formatter type="plain" usefile="false" />
+		</checkstyle>
+	</target>
+
+	<target name="compile">
+		<javac srcdir="${src-dir}" destdir="${bin-dir}" verbose="true" includeantruntime="false" encoding="UTF-8" target="1.7">
+			<classpath refid="classpath.test" />
+		</javac>
+	</target>
+	
+	<target name="compile-test">
+	    <javac srcdir="${test-dir}" destdir="${bin-dir}" verbose="true" includeantruntime="false" encoding="UTF-8" target="1.7">
+	      <classpath refid="classpath.test"/>
+	    </javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="${dist-dir}/${jar-name}.jar" basedir="${bin-dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${Main-Class}" />
+			</manifest>
+		</jar>
+
+		<!-- Places all jars from lib into the java application -->
+		<jar jarfile="${dist-dir}/${jar-name}.jar" basedir="${bin-dir}" manifest="${manifest-file}">
+			<zipgroupfileset dir="${lib-dir}" includes="**/*.jar" />
+		</jar>
+	</target>
+
+	<target name="clean">
+		<delete verbose="true">
+			<fileset dir="${bin-dir}" includes="**/*.class" />
+			<fileset dir="${dist-dir}" includes="${jar-name}.jar" />
+		</delete>
+	</target>
+
+	<target name="test" depends="compile-test, compile">
+		<junit printsummary="yes">
+			<classpath refid="classpath.test" />
+			<!--formatter type="brief" usefile="false" />
+			<batchtest>
+				<fileset dir="${bin-dir}" includes="**/Test*.class" />
+			</batchtest-->
+			<batchtest fork="yes">
+				<formatter type="plain" usefile="false" />
+				<fileset dir="${test-dir}">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="all" depends="compile, compile-test, test, checkstyle, jar"/>
+	
+	<target name="all-no-tests" depends="compile, checkstyle, jar" />
+
+	<target name='run' description='Build and run the program.' depends='all'>
+		<java classname='${Main-Class}' classpathref='classpath.run'>
+			<!--arg value="${arg0}" />
+			<arg value="${arg1}" />
+			<arg value="${arg2}" />
+			<arg value="${arg3}" />
+			<arg value="${arg4}" /-->
+		</java>
+	</target>
+</project>
