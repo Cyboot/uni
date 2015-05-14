@@ -6,68 +6,106 @@
  */
 package daql;
 
-import java.util.HashSet;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
+import daql.crawler.WikipediaArticleCrawler;
+import daql.programmingtask1.KShingling;
 import daql.programmingtask2.SimHash;
 
 /**
  * Main class of ProgrammingTask2.
- * @author ...write your name here...
+ * 
+ * @author Tim Schmiedl
  *
  */
 public class ProgrammingTask2 {
+    private static WikipediaArticleCrawler crawler;
+
     /**
-     * Main Class for Programming task 2.
+     * Main Class for Programming task 1.
+     * 
      * @param args
+     * @throws Exception
      */
-    public static void main(String[] args) {
-        /*
-         * You have to REWRITE this method and calculate the similarity of 
-         * pairs of Wikipedia articles using the SimHash fingerprints instead 
-         * of using the Jaccard Similarity. 
-         * 
-         * The first step consists in computing the fingerprint of each article.
-         * You can store the fingerprints in a hash table.
-         * Then, to compute the similarity of two fingerprints you can compute 
-         * the XOR of fingerprints and count the resulting number of 1's. 
-         * Remember that this is a distance metric and not a similarity metric.
-         * Therefore, treat elements as similar, whenever this number is 
-         * smaller or equal to k.
-         * 
-         * The list of documents you have to consider is the same as for the 
-         * previous programming task 1./data/ListartTalks.txt.
-         */
-        
-        //You can remove the following code. It is just to give you an idea 
-        //of the program flow.
-        //Suppose you have a document represented by the set of k-shingles set1
-        //(you can get this invoking KShingling.getKShingles()):
-        Set<String> set1 = new HashSet();
-        set1.add("abc");
-        set1.add("bcd");
-        set1.add("cde");
-        set1.add("def");
-        
-        //To compute the fingerprint:
-        boolean[] fingerprint1 = SimHash.computeFingerprint(set1);
-        
-        //Now you do the same with another document:
-        Set<String> set2 = new HashSet();
-        set2.add("opq");
-        set2.add("pqr");
-        set2.add("qrs");
-        set2.add("rst");
-        
-        boolean[] fingerprint2 = SimHash.computeFingerprint(set2);
-        
-        //Now you can compute the distance of both fingerprints with this 
-        //method (based on XOR)
-        double numOfDifferentBits 
-            = SimHash.distance(fingerprint1, fingerprint2);
-        
-        //Finally, decide if the documents are similar if numOfDifferentBits < k
-        //where k is a threshold you can choose.        
-        //Compute the most similar pairs of documents.
+    public static void main(String[] args) throws Exception {
+        crawler = new WikipediaArticleCrawler();
+        Map<String, Set<String>> articleShingleMap = new HashMap<String, Set<String>>();
+
+        // read all articles from the text file
+        BufferedReader br = new BufferedReader(new FileReader(new File(
+                        "data/ListArtTalks.txt")));
+        String line = null;
+        while ((line = br.readLine()) != null) {
+            String article = readArticle(line);
+            Set<String> kShingles = KShingling.getKShingles(5, article);
+
+            articleShingleMap.put(line, kShingles);
+        }
+        br.close();
+
+        // calculate the Jaccard similarity between all articles
+        TreeMap<Integer, String> scoreMap = new TreeMap<Integer, String>();
+        for (Entry<String, Set<String>> entryOuter : articleShingleMap
+                        .entrySet()) {
+            for (Entry<String, Set<String>> entryInner : articleShingleMap
+                            .entrySet()) {
+                // don't compare equal article
+                if (entryOuter == entryInner)
+                    continue;
+
+                System.out.println("Computing Fingerprints");
+
+                Set<String> shiglesOuter = entryOuter.getValue();
+                Set<String> shiglesInner = entryInner.getValue();
+                boolean[] fingerprintInner = SimHash
+                                .computeFingerprint(shiglesInner);
+                boolean[] fingerprintOuter = SimHash
+                                .computeFingerprint(shiglesOuter);
+
+                int distance = SimHash.distance(fingerprintInner,
+                                fingerprintOuter);
+
+                // compute the Jaccard similarity
+                scoreMap.put(distance,
+                                entryOuter.getKey() + " - "
+                                                + entryInner.getKey());
+            }
+        }
+
+        // print the similarity in descresing order
+        int count = 0;
+        for (Entry<Integer, String> entry : scoreMap.descendingMap().entrySet()) {
+            if (count >= 15)
+                break;
+            count++;
+
+            System.out.printf("%i : %s\n", entry.getKey(), entry.getValue());
+        }
+    }
+
+    private static String readArticle(String article) {
+        crawler.setArticleName(article);
+        try {
+            crawler.crawl();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String articleText = crawler.getAbstractText();
+
+        // Merge the text from abstract and sections:
+        for (String section : crawler.getSectionsText()) {
+            articleText += section;
+        }
+
+        return articleText;
     }
 }
