@@ -6,7 +6,6 @@
  */
 package daql.programmingtask2;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import com.google.common.base.Charsets;
@@ -64,66 +63,6 @@ public class SimHash {
         }
 
         return resultFingerPrint;
-
-        // SINGLE HASH CODE -> ONE array of bits
-        // Note that you can invoke hc.asBytes() to get the hashcode as an array
-        // of bytes (NOT bits).
-        // Use the method SimHash.bits(...) to convert a single byte to an array
-        // of bits. You have to combine all arrays of bits together taking into
-        // account the order of the byte.
-        // In this way you will have a hash code as a single array of bits.
-
-        // SET of HASH CODES -> SET of arrays of bits -> Finderprint
-        // From the set of hash codes (one for each k-shingle) you have to
-        // compute one single array of bits, the fingerprint, as described in
-        // slide 22 of 02-DAQL-Finding_similarities.pdf.
-    }
-
-    public static void main(String[] args) {
-        Set<String> kShingles = new HashSet<String>();
-        kShingles.add("asdf");
-        kShingles.add("xyz");
-        kShingles.add("xyz12");
-        kShingles.add("123jk");
-        kShingles.add("123");
-        kShingles.add("rierk");
-        kShingles.add("r7fduisjk");
-
-        boolean[] computeFingerprint = computeFingerprint(kShingles);
-        printFingerPrint(computeFingerprint);
-
-        System.out.println();
-        kShingles.add("test");
-        boolean[] computeFingerprint2 = computeFingerprint(kShingles);
-        printFingerPrint(computeFingerprint2);
-
-        System.out.println();
-        kShingles.add("234");
-        kShingles.add("tehtzst");
-        kShingles.add("42uio");
-        kShingles.add("afguihaewiost");
-        kShingles.add("retet");
-        boolean[] computeFingerprint3 = computeFingerprint(kShingles);
-        printFingerPrint(computeFingerprint3);
-
-        System.out.println("\nDistance (1,2): "
-                        + distance(computeFingerprint, computeFingerprint2));
-        System.out.println("Distance (1,3): "
-                        + distance(computeFingerprint, computeFingerprint3));
-    }
-
-    private static void printFingerPrint(boolean[] computeFingerprint) {
-        int i = 0;
-        for (boolean b : computeFingerprint) {
-            String bit = b ? "1" : "0";
-            System.out.print(bit);
-
-            i++;
-            if (i == 8) {
-                i = 0;
-                System.out.print(" ");
-            }
-        }
     }
 
     /**

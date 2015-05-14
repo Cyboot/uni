@@ -27,6 +27,9 @@ import daql.programmingtask2.SimHash;
  *
  */
 public class ProgrammingTask2 {
+    /**
+     * the wikipedia crawler.
+     */
     private static WikipediaArticleCrawler crawler;
 
     /**
@@ -55,13 +58,13 @@ public class ProgrammingTask2 {
         TreeMap<Integer, String> scoreMap = new TreeMap<Integer, String>();
         for (Entry<String, Set<String>> entryOuter : articleShingleMap
                         .entrySet()) {
+            System.out.println("Computing Fingerprints");
             for (Entry<String, Set<String>> entryInner : articleShingleMap
                             .entrySet()) {
                 // don't compare equal article
-                if (entryOuter == entryInner)
+                if (entryOuter == entryInner) {
                     continue;
-
-                System.out.println("Computing Fingerprints");
+                }
 
                 Set<String> shiglesOuter = entryOuter.getValue();
                 Set<String> shiglesInner = entryInner.getValue();
@@ -80,17 +83,24 @@ public class ProgrammingTask2 {
             }
         }
 
-        // print the similarity in descresing order
+        // print the similarity in descresing order (Top10)
         int count = 0;
-        for (Entry<Integer, String> entry : scoreMap.descendingMap().entrySet()) {
-            if (count >= 15)
+        for (Entry<Integer, String> entry : scoreMap.entrySet()) {
+            if (count >= 10) {
                 break;
+            }
             count++;
 
-            System.out.printf("%i : %s\n", entry.getKey(), entry.getValue());
+            System.out.printf("%d : %s\n", entry.getKey(), entry.getValue());
         }
     }
 
+    /**
+     * read the wikipedia article.
+     * 
+     * @param article
+     * @return
+     */
     private static String readArticle(String article) {
         crawler.setArticleName(article);
         try {
