@@ -12,8 +12,8 @@ import org.apache.hadoop.mapreduce.Reducer;
 public class FoaF3Reducer extends Reducer<Text, Text, Text, Text> {
 
 	@Override
-	protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException,
-			InterruptedException {
+	protected void reduce(Text key, Iterable<Text> values, Context context)
+			throws IOException, InterruptedException {
 		// join all the Lists
 		Set<String> commonFriends = new HashSet<String>();
 		for (Text user : values) {
@@ -27,6 +27,9 @@ public class FoaF3Reducer extends Reducer<Text, Text, Text, Text> {
 		String commaJoinedList = StringUtils.join(commonFriends, ',');
 
 		// emit the final result: User (Key) and a List with friends of friends
-		context.write(key, new Text("" + StringUtils.countMatches(commaJoinedList, ",")));
+		context.write(key, new Text(commaJoinedList));
+
+		context.write(key,
+				new Text("" + StringUtils.countMatches(commaJoinedList, ",")));
 	}
 }
