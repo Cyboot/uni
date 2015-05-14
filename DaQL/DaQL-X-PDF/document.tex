@@ -21,18 +21,80 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Exercise 1}
 \subsection*{a) stop words}
+\subsubsection*{T1: It is payday (payday)}
+payda, ayday
+
+\subsubsection*{T2: Mayday, mayday (mayday\textvisiblespace mayday)}
+mayda,
+ayday,
+yday\textvisiblespace ,
+day\textvisiblespace m,
+ay\textvisiblespace ma,
+y\textvisiblespace may,
+\textvisiblespace mayd
+
+\subsubsection*{T3: Day of may (day\textvisiblespace may)}
+day\textvisiblespace m,
+ay\textvisiblespace ma,
+y\textvisiblespace may
 
 \subsection*{b) Jaccard similarity}
+$SIM(T_1,T_2) = \frac{1}{8} = 0.125 \;\;\;\;\;\;\;\; $ no canidate\\
+\\
+$SIM(T_2,T_3) = \frac{3}{7} \approx 0.429 \;\;\;\;\;\;\;\; $ canidate\\
+
 
 \subsection*{c) Index prefix}
+\subsubsection*{T1: It is payday (payday)}
+T1 = [ayday, payda]\\
+Prefix length = $|T1| - (\lceil 0.25 * |T1| \rceil ) + 1 = 2$
+
+
+\subsubsection*{T2: Mayday, mayday (mayday\textvisiblespace mayday)}
+T2 = [\textvisiblespace mayd, ay\textvisiblespace ma, ayday, day\textvisiblespace m, mayda, y\textvisiblespace may, yday\textvisiblespace ]
+Prefix length = $|T2| - (\lceil 0.25 * |T2| \rceil ) + 1 = 6$
+
+\subsubsection*{T3: Day of may (day\textvisiblespace may)}
+T3 = [ay\textvisiblespace ma, day\textvisiblespace m, y\textvisiblespace may]
+Prefix length = $|T3| - (\lceil 0.25 * |T3| \rceil ) + 1 = 3$
+
 
 \vspace{2cm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Exercise 2}
-\subsection*{a) stop words}
+\subsection*{a) Vector space model}
+Vector = [best, costume, halloweens, night, halloween, party, during, this,
+will, walking, with]\\
+\\
+T1 = [1, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0]\\
+T2 = [1, 0, 0, 1, 1, 2, 1, 1, 1, 0, 0]\\
+T3 = [0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1]
 
-\subsection*{b) Queries}
+\subsection*{b) cosine similarity }
+Q1 = [1, 1, 2, 1, 0, 0, 1, 0, 0, 0, 0]\\
+Q2 = [1, 0, 1, 0, 0, 2, 0, 0, 0, 0, 1]\\
+\\
+$ || T1 || = \sqrt{1 +2^2 + 1 +1} \approx 2.646$\\
+$ || T2 || = \sqrt{1 + 1 + 1 + 2^2 + 1 + 1 + 1} \approx 3.162$\\
+$ || T3 || = \sqrt{1 + 1 + 1 + 1 + 1} \approx 2.236$\\
+\\
+$ || Q1 || = \sqrt{1 + 1 + 2^2 + 1 + 1} \approx 2.828$\\
+$ || Q2 || = \sqrt{1 + 1 + 2^2 + 1} \approx 2.646$\\
+\vspace{0.5cm}
+\\
+$SIM(Q1, T1) = \frac{1*1 + 2*1 + 1*2 + 1*1}{|| T1 || * || Q1 ||} \approx
+0.802$\\
+$SIM(Q1, T2) = \frac{1*1 + 1*1 + 1*1}{|| T2 || * || Q1 ||} \approx 0.335 $\\
+$SIM(Q1, T3) = \frac{1*1 + 1*1 + 1*1}{|| T3 || * || Q1 ||} \approx 0.474 $\\
+\\
+Ranking for Query1: T1 \textgreater T3 \textgreater T2\\
+\\
+$SIM(Q2, T1) = \frac{1*1 + 1*1}{|| T1 || * || Q2 ||} \approx 0.286 $\\
+$SIM(Q2, T2) = \frac{1*1 + 2*2}{|| T2 || * || Q2 ||} \approx 0.598 $\\
+$SIM(Q2, T3) = \frac{1*1}{|| T3 || * || Q2 ||} \approx 0.169 $\\
+\\
+Ranking for Query2: T2 \textgreater T1 \textgreater T3\\
 
 \subsection*{c) cosine distance}
 
