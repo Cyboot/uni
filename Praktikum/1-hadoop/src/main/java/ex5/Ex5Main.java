@@ -18,6 +18,7 @@ import common.Utils;
 
 import ex1.Ex1Main;
 
+
 public class Ex5Main {
 	private static final String	OUTPUT_PATH2	= "/out2";
 	private static final String	OUTPUT_PATH3	= "/out3";
