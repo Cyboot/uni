@@ -8,14 +8,13 @@ import org.apache.hadoop.mapreduce.Mapper;
 public class FullNameMapper extends Mapper<Object, Text, Text, Text> {
 
 	@Override
-	protected void map(Object key, Text value, Context context) throws IOException,
-			InterruptedException {
+	protected void map(Object key, Text value, Context context)
+			throws IOException, InterruptedException {
 		String[] splits = value.toString().split(" ");
 
 		Text subject = new Text(splits[0]);
 		String edge = splits[1];
 		String object = splits[2];
-
 
 		if (splits != null && splits.length >= 3) {
 			object = object.replace("\"", "");

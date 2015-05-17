@@ -19,7 +19,7 @@ import common.Utils;
 
 public class Ex1Main extends Configured implements Tool {
 	// User with likes
-	public static final String	RELEVANT_USER	= "sibu:u107";
+	public static final String RELEVANT_USER = "sibu:u107";
 
 	@Override
 	public int run(String[] args) throws Exception {
@@ -68,7 +68,6 @@ public class Ex1Main extends Configured implements Tool {
 		}
 		return 1;
 	}
-
 
 	public static void main(String[] args) throws Exception {
 		int exitCode = ToolRunner.run(new Ex1Main(), args);

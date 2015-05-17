@@ -9,13 +9,12 @@ import org.apache.hadoop.mapreduce.Reducer;
 public class FullNameReducer extends Reducer<Text, Text, Text, Text> {
 
 	@Override
-	protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException,
-			InterruptedException {
+	protected void reduce(Text key, Iterable<Text> values, Context context)
+			throws IOException, InterruptedException {
 		String firstName = "";
 		String lastName = "";
 		String gender = "";
 		String birthday = "";
-
 
 		for (Text text : values) {
 			String[] split = text.toString().split(">");
@@ -42,7 +41,7 @@ public class FullNameReducer extends Reducer<Text, Text, Text, Text> {
 
 		String user = StringUtils.rightPad(key.toString(), 10, " ");
 
-		context.write(new Text(user), new Text(firstName + "\t " + lastName + "\t (" + gender
-				+ "\t " + birthday));
+		context.write(new Text(user), new Text(firstName + "\t " + lastName
+				+ "\t (" + gender + "\t " + birthday));
 	}
 }

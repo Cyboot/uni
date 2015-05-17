@@ -12,7 +12,8 @@ public class Utils {
 	public static void printOutputFile(String outputPath) throws IOException {
 		Path pt = new Path(outputPath + "/part-r-00000");
 		FileSystem fs = FileSystem.get(new Configuration());
-		BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(pt)));
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				fs.open(pt)));
 		String line = br.readLine();
 		while (line != null) {
 			System.out.println(line);
@@ -20,8 +21,9 @@ public class Utils {
 		}
 	}
 
-	public static void deleteOutputDirectory(Configuration conf, String outputPath)
-			throws IllegalArgumentException, IOException {
-		new Path(outputPath).getFileSystem(conf).delete(new Path(outputPath), true);
+	public static void deleteOutputDirectory(Configuration conf,
+			String outputPath) throws IllegalArgumentException, IOException {
+		new Path(outputPath).getFileSystem(conf).delete(new Path(outputPath),
+				true);
 	}
 }

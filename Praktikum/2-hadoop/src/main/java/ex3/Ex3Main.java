@@ -48,8 +48,8 @@ public class Ex3Main {
 		job.setJobName("Ex5");
 	}
 
-
-	private static void setIOPaths(Job job, String pathInput, String pathOutput) throws Exception {
+	private static void setIOPaths(Job job, String pathInput, String pathOutput)
+			throws Exception {
 		// delete old output directory
 		Utils.deleteOutputDirectory(job.getConfiguration(), pathOutput);
 
@@ -65,7 +65,6 @@ public class Ex3Main {
 		}
 		return 1;
 	}
-
 
 	private static class Job1 extends Configured implements Tool {
 		@Override
@@ -90,7 +89,6 @@ public class Ex3Main {
 			return runJob(job, "/out2");
 		}
 	}
-
 
 	public static void main(String[] args) throws Exception {
 		int exitCode = 0;

@@ -56,7 +56,6 @@ public class Ex2Main extends Configured implements Tool {
 		return 1;
 	}
 
-
 	public static void main(String[] args) throws Exception {
 		int exitCode = ToolRunner.run(new Ex2Main(), args);
 		System.exit(exitCode);

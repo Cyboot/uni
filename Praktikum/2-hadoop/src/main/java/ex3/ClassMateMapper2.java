@@ -8,8 +8,8 @@ import org.apache.hadoop.mapreduce.Mapper;
 public class ClassMateMapper2 extends Mapper<Object, Text, Text, Text> {
 
 	@Override
-	protected void map(Object key, Text value, Context context) throws IOException,
-			InterruptedException {
+	protected void map(Object key, Text value, Context context)
+			throws IOException, InterruptedException {
 		String line = value.toString();
 		String[] split = line.split("\t");
 
@@ -18,7 +18,6 @@ public class ClassMateMapper2 extends Mapper<Object, Text, Text, Text> {
 
 		String organization = "";
 		String year = "";
-
 
 		for (String str : concatValue.split(";;;")) {
 			String prefix = str.split(">")[0];

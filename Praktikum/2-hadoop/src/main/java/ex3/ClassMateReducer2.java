@@ -10,8 +10,8 @@ import org.apache.hadoop.mapreduce.Reducer;
 public class ClassMateReducer2 extends Reducer<Text, Text, Text, Text> {
 
 	@Override
-	protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException,
-			InterruptedException {
+	protected void reduce(Text key, Iterable<Text> values, Context context)
+			throws IOException, InterruptedException {
 		String[] split = key.toString().split(";;;");
 
 		// just consider the element if there is a Oranization AND a year
@@ -32,13 +32,12 @@ public class ClassMateReducer2 extends Reducer<Text, Text, Text, Text> {
 				users += ", ";
 		}
 
-		organization = StringUtils.rightPad(StringUtils.abbreviate(organization, 43), 45);
+		organization = StringUtils.rightPad(
+				StringUtils.abbreviate(organization, 43), 45);
 		year = StringUtils.rightPad(year, 5);
-
 
 		context.write(new Text(organization + year), new Text(users));
 	}
-
 
 	public static void main(String[] args) {
 		String organization = StringUtils.rightPad("Uni Freiburg", 50);
