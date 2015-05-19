@@ -7,8 +7,10 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
@@ -38,8 +40,10 @@ public class Ex3Main {
 		job.setOutputValueClass(Text.class);
 
 		// Set Mapper and Reducer Class
-		job.setMapperClass(mapper);
-		job.setReducerClass(reducer);
+		if (mapper != null)
+			job.setMapperClass(mapper);
+		if (reducer != null)
+			job.setReducerClass(reducer);
 
 		// Set the Number of Reduce Tasks
 		job.setNumReduceTasks(1);
@@ -48,8 +52,7 @@ public class Ex3Main {
 		job.setJobName("Ex5");
 	}
 
-	private static void setIOPaths(Job job, String pathInput, String pathOutput)
-			throws Exception {
+	private static void setIOPaths(Job job, String pathInput, String pathOutput) throws Exception {
 		// delete old output directory
 		Utils.deleteOutputDirectory(job.getConfiguration(), pathOutput);
 
@@ -57,14 +60,6 @@ public class Ex3Main {
 		FileOutputFormat.setOutputPath(job, new Path(pathOutput));
 	}
 
-	private static int runJob(Job job, String pathOutput) throws Exception {
-		if (job.waitForCompletion(true)) {
-			// print the output file
-			Utils.printOutputFile(pathOutput);
-			return 0;
-		}
-		return 1;
-	}
 
 	private static class Job1 extends Configured implements Tool {
 		@Override
@@ -73,8 +68,9 @@ public class Ex3Main {
 
 			setIOPaths(job, Const.PATH_INPUT, Const.PATH_OUTPUT);
 			setMapRed(job, ClassMateMapper.class, ClassMateReducer.class);
+			job.setOutputFormatClass(SequenceFileOutputFormat.class);
 
-			return runJob(job, Const.PATH_OUTPUT);
+			return job.waitForCompletion(true) ? 0 : 1;
 		}
 	}
 
@@ -84,9 +80,16 @@ public class Ex3Main {
 			Job job = Job.getInstance(getConf());
 
 			setIOPaths(job, Const.PATH_OUTPUT, "/out2");
-			setMapRed(job, ClassMateMapper2.class, ClassMateReducer2.class);
+			setMapRed(job, null, ClassMateReducer2.class);
+			job.setInputFormatClass(SequenceFileInputFormat.class);
+			job.setOutputFormatClass(TextOutputFormat.class);
 
-			return runJob(job, "/out2");
+			if (job.waitForCompletion(true)) {
+				// print the output file
+				Utils.printOutputFile("/out2");
+				return 0;
+			}
+			return 1;
 		}
 	}
 
