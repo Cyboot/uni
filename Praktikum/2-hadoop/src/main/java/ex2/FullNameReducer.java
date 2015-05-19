@@ -9,8 +9,8 @@ import org.apache.hadoop.mapreduce.Reducer;
 public class FullNameReducer extends Reducer<Text, Text, Text, Text> {
 
 	@Override
-	protected void reduce(Text key, Iterable<Text> values, Context context)
-			throws IOException, InterruptedException {
+	protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException,
+			InterruptedException {
 		String firstName = "";
 		String lastName = "";
 		String gender = "";
@@ -35,13 +35,13 @@ public class FullNameReducer extends Reducer<Text, Text, Text, Text> {
 				gender = value;
 			}
 		}
-		firstName = StringUtils.rightPad(firstName, 10, " ");
-		lastName = StringUtils.rightPad(lastName, 12, " ");
+		String fullname = firstName + " " + lastName;
+
+		fullname = StringUtils.rightPad(fullname, 25, " ");
 		gender = StringUtils.rightPad(gender + ")", 10, " ");
 
 		String user = StringUtils.rightPad(key.toString(), 10, " ");
 
-		context.write(new Text(user), new Text(firstName + "\t " + lastName
-				+ "\t (" + gender + "\t " + birthday));
+		context.write(new Text(user), new Text(fullname + "  (" + gender + "  " + birthday));
 	}
 }

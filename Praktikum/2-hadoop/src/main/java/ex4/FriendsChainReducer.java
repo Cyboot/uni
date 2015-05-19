@@ -26,7 +26,7 @@ public class FriendsChainReducer extends Reducer<Text, Text, Text, Text> {
 		List<String[]> tails = new ArrayList<String[]>();
 
 		for (Text t : values) {
-			tails.add(t.toString().split(" "));
+			tails.add(t.toString().split(","));
 		}
 
 		/**
@@ -103,11 +103,11 @@ public class FriendsChainReducer extends Reducer<Text, Text, Text, Text> {
 	}
 
 	public String printChain(List<String> chain) {
-		return StringUtils.join(chain, ' ');
+		return StringUtils.join(chain, ',');
 	}
 
 	public String printChainWithDistance(List<String> chain) {
-		return printChain(chain) + ",\t distance = " + (chain.size() - 1);
+		return printChain(chain) + ",\t distance: " + (chain.size() - 1);
 	}
 
 	public List<String> concatChains(String[] a, String middle, String[] b) {
