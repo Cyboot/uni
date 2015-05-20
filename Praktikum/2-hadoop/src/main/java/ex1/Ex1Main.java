@@ -21,6 +21,14 @@ public class Ex1Main extends Configured implements Tool {
 
 	@Override
 	public int run(String[] args) throws Exception {
+		if (args.length != 2) {
+			System.out.println("Usage: Ex1Main <input dir> <output dir>");
+			System.exit(-1);
+		}
+		Const.PATH_INPUT = args[0];
+		Const.PATH_OUTPUT = args[1];
+
+
 		Job job = Job.getInstance(getConf());
 
 		// Define Input and Output Format
@@ -53,10 +61,10 @@ public class Ex1Main extends Configured implements Tool {
 			job2.setOutputFormatClass(TextOutputFormat.class);
 
 			// delete old output directory
-			Utils.deleteOutputDirectory(getConf(), "/out2");
+			Utils.deleteOutputDirectory(getConf(), "out2");
 
 			SequenceFileInputFormat.setInputPaths(job2, new Path(Const.PATH_OUTPUT));
-			TextOutputFormat.setOutputPath(job2, new Path("/out2"));
+			TextOutputFormat.setOutputPath(job2, new Path("out2"));
 
 			// set types of Input/Output Objects
 			job2.setMapOutputKeyClass(Text.class);
@@ -70,7 +78,7 @@ public class Ex1Main extends Configured implements Tool {
 			job2.setJobName("Ex1:MR2");
 
 			if (job2.waitForCompletion(true)) {
-				Utils.printOutputFile("/out2");
+				Utils.printOutputFile("out2");
 				return 0;
 			}
 		}

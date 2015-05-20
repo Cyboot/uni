@@ -64,6 +64,14 @@ public class Ex3Main {
 	private static class Job1 extends Configured implements Tool {
 		@Override
 		public int run(String[] args) throws Exception {
+			if (args.length != 2) {
+				System.out.println("Usage: Ex1Main <input dir> <output dir>");
+				System.exit(-1);
+			}
+			Const.PATH_INPUT = args[0];
+			Const.PATH_OUTPUT = args[1];
+
+
 			Job job = Job.getInstance(getConf());
 
 			setIOPaths(job, Const.PATH_INPUT, Const.PATH_OUTPUT);
@@ -79,14 +87,14 @@ public class Ex3Main {
 		public int run(String[] args) throws Exception {
 			Job job = Job.getInstance(getConf());
 
-			setIOPaths(job, Const.PATH_OUTPUT, "/out2");
+			setIOPaths(job, Const.PATH_OUTPUT, "out2");
 			setMapRed(job, null, ClassMateReducer2.class);
 			job.setInputFormatClass(SequenceFileInputFormat.class);
 			job.setOutputFormatClass(TextOutputFormat.class);
 
 			if (job.waitForCompletion(true)) {
 				// print the output file
-				Utils.printOutputFile("/out2");
+				Utils.printOutputFile("out2");
 				return 0;
 			}
 			return 1;

@@ -19,6 +19,14 @@ public class Ex2Main extends Configured implements Tool {
 
 	@Override
 	public int run(String[] args) throws Exception {
+		if (args.length != 2) {
+			System.out.println("Usage: Ex2Main <input dir> <output dir>");
+			System.exit(-1);
+		}
+		Const.PATH_INPUT = args[0];
+		Const.PATH_OUTPUT = args[1];
+
+
 		Configuration conf = getConf();
 
 		Job job = Job.getInstance(conf);

@@ -115,10 +115,18 @@ public class Ex4Main extends Configured implements Tool {
 	}
 
 	@Override
-	public int run(String[] strings) throws Exception {
+	public int run(String[] args) throws Exception {
+		if (args.length != 4) {
+			System.out.println("Usage: Ex4Main <input dir> <output dir> <userA> <userB>");
+			System.exit(-1);
+		}
+		Const.PATH_INPUT = args[0];
+		Const.PATH_OUTPUT = args[1];
+
+
 		Configuration conf = getConf();
-		conf.set("userA", "sibu:u14");
-		conf.set("userB", "sibu:u163");
+		conf.set("userA", args[2]);
+		conf.set("userB", args[3]);
 		conf.set("mapred.used.genericoptionsparser", "true");
 
 		Path initFriendshipPath = getTemporaryPath(conf);
@@ -148,11 +156,11 @@ public class Ex4Main extends Configured implements Tool {
 		}
 
 		// run a job to fetch the results
-		Utils.deleteOutputDirectory(conf, "/out");
-		createReformatJob(conf, currentIn, new Path("/out")).waitForCompletion(true);
+		Utils.deleteOutputDirectory(conf, "out");
+		createReformatJob(conf, currentIn, new Path("out")).waitForCompletion(true);
 
 		// print the result
-		Utils.printOutputFile("/out");
+		Utils.printOutputFile("out");
 
 		return 0;
 	}
