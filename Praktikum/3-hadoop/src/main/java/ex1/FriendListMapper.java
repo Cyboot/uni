@@ -18,9 +18,9 @@ public class FriendListMapper extends Mapper<Object, Text, Text, Text> {
 		if (splits != null && splits.length >= 3) {
 			if (edge.equals("foaf:knows")) {
 				context.write(new Text(subject), new Text(
-						FriendListReducer.INCOMING + " > " + object));
+						FriendListReducer.OUTGOING + " > " + object));
 				context.write(new Text(object), new Text(
-						FriendListReducer.OUTGOING + " > " + subject));
+						FriendListReducer.INCOMING + " > " + subject));
 			}
 		}
 	}

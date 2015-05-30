@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
@@ -27,10 +28,27 @@ public class FriendListReducer2 extends Reducer<Text, Text, Text, Text> {
 
 				sumPageRank += pageRank / nrOfFriends;
 			}
-			if (str[0].equals(FriendListReducer.FRIENDLIST)) {
+			if (str[0].equals(FriendListReducer.FRIENDLIST) && str.length > 1) {
 				friendList = Arrays.asList(str[1].split(","));
 			}
 		}
 
+		// skip user with no friends
+		if (friendList == null)
+			return;
+
+		int nrOutgoingFriends = friendList.size();
+		String valueOut = FriendListReducer.PAGE_RANK + "->" + key.toString()
+				+ " > " + nrOutgoingFriends + " > " + sumPageRank;
+
+		// propagate Nr of friends for key to all friends
+		for (String user : friendList) {
+			context.write(new Text(user), new Text(valueOut));
+		}
+
+		// also emit the list of friends for the user
+		String commaJoinedList = StringUtils.join(friendList, ",");
+		context.write(key, new Text(FriendListReducer.FRIENDLIST + "->"
+				+ commaJoinedList));
 	}
 }

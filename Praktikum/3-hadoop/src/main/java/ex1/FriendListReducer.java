@@ -25,10 +25,10 @@ public class FriendListReducer extends Reducer<Text, Text, Text, Text> {
 		for (Text text : values) {
 			String[] split = text.toString().split(" > ");
 
-			if (split[0].equals(INCOMING)) {
-				incomingList.add(split[1]);
-			} else {
+			if (split[0].equals(OUTGOING)) {
 				outgoingList.add(split[1]);
+			} else {
+				incomingList.add(split[1]);
 			}
 		}
 
@@ -43,7 +43,7 @@ public class FriendListReducer extends Reducer<Text, Text, Text, Text> {
 		}
 
 		// also emit the list of friends for the user
-		String commaJoinedList = StringUtils.join(incomingList, ",");
+		String commaJoinedList = StringUtils.join(outgoingList, ",");
 		context.write(key, new Text(FRIENDLIST + "->" + commaJoinedList));
 	}
 }
