@@ -9,6 +9,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
 public class FriendListReducer extends Reducer<Text, Text, Text, Text> {
+	private static final int INITIAL_PAGERANK = 100;
 	public static final String PAGE_RANK = "pagerank";
 	public static final String FRIENDLIST = "friendlist";
 
@@ -33,7 +34,7 @@ public class FriendListReducer extends Reducer<Text, Text, Text, Text> {
 		}
 
 		int nrOutgoingFriends = outgoingList.size();
-		double pageRank = 0.5 / nrOutgoingFriends;
+		double pageRank = INITIAL_PAGERANK / nrOutgoingFriends;
 		String valueOut = PAGE_RANK + "->" + key.toString() + " > "
 				+ nrOutgoingFriends + " > " + pageRank;
 
