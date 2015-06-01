@@ -1,0 +1,35 @@
+A)
+
+PREFIX myns:<http://my.local.namespace#>
+PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?doc
+WHERE
+{
+	?doc rdf:type myns:Document.
+	?doc myns:creator ?creator
+}
+
+
+
+B)
+
+
+
+C)
+PREFIX myns:<http://my.local.namespace#>
+PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?pub ?age
+WHERE
+{
+	?doc myns:publisher ?pub.
+	?doc myns:creator ?creator.
+
+	OPTIONAL{ ?doc myns:year ?date.}
+	OPTIONAL{ ?creator myns:age ?age .}
+	
+	FILTER(!bound(?date))
+}
