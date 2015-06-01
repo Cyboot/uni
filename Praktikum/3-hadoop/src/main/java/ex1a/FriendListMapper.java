@@ -1,13 +1,11 @@
-package ex1;
+package ex1a;
 
 import java.io.IOException;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-import common.KeyValueWritable;
-
-public class FriendListMapper extends Mapper<Object, Text, Text, KeyValueWritable> {
+public class FriendListMapper extends Mapper<Object, Text, Text, Text> {
 
 	@Override
 	protected void map(Object key, Text value, Context context) throws IOException,
@@ -19,11 +17,7 @@ public class FriendListMapper extends Mapper<Object, Text, Text, KeyValueWritabl
 
 		if (splits != null && splits.length >= 3) {
 			if (edge.equals("foaf:knows")) {
-				KeyValueWritable valueOut1 = new KeyValueWritable(FriendListReducer.OUTGOING, object);
-				KeyValueWritable valueOut2 = new KeyValueWritable(FriendListReducer.INCOMING, subject);
-				
-				context.write(new Text(subject), valueOut1);
-				context.write(new Text(object), valueOut2);
+				context.write(new Text(subject), new Text(object));
 			}
 		}
 	}
