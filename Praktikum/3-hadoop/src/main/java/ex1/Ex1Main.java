@@ -1,7 +1,11 @@
 package ex1;
 
+import java.io.IOException;
+
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -23,7 +27,7 @@ public class Ex1Main extends Configured implements Tool {
 			System.exit(-1);
 		}
 		Const.PATH_INPUT = args[0];
-		Const.PATH_OUTPUT = "out0";
+		Const.PATH_OUTPUT = "/tmp/out-0";
 
 		Job job = Job.getInstance(getConf());
 
@@ -35,8 +39,7 @@ public class Ex1Main extends Configured implements Tool {
 		Utils.deleteOutputDirectory(getConf(), Const.PATH_OUTPUT);
 
 		FileInputFormat.setInputPaths(job, new Path(Const.PATH_INPUT));
-		SequenceFileOutputFormat
-				.setOutputPath(job, new Path(Const.PATH_OUTPUT));
+		SequenceFileOutputFormat.setOutputPath(job, new Path(Const.PATH_OUTPUT));
 
 		// set types of Input/Output Objects
 		job.setMapOutputKeyClass(Text.class);
@@ -53,48 +56,54 @@ public class Ex1Main extends Configured implements Tool {
 		if (job.waitForCompletion(true)) {
 
 			for (int i = 1; i <= 5; i++) {
-				Job job2 = Job.getInstance(getConf());
+				String input = "/tmp/out-" + (i - 1);
+				String output = "/tmp/out-" + i;
 
-				// Define Input and Output Format
-				job2.setInputFormatClass(SequenceFileInputFormat.class);
-				job2.setOutputFormatClass(SequenceFileOutputFormat.class);
+				Job tmpJob = createRecurringJob(getConf(), input, output);
+				tmpJob.setJobName("PageRank: Job" + i);
 
-				// delete old output directory
-				Utils.deleteOutputDirectory(getConf(), "out" + i);
+				if (tmpJob.waitForCompletion(true)) {
+					SequenceFile.Reader reader = new SequenceFile.Reader(getConf(),
+							SequenceFile.Reader.file(new Path("/tmp/out-" + i + "/part-r-00000")));
+					Text key = new Text();
+					Text val = new Text();
 
-				SequenceFileInputFormat.setInputPaths(job2, new Path("out"
-						+ (i - 1)));
-				SequenceFileOutputFormat.setOutputPath(job2,
-						new Path("out" + i));
+					while (reader.next(key, val)) {
+						System.err.println(key + "\t" + val);
+					}
 
-				// set types of Input/Output Objects
-				job2.setMapOutputKeyClass(Text.class);
-				job2.setMapOutputValueClass(Text.class);
-				job2.setOutputKeyClass(Text.class);
-				job2.setOutputValueClass(Text.class);
-
-				job2.setReducerClass(FriendListReducer2.class);
-
-				job2.setJarByClass(Ex1Main.class);
-				job2.setJobName("Ex1:MR2");
-
-				if (job2.waitForCompletion(true)) {
-					// SequenceFile.Reader reader = new SequenceFile.Reader(
-					// getConf(), SequenceFile.Reader.file(new Path("out"
-					// + i + "/part-r-00000")));
-					// Text key = new Text();
-					// Text val = new Text();
-					//
-					// while (reader.next(key, val)) {
-					// System.err.println(key + "\t" + val);
-					// }
-					//
-					// reader.close();
+					reader.close();
 				}
 			}
 
 		}
 		return 1;
+	}
+
+	private Job createRecurringJob(Configuration conf, String input, String output)
+			throws IllegalArgumentException, IOException {
+		Job job = Job.getInstance(getConf());
+
+		// Define Input and Output Format
+		job.setInputFormatClass(SequenceFileInputFormat.class);
+		job.setOutputFormatClass(SequenceFileOutputFormat.class);
+
+		// delete old output directory
+		Utils.deleteOutputDirectory(getConf(), output);
+
+		SequenceFileInputFormat.setInputPaths(job, new Path(input));
+		SequenceFileOutputFormat.setOutputPath(job, new Path(output));
+
+		// set types of Input/Output Objects
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(Text.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(Text.class);
+
+		job.setReducerClass(FriendListReducer2.class);
+
+		job.setJarByClass(Ex1Main.class);
+		return job;
 	}
 
 	public static void main(String[] args) throws Exception {

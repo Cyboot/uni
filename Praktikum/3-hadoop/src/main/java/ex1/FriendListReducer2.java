@@ -5,31 +5,31 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class FriendListReducer2 extends Reducer<Text, Text, Text, Text> {
+public class FriendListReducer2 extends Reducer<Text, MapWritable, Text, MapWritable> {
 
 	@Override
-	protected void reduce(Text key, Iterable<Text> values, Context context)
+	protected void reduce(Text key, Iterable<MapWritable> values, Context context)
 			throws IOException, InterruptedException {
 		double sumPageRank = 0;
 
 		List<String> friendList = null;
 
-		for (Text text : values) {
-			String[] str = text.toString().split("->");
+		for (MapWritable map : values) {
+			if (map.containsKey(new Text("frienList"))) {
+				String commaJoinedList = map.get(new Text("frienList")).toString();
 
-			if (str[0].equals(FriendListReducer.PAGE_RANK)) {
-				String[] split = str[1].split(" > ");
-
-				int nrOfFriends = Integer.parseInt(split[1]);
-				double pageRank = Double.parseDouble(split[2]);
+				friendList = Arrays.asList(commaJoinedList.split(","));
+			} else {
+				int nrOfFriends = ((IntWritable) map.get(new Text("nrOutgoingFriends"))).get();
+				double pageRank = ((DoubleWritable) map.get(new Text("pageRank"))).get();
 
 				sumPageRank += pageRank / nrOfFriends;
-			}
-			if (str[0].equals(FriendListReducer.FRIENDLIST) && str.length > 1) {
-				friendList = Arrays.asList(str[1].split(","));
 			}
 		}
 
@@ -38,17 +38,22 @@ public class FriendListReducer2 extends Reducer<Text, Text, Text, Text> {
 			return;
 
 		int nrOutgoingFriends = friendList.size();
-		String valueOut = FriendListReducer.PAGE_RANK + "->" + key.toString()
-				+ " > " + nrOutgoingFriends + " > " + sumPageRank;
+
+		MapWritable valueOUTMap = new MapWritable();
+		valueOUTMap.put(new Text("key"), key);
+		valueOUTMap.put(new Text("nrOutgoingFriends"), new IntWritable(nrOutgoingFriends));
+		valueOUTMap.put(new Text("pageRank"), new DoubleWritable(sumPageRank));
 
 		// propagate Nr of friends for key to all friends
 		for (String user : friendList) {
-			context.write(new Text(user), new Text(valueOut));
+			context.write(new Text(user), valueOUTMap);
 		}
 
 		// also emit the list of friends for the user
+		MapWritable valueOUTList = new MapWritable();
 		String commaJoinedList = StringUtils.join(friendList, ",");
-		context.write(key, new Text(FriendListReducer.FRIENDLIST + "->"
-				+ commaJoinedList));
+		valueOUTList.put(new Text("friendList"), new Text(commaJoinedList));
+
+		context.write(key, valueOUTList);
 	}
 }
