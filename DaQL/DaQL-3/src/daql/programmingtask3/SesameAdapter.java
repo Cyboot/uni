@@ -84,23 +84,23 @@ public class SesameAdapter {
      * @throws QueryEvaluationException
      */
     public Set<Feature> getIncommingFeatures(String object)
-                    throws RepositoryException {
+            throws RepositoryException {
         Set<Feature> result = new HashSet<Feature>();
         ValueFactory vf = this.repo.getValueFactory();
 
         URI obj = vf.createURI(object);
         RepositoryResult<Statement> statements = this.conn.getStatements(null,
-                        null, obj, false);
+                null, obj, false);
         try {
             while (statements.hasNext()) {
                 Statement st = statements.next();
                 Feature feat = new Feature(st.getPredicate(), st.getSubject(),
-                                FeatureType.INCOMING);
+                        FeatureType.INCOMING);
                 result.add(feat);
             }
         } catch (Exception ex) {
             System.out.println("exception :" + object + ", retrieved: "
-                            + result.size());
+                    + result.size() + " => " + ex);
         } finally {
             statements.close(); // make sure the result object is closed
                                 // properly
@@ -120,12 +120,28 @@ public class SesameAdapter {
      * @throws QueryEvaluationException
      */
     public Set<Feature> getOutgoingFeatures(String subject)
-                    throws RepositoryException, MalformedQueryException,
-                    QueryEvaluationException {
+            throws RepositoryException, MalformedQueryException,
+            QueryEvaluationException {
         Set<Feature> result = new HashSet<Feature>();
-        /*
-         * Put your code here.
-         */
+        ValueFactory vf = this.repo.getValueFactory();
+
+        URI subj = vf.createURI(subject);
+        RepositoryResult<Statement> statements = this.conn.getStatements(subj,
+                null, null, false);
+        try {
+            while (statements.hasNext()) {
+                Statement st = statements.next();
+                Feature feat = new Feature(st.getPredicate(), st.getSubject(),
+                        FeatureType.OUTGOING);
+                result.add(feat);
+            }
+        } catch (Exception ex) {
+            System.out.println("exception :" + subj + ", retrieved: "
+                    + result.size());
+        } finally {
+            statements.close(); // make sure the result object is closed
+                                // properly
+        }
         return result;
     }
 
@@ -141,13 +157,13 @@ public class SesameAdapter {
      * @throws QueryEvaluationException
      */
     public int getPredicateFrequency(Feature feature)
-                    throws RepositoryException, MalformedQueryException,
-                    QueryEvaluationException {
+            throws RepositoryException, MalformedQueryException,
+            QueryEvaluationException {
         try {
             ValueFactory vf = this.repo.getValueFactory();
             String queryString = "SELECT (count(*) as ?count) where {?s ?p ?o .}";
             TupleQuery tupleQuery = this.conn.prepareTupleQuery(
-                            QueryLanguage.SPARQL, queryString);
+                    QueryLanguage.SPARQL, queryString);
             switch (feature.getFeatureType()) {
             case INCOMING:
                 tupleQuery.setBinding("s", feature.getResource());
@@ -164,7 +180,7 @@ public class SesameAdapter {
                 if (tResult.hasNext()) { // iterate over the result
                     BindingSet bindingSet = tResult.next();
                     int count = Integer.parseInt(bindingSet.getValue("count")
-                                    .stringValue());
+                            .stringValue());
                     return count;
                 }
             } finally {
