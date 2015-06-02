@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
+import common.PageRankCounter;
+
 public class FriendListReducer extends Reducer<Text, Text, Text, Text> {
 	@Override
 	protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException,
@@ -20,5 +22,6 @@ public class FriendListReducer extends Reducer<Text, Text, Text, Text> {
 
 		String commaJoinedList = StringUtils.join(outgoingList, ",");
 		context.write(key, new Text(commaJoinedList));
+		context.getCounter(PageRankCounter.USER).increment(1);
 	}
 }

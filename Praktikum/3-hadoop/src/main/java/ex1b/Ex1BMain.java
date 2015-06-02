@@ -21,15 +21,19 @@ import common.Utils;
 import ex1a.Ex1AMain;
 
 public class Ex1BMain extends Configured implements Tool {
+	private int	nrUsers	= 1;
+
+	public Ex1BMain(int nrUsers) {
+		this.nrUsers = nrUsers;
+	}
 
 	@Override
 	public int run(String[] args) throws Exception {
-		if (args.length != 2) {
-			System.out.println("Usage: Ex1BMain <input dir> <output dir>");
-			System.exit(-1);
-		}
 		Const.PATH_INPUT = args[0];
 		Const.PATH_OUTPUT = args[1];
+		int maxIterations = Integer.parseInt(args[2]);
+
+		getConf().setInt("NR_USER", nrUsers);
 
 		// create the initial Job
 		Job job = createInitalJob(getConf(), Const.PATH_INPUT, "/tmp/out-0");
@@ -39,7 +43,8 @@ public class Ex1BMain extends Configured implements Tool {
 
 		// run the recurring jobs
 		if (job.waitForCompletion(true)) {
-			for (int i = 1; i <= 2; i++) {
+
+			for (int i = 1; i <= maxIterations; i++) {
 				input = "/tmp/out-" + (i - 1);
 				output = "/tmp/out-" + i;
 
@@ -118,12 +123,20 @@ public class Ex1BMain extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
+		if (args.length != 3) {
+			System.out.println("Usage: Ex1BMain <input dir> <output dir> <number of iteration>");
+			System.exit(-1);
+		}
+
 		String input = args[0];
 		String tmpOut = "/tmp/out";
 		String output = args[1];
+		String iterations = args[2];
 
-		int exitCode = ToolRunner.run(new Ex1AMain(), new String[] { input, tmpOut });
-		exitCode = ToolRunner.run(new Ex1BMain(), new String[] { tmpOut, output });
+		Ex1AMain toolRun = new Ex1AMain(false);
+		int exitCode = ToolRunner.run(toolRun, new String[] { input, tmpOut });
+		exitCode = ToolRunner.run(new Ex1BMain(toolRun.getNrUsers()), new String[] { tmpOut,
+				output, iterations });
 		System.exit(exitCode);
 	}
 }

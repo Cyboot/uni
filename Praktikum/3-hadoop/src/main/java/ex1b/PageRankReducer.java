@@ -13,8 +13,6 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 public class PageRankReducer extends Reducer<Text, MapWritable, Text, MapWritable> {
 
-	private static final double	INITIAL_PAGERANK	= 100;
-
 	@Override
 	protected void reduce(Text key, Iterable<MapWritable> values, Context context)
 			throws IOException, InterruptedException {
@@ -44,8 +42,10 @@ public class PageRankReducer extends Reducer<Text, MapWritable, Text, MapWritabl
 		int fiendCount = friendList.size();
 
 		// if its the first run use a initial pagerank
-		if (inialRun)
-			sumPageRank = INITIAL_PAGERANK / fiendCount;
+		if (inialRun) {
+			// for the initial PageRank use 1/(#USER)
+			sumPageRank = 1.0 / context.getConfiguration().getInt("NR_USER", 1);
+		}
 
 
 		MapWritable valueOUTMap = new MapWritable();
