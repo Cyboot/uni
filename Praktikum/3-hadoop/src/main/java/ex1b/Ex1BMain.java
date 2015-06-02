@@ -1,12 +1,16 @@
 package ex1b;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Counter;
+import org.apache.hadoop.mapreduce.CounterGroup;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
@@ -21,10 +25,20 @@ import common.Utils;
 import ex1a.Ex1AMain;
 
 public class Ex1BMain extends Configured implements Tool {
-	private int	nrUsers	= 1;
+	private static final double	MIN_DELTA		= 1e-6;
+
+	private int					nrUsers			= 1;
+	private boolean				useDelta;
+
+	private Map<String, Double>	previousValues	= new HashMap<String, Double>();
+
 
 	public Ex1BMain(int nrUsers) {
 		this.nrUsers = nrUsers;
+	}
+
+	public void useDeltaFinish() {
+		useDelta = true;
 	}
 
 	@Override
@@ -32,6 +46,10 @@ public class Ex1BMain extends Configured implements Tool {
 		Const.PATH_INPUT = args[0];
 		Const.PATH_OUTPUT = args[1];
 		int maxIterations = Integer.parseInt(args[2]);
+
+		if (useDelta) {
+			maxIterations = 20;
+		}
 
 		getConf().setInt("NR_USER", nrUsers);
 
@@ -41,6 +59,8 @@ public class Ex1BMain extends Configured implements Tool {
 		String output = null;
 		String input = null;
 
+		double delta = 0;
+		int lastIteration = 0;
 		// run the recurring jobs
 		if (job.waitForCompletion(true)) {
 
@@ -51,7 +71,14 @@ public class Ex1BMain extends Configured implements Tool {
 				Job tmpJob = createRecurringJob(getConf(), input, output);
 				tmpJob.setJobName("PageRank: Job" + i);
 
+
 				tmpJob.waitForCompletion(true);
+
+				delta = getAverageDelta(tmpJob);
+				if (delta < MIN_DELTA && useDelta) {
+					lastIteration = i;
+					break;
+				}
 			}
 
 		}
@@ -61,10 +88,41 @@ public class Ex1BMain extends Configured implements Tool {
 		if (formatJob.waitForCompletion(true)) {
 			Utils.printOutputFile(Const.PATH_OUTPUT);
 
+			if (useDelta) {
+				System.out.println();
+				System.out.println("Break after " + lastIteration + " iteration.");
+				System.out.println("Delta between last two PageRank-Runs: " + delta);
+			}
+
 			return 0;
 		}
 
 		return 1;
+	}
+
+	private double getAverageDelta(Job tmpJob) throws IOException {
+		double sumPagerankDelta = 0;
+		boolean firstRun = true;
+
+		CounterGroup counters = tmpJob.getCounters().getGroup("USER");
+		for (Counter counter : counters) {
+			String name = counter.getName();
+			double pageRank = Double.longBitsToDouble(counter.getValue());
+
+			if (previousValues.containsKey(name)) {
+				Double previousRank = previousValues.get(name);
+
+				sumPagerankDelta += Math.abs(pageRank - previousRank);
+				firstRun = false;
+			}
+			previousValues.put(name, pageRank);
+		}
+		int size = previousValues.size();
+
+		if (firstRun)
+			return Double.MAX_VALUE;
+		else
+			return sumPagerankDelta / size;
 	}
 
 	private Job createFormatJob(Configuration conf, String input, String output)

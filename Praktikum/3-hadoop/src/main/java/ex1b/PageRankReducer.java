@@ -5,10 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Counter;
 import org.apache.hadoop.mapreduce.Reducer;
 
 public class PageRankReducer extends Reducer<Text, MapWritable, Text, MapWritable> {
@@ -40,13 +42,22 @@ public class PageRankReducer extends Reducer<Text, MapWritable, Text, MapWritabl
 			return;
 
 		int fiendCount = friendList.size();
+		Configuration conf = context.getConfiguration();
 
 		// if its the first run use a initial pagerank
 		if (inialRun) {
 			// for the initial PageRank use 1/(#USER)
-			sumPageRank = 1.0 / context.getConfiguration().getInt("NR_USER", 1);
+			sumPageRank = 1.0 / conf.getInt("NR_USER", 1);
 		}
 
+		// set the pagerank for a subset of user
+		String keyStr = key.toString();
+		if (keyStr.startsWith("sibu:u9")) {
+			Counter counter = context.getCounter("USER", keyStr);
+
+			long longBits = Double.doubleToLongBits(sumPageRank);
+			counter.increment(longBits);
+		}
 
 		MapWritable valueOUTMap = new MapWritable();
 		valueOUTMap.put(new Text("key"), key);
