@@ -52,7 +52,7 @@ public class PageRankReducer extends Reducer<Text, MapWritable, Text, MapWritabl
 
 		// set the pagerank for a subset of user
 		String keyStr = key.toString();
-		if (keyStr.startsWith("sibu:u9")) {
+		if (keyStr.startsWith("sibu:u9") && keyStr.length() < 9) {
 			Counter counter = context.getCounter("USER", keyStr);
 
 			long longBits = Double.doubleToLongBits(sumPageRank);
