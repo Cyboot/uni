@@ -18,6 +18,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.repository.RepositoryException;
 
 import daql.programmingtask3.Feature;
@@ -42,7 +44,7 @@ public class ProgrammingTask3 {
 
         // read all articles from the text file
         BufferedReader br = new BufferedReader(new FileReader(new File(
-                "data/small.txt")));
+                "data/Person_uris.txt")));
         String line = null;
         while ((line = br.readLine()) != null) {
             uriList.add(line);
@@ -56,44 +58,58 @@ public class ProgrammingTask3 {
 
             Map<String, Set<Feature>> uriFeaturesMap = new HashMap<String, Set<Feature>>();
             Map<Feature, Integer> allFeatureMap = new HashMap<Feature, Integer>();
-            Set<Feature> allFeatures = new HashSet<Feature>();
 
-            for (String uri : uriList) {
-                Set<Feature> featureSet = adapter.getIncommingFeatures(uri);
-                // featureSet.addAll(adapter.getOutgoingFeatures(uri));
+            // fill uriFeaturesMap
+            fillFeatureMap(uriList, adapter, uriFeaturesMap);
 
-                // add to allFeatures
-                allFeatures.addAll(featureSet);
-
-                uriFeaturesMap.put(uri, featureSet);
-            }
-
-            for (Feature feature : allFeatures) {
-                allFeatureMap.put(feature,
-                        adapter.getPredicateFrequency(feature));
-            }
-
+            // the resulting (sorted Map)
+            // Map<Score, uri1 + uri2>
             Map<Integer, String> resultSortedMap = new TreeMap<Integer, String>();
 
+            // find every pair
             for (Entry<String, Set<Feature>> entryOuter : uriFeaturesMap
                     .entrySet()) {
-                for (Entry<String, Set<Feature>> entryInnter : uriFeaturesMap
+                for (Entry<String, Set<Feature>> entryInner : uriFeaturesMap
                         .entrySet()) {
+                    if (entryInner == entryOuter)
+                        continue;
+
                     // calculate the intersection
-                    Set<Feature> intersectFeature = entryOuter.getValue();
-                    intersectFeature.retainAll(entryInnter.getValue());
+                    Set<Feature> intersectFeature = new HashSet<Feature>(
+                            entryOuter.getValue());
+                    intersectFeature.retainAll(entryInner.getValue());
+
+                    if (intersectFeature.size() != 0) {
+                        System.out.println(intersectFeature);
+                    }
 
                     int sum = 0;
                     for (Feature feature : intersectFeature) {
+
+                        // calculate Frequency on the fly
+                        if (!allFeatureMap.containsKey(feature)) {
+                            System.out.println("calc freq for " + feature);
+                            allFeatureMap.put(feature,
+                                    adapter.getPredicateFrequency(feature));
+                        }
+
                         Integer weight = allFeatureMap.get(feature);
 
                         sum += weight;
                     }
-                    resultSortedMap.put(sum, entryOuter.getKey() + ":"
-                            + entryInnter.getKey());
+
+                    if (sum > 0) {
+                        System.out.println("putting into resultMap");
+
+                        resultSortedMap.put(sum, entryOuter.getKey() + " : "
+                                + entryInner.getKey());
+                    }
                 }
             }
 
+            System.out.println();
+            System.out.println("==================================");
+            System.out.println("======        RESULT        ======");
             for (Entry<Integer, String> entry : resultSortedMap.entrySet()) {
                 System.out.println(entry.getKey() + "\t" + entry.getValue());
             }
@@ -104,5 +120,21 @@ public class ProgrammingTask3 {
             e.printStackTrace();
         }
 
+    }
+
+    private static void fillFeatureMap(List<String> uriList,
+            SesameAdapter adapter, Map<String, Set<Feature>> uriFeaturesMap)
+            throws RepositoryException, MalformedQueryException,
+            QueryEvaluationException {
+        for (String uri : uriList) {
+            System.out.println("Finding Features for " + uri + "...");
+
+            Set<Feature> featureSet = adapter.getIncommingFeatures(uri);
+            featureSet.addAll(adapter.getOutgoingFeatures(uri));
+
+            uriFeaturesMap.put(uri, featureSet);
+            System.out
+                    .println("...found " + featureSet.size() + " features.\n");
+        }
     }
 }
