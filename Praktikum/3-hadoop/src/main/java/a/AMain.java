@@ -1,4 +1,4 @@
-package ex1a;
+package a;
 
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -15,26 +15,29 @@ import common.Const;
 import common.PageRankCounter;
 import common.Utils;
 
-public class Ex1AMain extends Configured implements Tool {
+public class AMain extends Configured implements Tool {
 	private boolean	verbose;
 	private int		nrUsers;
 
-	public Ex1AMain() {
+	public AMain() {
 		this(true);
 	}
 
-	public Ex1AMain(boolean verbose) {
+	public AMain(boolean verbose) {
 		this.verbose = verbose;
 	}
 
 	@Override
 	public int run(String[] args) throws Exception {
-		if (args.length != 2) {
-			System.out.println("Usage: Ex1AMain <input dir> <output dir>");
+		if (args.length < 2 || args.length > 3) {
+			System.out.println("Usage: AMain <input dir> <output dir> [verbose]");
 			System.exit(-1);
 		}
 		Const.PATH_INPUT = args[0];
 		Const.PATH_OUTPUT = args[1];
+		if (args.length > 2)
+			verbose = "true".equals(args[2]);
+
 
 		Job job = Job.getInstance(getConf());
 
@@ -57,7 +60,7 @@ public class Ex1AMain extends Configured implements Tool {
 		job.setMapperClass(FriendListMapper.class);
 		job.setReducerClass(FriendListReducer.class);
 
-		job.setJarByClass(Ex1AMain.class);
+		job.setJarByClass(AMain.class);
 		job.setJobName("Ex1:MR1");
 
 		if (job.waitForCompletion(true)) {
@@ -77,7 +80,7 @@ public class Ex1AMain extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int exitCode = ToolRunner.run(new Ex1AMain(), args);
+		int exitCode = ToolRunner.run(new AMain(), args);
 		System.exit(exitCode);
 	}
 }

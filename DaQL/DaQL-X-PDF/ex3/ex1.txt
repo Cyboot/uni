@@ -1,37 +1,35 @@
-@prefix uni:	<http://my.local.namespace#> .
+:u_lausen                rdf:type            :head_of_department.
+:u_elisabeth             rdf:type            :secretary.
+:u_norbert               rdf:type            :system_administator.
 
-uni:u_lausen				rdf:type			uni:head_of_department.
-uni:u_elisabeth				rdf:type			uni:secretary.
-uni:u_norbert				rdf:type			uni:system_administator.
+:u_alexander             rdf:type            :researcher.
+:u_martin                rdf:type            :researcher.
+:u_anthony               rdf:type            :researcher.
+:u_anas                  rdf:type            :researcher.
 
-uni:u_alexander				rdf:type			uni:researcher.
-uni:u_martin				rdf:type			uni:researcher.
-uni:u_anthony				rdf:type			uni:researcher.
-uni:u_anas					rdf:type			uni:researcher.
+:head_of_department      rdfs:subClassOf     :employee.
+:secretary               rdfs:subClassOf     :employee.
+:system_administator     rdfs:subClassOf     :employee.
+:researcher              rdfs:subClassOf     :employee.
 
-uni:head_of_department		rdfs:subClassOf		uni:employee.
-uni:secretary				rdfs:subClassOf		uni:employee.
-uni:system_administator		rdfs:subClassOf		uni:employee.
-uni:researcher				rdfs:subClassOf		uni:employee.
-
-uni:researcher				uni:responsibilty	uni:teaching.
-uni:researcher				uni:supervise		uni:thesis.
+:researcher              :responsibilty      :teaching.
+:researcher              :supervise          :thesis.
 
 
-uni:data_analysis			rdf:type					uni:lecture;
-uni:data_analysis			uni:offered_in				"summer";
-uni:data_analysis			uni:supervisor				uni:u_lausen;
-uni:data_analysis			rdf:teaching_assistance		uni:u_anthony;
-uni:data_analysis			rdf:teaching_assistance		uni:u_anas.
+:data_analysis           rdf:type            :lecture;
+:data_analysis           :offered_in         "summer";
+:data_analysis           :supervisor         :u_lausen;
+:data_analysis           rdf:teaching_ass    :u_anthony;
+:data_analysis           rdf:teaching_ass    :u_anas.
 
-uni:take_thesis				rdfs:domain			uni:student;
-uni:take_thesis				rdfs:range			uni:thesis.
+:take_thesis             rdfs:domain         :student;
+:take_thesis             rdfs:range          :thesis.
 
-uni:take_project			rdfs:domain			uni:student_team
-uni:take_project			rdfs:range			uni:teamproject
+:take_project            rdfs:domain         :student_team
+:take_project            rdfs:range          :teamproject
 
-uni:bachelor_thesis			rdfs:subClassOf		uni:thesis.
-uni:master_thesis			rdfs:subClassOf		uni:thesis.
-uni:thesis					rdfs:subClassOf		uni:academic_work.
-uni:teamproject				rdfs:subClassOf		uni:academic_work.
-			
+:bachelor_thesis         rdfs:subClassOf     :thesis.
+:master_thesis           rdfs:subClassOf     :thesis.
+:thesis                  rdfs:subClassOf     :academic_work.
+:teamproject             rdfs:subClassOf     :academic_work.
+            

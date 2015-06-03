@@ -1,0 +1,13 @@
+2708	http://dbpedia.org/resource/Paul_McCartney 			http://dbpedia.org/resource/John_Lennon
+1383	http://dbpedia.org/resource/Stevie_Wonder 			http://dbpedia.org/resource/Smokey_Robinson
+1311	http://dbpedia.org/resource/Stevie_Wonder 			http://dbpedia.org/resource/Paul_McCartney
+1219	http://dbpedia.org/resource/Paul_McCartney 			http://dbpedia.org/resource/James_Brown
+1186	http://dbpedia.org/resource/Al_Green 				http://dbpedia.org/resource/Smokey_Robinson
+1104	http://dbpedia.org/resource/Al_Green 				http://dbpedia.org/resource/James_Brown
+1029	http://dbpedia.org/resource/Stevie_Wonder 			http://dbpedia.org/resource/Al_Green
+962		http://dbpedia.org/resource/Stevie_Wonder 			http://dbpedia.org/resource/James_Brown
+931		http://dbpedia.org/resource/Smokey_Robinson 		http://dbpedia.org/resource/Paul_McCartney
+906		http://dbpedia.org/resource/Smokey_Robinson 		http://dbpedia.org/resource/James_Brown
+815		http://dbpedia.org/resource/Al_Green 				http://dbpedia.org/resource/Paul_McCartney
+762		http://dbpedia.org/resource/Robert_Plant 			http://dbpedia.org/resource/Paul_McCartney
+676		http://dbpedia.org/resource/Marvin_Gaye 			http://dbpedia.org/resource/Stevie_Wonder

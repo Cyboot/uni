@@ -1,11 +1,11 @@
-package ex1c;
+package c;
 
 import org.apache.hadoop.util.ToolRunner;
 
-import ex1a.Ex1AMain;
-import ex1b.Ex1BMain;
+import a.AMain;
+import b.BMain;
 
-public class Main {
+public class CMain {
 	public static void main(String[] args) throws Exception {
 		if (args.length != 2) {
 			System.out.println("Usage: Main <input dir> <output dir>");
@@ -16,13 +16,13 @@ public class Main {
 		String tmpOut = "/tmp/out";
 		String output = args[1];
 
-		Ex1AMain toolA = new Ex1AMain(false);
+		AMain toolA = new AMain(false);
 		int exitCode = ToolRunner.run(toolA, new String[] { input, tmpOut });
 
-		Ex1BMain toolB = new Ex1BMain(toolA.getNrUsers());
+		BMain toolB = new BMain(toolA.getNrUsers());
 		toolB.useDeltaFinish();
 
-		exitCode = ToolRunner.run(toolB, new String[] { tmpOut, output, "20" });
+		exitCode = ToolRunner.run(toolB, new String[] { tmpOut, output, "0" });
 
 		System.exit(exitCode);
 	}

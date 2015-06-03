@@ -1,4 +1,4 @@
-package ex1a;
+package a;
 
 import java.io.IOException;
 
@@ -15,6 +15,7 @@ public class FriendListMapper extends Mapper<Object, Text, Text, Text> {
 		String edge = splits[1];
 		String object = splits[2];
 
+		// only consider foaf:knows edges
 		if (splits != null && splits.length >= 3) {
 			if (edge.equals("foaf:knows")) {
 				context.write(new Text(subject), new Text(object));

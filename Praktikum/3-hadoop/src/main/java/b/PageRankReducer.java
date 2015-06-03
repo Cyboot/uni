@@ -1,4 +1,4 @@
-package ex1b;
+package b;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -42,19 +42,20 @@ public class PageRankReducer extends Reducer<Text, MapWritable, Text, MapWritabl
 			return;
 
 		int fiendCount = friendList.size();
-		Configuration conf = context.getConfiguration();
 
 		// if its the first run use a initial pagerank
 		if (inialRun) {
 			// for the initial PageRank use 1/(#USER)
+			Configuration conf = context.getConfiguration();
 			sumPageRank = 1.0 / conf.getInt("NR_USER", 1);
 		}
 
-		// set the pagerank for a subset of user
+		// set the pagerank for a subset of users
 		String keyStr = key.toString();
 		if (keyStr.startsWith("sibu:u9") && keyStr.length() < 9) {
 			Counter counter = context.getCounter("USER", keyStr);
 
+			// convert from double to long (pagerank to CounterValue)
 			long longBits = Double.doubleToLongBits(sumPageRank);
 			counter.increment(longBits);
 		}
@@ -64,7 +65,7 @@ public class PageRankReducer extends Reducer<Text, MapWritable, Text, MapWritabl
 		valueOUTMap.put(new Text("nrFriends"), new IntWritable(fiendCount));
 		valueOUTMap.put(new Text("pageRank"), new DoubleWritable(sumPageRank));
 
-		// propagate Nr of friends for key to all friends
+		// propagate pagerank for key to all friends
 		for (String user : friendList) {
 			context.write(new Text(user), valueOUTMap);
 		}

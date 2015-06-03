@@ -1,4 +1,4 @@
-package ex1b;
+package b;
 
 import java.io.IOException;
 
@@ -17,9 +17,5 @@ public class InitialMapper extends Mapper<Object, Text, Text, MapWritable> {
 		valueOUT.put(new Text("friendList"), new Text(friendList));
 
 		context.write(new Text(key), valueOUT);
-
-		// increment the User Counter
-		// Counter counter = context.getCounter(PageRankCounter.USER);
-		// counter.increment(1);
 	}
 }

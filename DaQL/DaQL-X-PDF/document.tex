@@ -3,228 +3,103 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{graphicx}
  
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{Exercise Sheet 2}
+\lhead{Exercise Sheet 3}
 \rhead{Tim Schmiedl}
 \rfoot{Page \thepage}
 
 \begin{document}
 \title{Data Analysis and Query Languages \\
- Exercise Sheet 2}
+ Exercise Sheet 3}
 \date{\today}
-\author{Tim Schmiedl}
+\author{Tim Schmiedl} 
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Exercise 1}
-\subsection*{a) stop words}
-\subsubsection*{T1: It is payday (payday)}
-payda, ayday
-
-\subsubsection*{T2: Mayday, mayday (mayday\textvisiblespace mayday)}
-mayda,
-ayday,
-yday\textvisiblespace ,
-day\textvisiblespace m,
-ay\textvisiblespace ma,
-y\textvisiblespace may,
-\textvisiblespace mayd
-
-\subsubsection*{T3: Day of may (day\textvisiblespace may)}
-day\textvisiblespace m,
-ay\textvisiblespace ma,
-y\textvisiblespace may
-
-\subsection*{b) Jaccard similarity}
-$SIM(T_1,T_2) = \frac{1}{8} = 0.125 \;\;\;\;\;\;\;\; $ no canidate\\
-\\
-$SIM(T_2,T_3) = \frac{3}{7} \approx 0.429 \;\;\;\;\;\;\;\; $ canidate\\
-
-
-\subsection*{c) Index prefix}
-\subsubsection*{T1: It is payday (payday)}
-T1 = [ayday, payda]\\
-Prefix length = $|T1| - (\lceil 0.25 * |T1| \rceil ) + 1 = 2$
-
-
-\subsubsection*{T2: Mayday, mayday (mayday\textvisiblespace mayday)}
-T2 = [\textvisiblespace mayd, ay\textvisiblespace ma, ayday,
-day\textvisiblespace m, mayda, y\textvisiblespace may, yday\textvisiblespace ]\\
-Prefix length = $|T2| - (\lceil 0.25 * |T2| \rceil ) + 1 = 6$
-
-\subsubsection*{T3: Day of may (day\textvisiblespace may)}
-T3 = [ay\textvisiblespace ma, day\textvisiblespace m, y\textvisiblespace may]\\
-Prefix length = $|T3| - (\lceil 0.25 * |T3| \rceil ) + 1 = 3$
+\lstinputlisting{ex3/ex1.txt} 
 
 
 \vspace{2cm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Exercise 2}
-\subsection*{a) Vector space model}
-Vector = [best, costume, halloweens, night, halloween, party, during, this,
-will, walking, with]\\
-\\
-T1 = [1, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0]\\
-T2 = [1, 0, 0, 1, 1, 2, 1, 1, 1, 0, 0]\\
-T3 = [0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1]
+\subsection*{a) RDF Graph}
+\begin{figure}[h!]
+    \includegraphics[width=1.2\textwidth]{img/rdf-graph.png}
+\end{figure}
 
-\subsection*{b) cosine similarity }
-Q1 = [1, 1, 2, 1, 0, 0, 1, 0, 0, 0, 0]\\
-Q2 = [1, 0, 1, 0, 0, 2, 0, 0, 0, 0, 1]\\
-\\
-$ || T1 || = \sqrt{1 +2^2 + 1 +1} \approx 2.646$\\
-$ || T2 || = \sqrt{1 + 1 + 1 + 2^2 + 1 + 1 + 1} \approx 3.162$\\
-$ || T3 || = \sqrt{1 + 1 + 1 + 1 + 1} \approx 2.236$\\
-\\
-$ || Q1 || = \sqrt{1 + 1 + 2^2 + 1 + 1} \approx 2.828$\\
-$ || Q2 || = \sqrt{1 + 1 + 2^2 + 1} \approx 2.646$\\
-\vspace{0.5cm}
-\\
-$SIM(Q1, T1) = \frac{1*1 + 2*1 + 1*2 + 1*1}{|| T1 || * || Q1 ||} \approx
-0.802$\\
-$SIM(Q1, T2) = \frac{1*1 + 1*1 + 1*1}{|| T2 || * || Q1 ||} \approx 0.335 $\\
-$SIM(Q1, T3) = \frac{1*1 + 1*1 + 1*1}{|| T3 || * || Q1 ||} \approx 0.474 $\\
-\\
-Ranking for Query1: T1 \textgreater T3 \textgreater T2\\
-\\
-$SIM(Q2, T1) = \frac{1*1 + 1*1}{|| T1 || * || Q2 ||} \approx 0.286 $\\
-$SIM(Q2, T2) = \frac{1*1 + 2*2}{|| T2 || * || Q2 ||} \approx 0.598 $\\
-$SIM(Q2, T3) = \frac{1*1}{|| T3 || * || Q2 ||} \approx 0.169 $\\
-\\
-Ranking for Query2: T2 \textgreater T1 \textgreater T3\\
+\subsection*{b) SPARQL}
+\vspace{0.3cm}
+(a) All Documents that are published after the year 2000.\\
+\textbf{Result}: \{( :x, 2004), ( :y, 2010)\}\\
+\vspace{0.3cm}
 
-\subsection*{c) cosine distance}
-The cosine similarity is the cosine of the angle between two vectors.\\
-The cosine is 1 for orthogonal vectors $\rightarrow$ distance is 1, meaning
-completly different vectors.\\
-The cosine is 0 for parallel vectors $\rightarrow$ distance is 0, meaning
-completly similar vectors.\\
-\\
-$ \Sigma{_k} v_i[k] * v_j[k] $ is the dot product of $v_i$ and $v_j$
-$\Rightarrow v_i \times v_j = ||v_i|| * ||v_j|| * cos(v_i,v_j) $
+(b) All persons with an given age.\\
+\textbf{Result}: \{( :x, 29), ( :y, 35), ( :z, )\}\\
+\vspace{0.3cm}
+
+(c) Persons for which an age is given or are the creator of something.\\
+\textbf{Result}: \{( :x, 29, ), ( :y, 35, ), ( :z, , :a), ( :z, , :b), ( :x, ,
+:c), ( :y, , :d)\}
+\vspace{0.3cm}
 
 \vspace{2cm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Exercise 3}
-\subsection*{a) Graph A}
-\[
-M_A   =
-\left[   {\begin{array}{cccccc}
-0   &   0   &   0   &  1/2  &   0   &   0   \\
-1   &   0   &   0   &   0   &  1/2  &   0   \\
-0   &   1   &   0   &   0   &  1/2  &   1   \\
-0   &   0   &   1   &   0   &   0   &   0   \\
-0   &   0   &   0   &   0   &   0   &   0   \\
-0   &   0   &   0   &  1/2  &   0   &   0   \\
-\end{array}   }   \right]
-\]
-\[
-V_0   =
-\left[   {\begin{array}{c}
-1/6\\
-1/6\\
-1/6\\
-1/6\\
-1/6\\
-1/6\\
-\end{array}   }   \right],
-V_1   =
-\left[   {\begin{array}{c}
-1/12\\
-1/4\\
-5/12\\
-1/6\\
-0\\
-1/12\\
-\end{array}   }   \right],
-V_2   =
-\left[   {\begin{array}{c}
-1/12\\
-1/12\\
-1/3\\
-5/12\\
-0\\
-5/24\\
-\end{array}   }   \right],
-V_3   =
-\left[   {\begin{array}{c}
-5/24\\
-1/12\\
-7/24\\
-1/3\\
-0\\
-1/6\\
-\end{array}   }   \right]
-\]
-\\
-$diff(V_0,V_1) \approx 0.667 $\\
-$diff(V_1,V_2) = 0.625 $\\
-$diff(V_2,V_3) = 0.25 $\\
+\subsection*{a)}
+\begin{lstlisting}
+SELECT * WHERE {
+	?p rdf:type myns:Person .
+	?d1 rdf:type myns:Document .
+	?d2 rdf:type myns:Document .
+	?d1 myns:creator ?p.
+	?d2 myns:creator ?p.
+	
+	Filter (?d1 != ?d2)
+}
+
+SELECT ?doc
+WHERE
+{
+	?doc rdf:type myns:Document.
+	?doc myns:creator ?creator
+}
+\end{lstlisting}
+
+\subsection*{b)}
+\begin{lstlisting}
 
 
-\subsection*{b) Graph B}
-\[
-M_B   =
-\left[   {\begin{array}{ccccccc}
-0   &   0   &   0   &  1/3  &   0   &   0   &  0   \\
-1   &   0   &   0   &   0   &  1/2  &   0   &  0     \\
-0   &   1   &   0   &   0   &  1/2  &   1   &  0    \\
-0   &   0   &   1   &   0   &   0   &   0   &  0     \\
-0   &   0   &   0   &   0   &   0   &   0   &  0    \\
-0   &   0   &   0   &  1/3  &   0   &   0   &  0    \\
-0   &   0   &   0   &  1/3  &   0   &   0   &  1    \\
-\end{array}   }   \right]
-\]
-\[
-V_0   =
-\left[   {\begin{array}{c}
-1/7\\
-1/7\\
-1/7\\
-1/7\\
-1/7\\
-1/7\\
-\end{array}   }   \right],
-V_1 \approx
-\left[   {\begin{array}{c}
-0.07 \\
-0.2\\
-0.31\\
-0.14\\
-0.03\\
-0.07\\
-0.18\\
-\end{array}   }   \right]
-\]
+\end{lstlisting}
+
+\subsection*{c)}
+\begin{lstlisting}
+SELECT ?pub ?age
+WHERE
+{
+	?doc myns:publisher ?pub.
+	?doc myns:creator ?creator.
+
+	OPTIONAL{ ?doc myns:year ?date.}
+	OPTIONAL{ ?creator myns:age ?age .}
+	
+	FILTER(!bound(?date))
+}
+\end{lstlisting}
 
 
 \vspace{2cm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Exercise 4}
-\subsection*{a) see code}
-\subsection*{b) fingerprint}
 
-\begin{tabular}{ l | c | l | l |}
-& Distance [0,128] & Article 1 & Article 2  \\
-  \hline          
-Top 1 & 34 & Otis   Redding & Little   Richard\\
-Top 2 & 36 & Otis   Redding & Al   Green\\
-Top 3 & 37 & Marie   Curie & Ray   Charles\\
-Top 4 & 38 & Niels   Bohr & Elvis   Presley\\
-Top 5 & 39 & Tina   Turner & Al   Green\\
-Top 6 & 40 & Stephen   Hawking & John   Lennon\\
-Top 7 & 41 & Otis   Redding & Ray   Charles\\
-Top 8 & 42 & Tim   Berners-Lee & Guglielmo   Marconi\\
-Top 9 & 43 & Stephen   Hawking & Marie   Curie\\
-Top 10 & 44 & Otis   Redding & Roy   Orbison    \\       
-  \hline  
-\end{tabular}
 
 
 \end{document}

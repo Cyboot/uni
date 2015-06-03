@@ -1,4 +1,4 @@
-package ex1a;
+package a;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,14 +14,16 @@ public class FriendListReducer extends Reducer<Text, Text, Text, Text> {
 	@Override
 	protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException,
 			InterruptedException {
-		List<String> outgoingList = new ArrayList<String>();
+		List<String> friendList = new ArrayList<String>();
 
 		for (Text text : values) {
-			outgoingList.add(text.toString());
+			friendList.add(text.toString());
 		}
 
-		String commaJoinedList = StringUtils.join(outgoingList, ",");
+		String commaJoinedList = StringUtils.join(friendList, ",");
 		context.write(key, new Text(commaJoinedList));
+
+		// increment the User counter
 		context.getCounter(PageRankCounter.USER).increment(1);
 	}
 }

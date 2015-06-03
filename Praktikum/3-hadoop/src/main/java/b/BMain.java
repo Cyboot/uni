@@ -1,4 +1,4 @@
-package ex1b;
+package b;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,12 +19,12 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+import a.AMain;
+
 import common.Const;
 import common.Utils;
 
-import ex1a.Ex1AMain;
-
-public class Ex1BMain extends Configured implements Tool {
+public class BMain extends Configured implements Tool {
 	private static final double	MIN_DELTA		= 1e-6;
 
 	private int					nrUsers			= 1;
@@ -33,7 +33,7 @@ public class Ex1BMain extends Configured implements Tool {
 	private Map<String, Double>	previousValues	= new HashMap<String, Double>();
 
 
-	public Ex1BMain(int nrUsers) {
+	public BMain(int nrUsers) {
 		this.nrUsers = nrUsers;
 	}
 
@@ -61,9 +61,9 @@ public class Ex1BMain extends Configured implements Tool {
 
 		double delta = 0;
 		int lastIteration = 0;
-		// run the recurring jobs
 		if (job.waitForCompletion(true)) {
 
+			// run the recurring jobs
 			for (int i = 1; i <= maxIterations; i++) {
 				input = "/tmp/out-" + (i - 1);
 				output = "/tmp/out-" + i;
@@ -80,9 +80,9 @@ public class Ex1BMain extends Configured implements Tool {
 					break;
 				}
 			}
-
 		}
 
+		// create the format Job for prettier Output
 		Job formatJob = createFormatJob(getConf(), input, Const.PATH_OUTPUT);
 
 		if (formatJob.waitForCompletion(true)) {
@@ -100,13 +100,18 @@ public class Ex1BMain extends Configured implements Tool {
 		return 1;
 	}
 
+	/**
+	 * calculate the differences (deltas) between the pageranks of two runs
+	 */
 	private double getAverageDelta(Job tmpJob) throws IOException {
 		double sumPagerankDelta = 0;
 		boolean firstRun = true;
 
+		// get the Counter group "USER"
 		CounterGroup counters = tmpJob.getCounters().getGroup("USER");
 		for (Counter counter : counters) {
 			String name = counter.getName();
+			// convert from long to double (Countervalue to pagerank)
 			double pageRank = Double.longBitsToDouble(counter.getValue());
 
 			if (previousValues.containsKey(name)) {
@@ -125,6 +130,9 @@ public class Ex1BMain extends Configured implements Tool {
 			return sumPagerankDelta / size;
 	}
 
+	/**
+	 * create the formatting Job
+	 */
 	private Job createFormatJob(Configuration conf, String input, String output)
 			throws IllegalArgumentException, IOException {
 		Job job = createRecurringJob(conf, input, output);
@@ -142,6 +150,10 @@ public class Ex1BMain extends Configured implements Tool {
 		return job;
 	}
 
+	/**
+	 * create the initial Job, it uses the TextFileInformat (ie the output from
+	 * {@link a.AMain})
+	 */
 	private Job createInitalJob(Configuration conf, String input, String output) throws IOException {
 		Job job = createRecurringJob(conf, input, output);
 
@@ -154,6 +166,10 @@ public class Ex1BMain extends Configured implements Tool {
 		return job;
 	}
 
+
+	/**
+	 * create the recurring Job
+	 */
 	private Job createRecurringJob(Configuration conf, String input, String output)
 			throws IllegalArgumentException, IOException {
 		Job job = Job.getInstance(getConf());
@@ -176,13 +192,13 @@ public class Ex1BMain extends Configured implements Tool {
 
 		job.setReducerClass(PageRankReducer.class);
 
-		job.setJarByClass(Ex1BMain.class);
+		job.setJarByClass(BMain.class);
 		return job;
 	}
 
 	public static void main(String[] args) throws Exception {
 		if (args.length != 3) {
-			System.out.println("Usage: Ex1BMain <input dir> <output dir> <number of iteration>");
+			System.out.println("Usage: BMain <input dir> <output dir> <number of iteration>");
 			System.exit(-1);
 		}
 
@@ -191,10 +207,10 @@ public class Ex1BMain extends Configured implements Tool {
 		String output = args[1];
 		String iterations = args[2];
 
-		Ex1AMain toolRun = new Ex1AMain(false);
-		int exitCode = ToolRunner.run(toolRun, new String[] { input, tmpOut });
-		exitCode = ToolRunner.run(new Ex1BMain(toolRun.getNrUsers()), new String[] { tmpOut,
-				output, iterations });
+		AMain toolRunA = new AMain(false);
+		int exitCode = ToolRunner.run(toolRunA, new String[] { input, tmpOut });
+		exitCode = ToolRunner.run(new BMain(toolRunA.getNrUsers()), new String[] { tmpOut, output,
+				iterations });
 		System.exit(exitCode);
 	}
 }

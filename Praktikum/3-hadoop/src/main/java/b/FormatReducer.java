@@ -1,4 +1,4 @@
-package ex1b;
+package b;
 
 import java.io.IOException;
 
@@ -24,7 +24,7 @@ public class FormatReducer extends Reducer<Text, MapWritable, Text, Text> {
 			}
 		}
 
-		String valueOUT = String.format("PageRank: %.3f (%.2f %%)", sumPageRank, sumPageRank * 100);
+		String valueOUT = String.format("PageRank: %.3f (%.3f %%)", sumPageRank, sumPageRank * 100);
 
 		context.write(new Text(key.toString() + "  "), new Text(valueOUT));
 	}
