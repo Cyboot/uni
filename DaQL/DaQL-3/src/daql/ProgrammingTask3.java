@@ -64,13 +64,19 @@ public class ProgrammingTask3 {
 
             // the resulting (sorted Map)
             // Map<Score, uri1 + uri2>
-            Map<Integer, String> resultSortedMap = new TreeMap<Integer, String>();
+            TreeMap<Double, String> resultSortedMap = new TreeMap<Double, String>();
 
             // find every pair
+            int size = uriFeaturesMap.size() * uriFeaturesMap.size();
+            int i = 1;
+
             for (Entry<String, Set<Feature>> entryOuter : uriFeaturesMap
                     .entrySet()) {
+
                 for (Entry<String, Set<Feature>> entryInner : uriFeaturesMap
                         .entrySet()) {
+                    System.out.println("Progress " + i + "/" + size);
+                    i++;
                     if (entryInner == entryOuter)
                         continue;
 
@@ -79,28 +85,21 @@ public class ProgrammingTask3 {
                             entryOuter.getValue());
                     intersectFeature.retainAll(entryInner.getValue());
 
-                    if (intersectFeature.size() != 0) {
-                        System.out.println(intersectFeature);
-                    }
-
-                    int sum = 0;
+                    double sum = 0;
                     for (Feature feature : intersectFeature) {
-
                         // calculate Frequency on the fly
                         if (!allFeatureMap.containsKey(feature)) {
-                            System.out.println("calc freq for " + feature);
                             allFeatureMap.put(feature,
                                     adapter.getPredicateFrequency(feature));
                         }
 
-                        Integer weight = allFeatureMap.get(feature);
+                        double occurences = allFeatureMap.get(feature);
+                        double infoContent = -Math.log10(occurences / N);
 
-                        sum += weight;
+                        sum += infoContent;
                     }
 
                     if (sum > 0) {
-                        System.out.println("putting into resultMap");
-
                         resultSortedMap.put(sum, entryOuter.getKey() + " : "
                                 + entryInner.getKey());
                     }
@@ -110,8 +109,10 @@ public class ProgrammingTask3 {
             System.out.println();
             System.out.println("==================================");
             System.out.println("======        RESULT        ======");
-            for (Entry<Integer, String> entry : resultSortedMap.entrySet()) {
-                System.out.println(entry.getKey() + "\t" + entry.getValue());
+            for (Entry<Double, String> entry : resultSortedMap.descendingMap()
+                    .entrySet()) {
+                System.out.printf("%.2f \t %s\n", entry.getKey(),
+                        entry.getValue());
             }
 
             adapter.closeConnection();
