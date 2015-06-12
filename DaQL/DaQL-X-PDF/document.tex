@@ -3,6 +3,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}
+\usepackage{amsmath}
 \usepackage{listings}
 \usepackage{graphicx}
  
@@ -11,6 +12,13 @@
 \lhead{Exercise Sheet 3}
 \rhead{Tim Schmiedl}
 \rfoot{Page \thepage}
+
+\lstset{ 
+    language=SQL, % choose the language of the code
+    basicstyle=\footnotesize,
+    frame=single, 
+    keywordstyle=\bfseries, % style for keywords
+}
 
 \begin{document}
 \title{Data Analysis and Query Languages \\
@@ -23,41 +31,156 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Exercise 1}
 \subsection*{a)}
+\subsubsection*{Query}
 \begin{lstlisting}
-SELECT * WHERE {
+PREFIX foaf:<http://xmlns.com/foaf/0.1/>
+PREFIX movies:<http://example.org/movies#>
+PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>
+
+select ?user ?genre (AVG(?ratingValue) AS ?genre_rating)
+where{
+	?user 		movies:hasRated 	?rating.
+	?rating 	movies:hasRating	?ratingValue.
+	?rating 	movies:ratedMovie	?movie.
+	?movie		movies:hasGenre		?genre.
 }
+group by ?user ?genre
+\end{lstlisting}
+\subsubsection*{Result}
+\begin{lstlisting}
+user			genre		genre_rating
+movies:Bob 		"sci-fi" 	"4.0"^^xsd:float
+movies:Bob 		"drama" 	"4.0"^^xsd:float
+movies:Bob 		"thriller" 	"9.0"^^xsd:float
+movies:Bob 		"action" 	"9.0"^^xsd:float
+movies:Alice 		"drama" 	"4.0"^^xsd:float
+movies:Alice 		"sci-fi" 	"4.0"^^xsd:float
+movies:Alice 		"thriller" 	"8.75"^^xsd:float
+movies:Alice 		"action" 	"8.75"^^xsd:float
 \end{lstlisting}
 
 \vspace{1cm}
+\newpage
 \subsection*{b)}
+\subsubsection*{Query}
 \begin{lstlisting}
-SELECT * WHERE {
+PREFIX foaf:<http://xmlns.com/foaf/0.1/>
+PREFIX movies:<http://example.org/movies#>
+PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>
+
+
+select distinct ?user2
+{
+    
+    {
+        select ?user1 (AVG(?ratingValue) AS ?rating1) ?genre
+        where{
+            ?user1      movies:hasRated         ?rating.
+            ?rating     movies:hasRating        ?ratingValue.
+            ?rating     movies:ratedMovie       ?movie.
+            ?movie      movies:hasGenre         ?genre.
+            filter(?user1 = movies:Bob)
+        }
+        group by ?user1 ?genre
+    }
+    {
+        select ?user2 (AVG(?ratingValue) AS ?rating2) ?genre
+        where{
+            ?user2      movies:hasRated         ?rating.
+            ?rating     movies:hasRating        ?ratingValue.
+            ?rating     movies:ratedMovie       ?movie.
+            ?movie      movies:hasGenre         ?genre.
+            filter(?user2 != movies:Bob)
+        }
+        group by ?user2 ?genre
+    }
+    filter(abs(?rating1-?rating2) < 1)
 }
 \end{lstlisting}
+\subsubsection*{Query}
+\begin{lstlisting}
+movies:Alice
+\end{lstlisting}
+
 
 \vspace{2cm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Exercise 2}
 \subsection*{a)}
+\subsubsection*{Result}
+$[[(next :: TGV | next :: Seafrance)^+)]]_G \\
+= (([[next :: TGV ]]_G \cup [[next :: Seafrance]]_G) \cup ([[next :: TGV ]]_G
+\cup ...)\\\\
+= \{(Paris,Calais),(Paris,Dijon),(Paris,Dover),(Calais,Dover)\}
+\\\\
+?y = Dover
+\\
+\Rightarrow \{?x = Paris, ?x = Calais\}
+$
 
 \vspace{1cm}
 \subsection*{b)}
+Same as in a) but with additional OPT-clause.\\\\
+$
+[[(next :: TGV | next :: Seafrance)^+)]]_G  \\
+= \{(Paris,Calais),(Paris,Dijon),(Paris,Dover),(Calais,Dover)\} \\\\
+$
+$
+[[(next :: country ))]]_G  \\
+= \{(Paris,France)\} \\\\
+$
+$
+\Rightarrow
+\{(?x = Paris,  ?y = France),(?x = Calais)\}
+$
+
 
 \vspace{1cm}
 \subsection*{c)}
+\subsubsection*{Description}
+Nodes must be connected by the following conditions:\\
+\begin{itemize}
+  \item From start node \textbf{X} use one of \{Seafrance, NExpress\} at least
+  on time
+  \item the next node must reach London by NExpress (middle node \textbf{Z})
+  \item from this node \textbf{Z} use at least one of \{Seafrance, NExpress\} to
+  get to node \textbf{Y}
+\end{itemize}
+\subsubsection*{Result}
+$\{(?x = Calais, ?y = Hastings),(?x = Calais, ?y = London)\}$
 
 \vspace{1cm}
 \subsection*{d)}
+\subsubsection*{Description}
+All nodes that are connected via a (sub)-property of transport.
+\subsubsection*{Result}
+$\{(?x = Paris, ?y = Calais), (?x = Paris, ?y = Dijon), (?x = Paris, ?y =Dover), 
+ (?x = Paris, ?y = Hastings), (?x = Paris, ?y = London), (?x = Calais, ?y = Dover), 
+(?x = Calais, ?y = Hastings), (?x = Calais, ?y = London), \\
+(?x = Dover, ?y = Hastings), (?x = Dover, ?y = London)\}$
 
 \vspace{1cm}
 \subsection*{e)}
+$P_5' = (?x, (trans(ferry)|trans(train))^+ / self :: [trans(type) / self
+::costal_city]^+ , ?y)$
 
 \vspace{1cm}
 \subsection*{f)}
+Example for trans(city):\\
+$tans(city)  \{?x = Hastings\}$\\
+\\
+Path:
+$Hastings \overset{type}{\rightarrow} coastal_city \overset{sc}{\rightarrow}
+city$
 
 \vspace{1cm}
 \subsection*{g)}
+Example for trans(city):\\
+$tans(city) = \{?x = Paris,?x = Calais, ?x = Dijon, ?x = Dover\}$\\\\
+Example path for Paris:
+$Paris \overset{edge}{\rightarrow} TGV \overset{sc}{\rightarrow} train
+\overset{sc}{\rightarrow} transport \overset{dom}{\rightarrow} city$
 
 
 \end{document}
