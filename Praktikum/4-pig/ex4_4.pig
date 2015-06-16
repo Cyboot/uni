@@ -2,28 +2,28 @@ REGISTER 'RDFStorage.jar';
 
 indata = LOAD '/input/10_6.nt' USING RDFStorage() AS (s:chararray, p:chararray, o:chararray);
 
--- Only friendships are interesting here.
-friendships = FILTER indata BY p == 'foaf:knows';
+-- we are only interested in friendships
+friendships 			= FILTER indata		 BY p == 'foaf:knows';
+friendships_of_user 	= FILTER friendships BY s == '$user';
 
--- We need the friendships of our user.
-friendships_for_user = FILTER friendships BY s == '$user';
 
--- Generate friends-of-friends (excluding our user) as such:
--- USER -> FRIEND -> GUY
-friendships_of_friends_of_user = JOIN friendships BY s, friendships_for_user BY o PARALLEL 8;
-non_cyclic_friendships_of_friends_of_user = FILTER friendships_of_friends_of_user BY friendships::o != '$user';
+-- Generate a friend-of-friend chain: USER -> FRIEND -> FRIEND_OF_FRIEND (check/remove cyles)
+friendship_chain_tmp 	= JOIN friendships 				BY s, friendships_of_user BY o;
+friendship_chain 		= FILTER friendship_chain_tmp 	BY friendships::o != '$user';
 
--- Shrink the list and apply new names.
-friendship_pairs = FOREACH non_cyclic_friendships_of_friends_of_user GENERATE friendships::o AS notfriend:chararray, friendships_for_user::o AS friend:chararray;
+-- clean up the results
+friendship_pairs 		= FOREACH friendship_chain GENERATE friendships::o AS foaf:chararray, friendships_of_user::o AS friend:chararray;
 
--- Group and then count the paths from GUY to USER
-possible_friendships_grouped = GROUP friendship_pairs BY notfriend;
-possible_friendships_counted = FOREACH possible_friendships_grouped GENERATE group, SIZE(friendship_pairs);
+-- Group and then count the paths from  FRIEND_OF_FRIEND to USER
+suggest_friendships_grouped 	= GROUP friendship_pairs BY foaf;
+suggest_friendships_counted 	= FOREACH suggest_friendships_grouped GENERATE group, SIZE(friendship_pairs);
 
--- Order them by count descending
-possible_friendships_sorted = ORDER possible_friendships_counted BY $1 DESC PARALLEL 8;
+-- order and limit to top-10
+suggest_friendships_sorted 		= ORDER suggest_friendships_counted BY $1 DESC;
+suggest_friendships_top10 		= LIMIT suggest_friendships_sorted 10;
 
--- And dump only the top 10 results.
-possible_friendships_limited = LIMIT possible_friendships_sorted 10;
-
-DUMP possible_friendships_limited;
+sh echo " "
+sh echo "+++++++++++++++++++++"
+sh echo "++++++ Results ++++++"
+sh echo "Top 10 suggested friends of $user: "
+DUMP suggest_friendships_top10;
