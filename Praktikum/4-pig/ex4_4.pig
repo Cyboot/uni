@@ -1,6 +1,11 @@
 REGISTER 'RDFStorage.jar';
 
-indata = LOAD '/input/10_6.nt' USING RDFStorage() AS (s:chararray, p:chararray, o:chararray);
+sh echo " "
+sh echo "======================"
+sh echo "==== Exercise 4.4 ===="
+
+%default inputDir '/data/sib/sibdataset200.nt'
+indata = LOAD '$inputDir' USING RDFStorage() AS (s:chararray, p:chararray, o:chararray);
 
 -- we are only interested in friendships
 friendships 			= FILTER indata		 BY p == 'foaf:knows';

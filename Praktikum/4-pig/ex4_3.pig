@@ -1,6 +1,11 @@
 REGISTER 'RDFStorage.jar';
 
-indata = LOAD '/input/10_6.nt' USING RDFStorage() AS (s:chararray, p:chararray, o:chararray);
+sh echo " "
+sh echo "======================"
+sh echo "==== Exercise 4.3 ===="
+
+%default inputDir '/data/sib/sibdataset200.nt'
+indata = LOAD '$inputDir' USING RDFStorage() AS (s:chararray, p:chararray, o:chararray);
 
 -- the three classes
 photos 		= FILTER indata BY p == 'a' 			AND o == 'sib:Photo';

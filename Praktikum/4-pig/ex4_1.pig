@@ -4,7 +4,8 @@ sh echo " "
 sh echo "======================"
 sh echo "==== Exercise 4.1 ===="
 
-indata = LOAD '/input/all.nt' USING RDFStorage() AS (s:chararray, p:chararray, o:chararray);
+%default inputDir '/data/sib/sibdataset200.nt'
+indata = LOAD '$inputDir' USING RDFStorage() AS (s:chararray, p:chararray, o:chararray);
 
 -- we are only interested in birthdays
 birthdays = FILTER indata BY p == 'foaf:birthday';
@@ -28,7 +29,7 @@ max_birthday_count 	= FOREACH months_count_all GENERATE MAX(months_count.$1);
 
 -- And now get all months that have this value as their count.
 sh echo "Selecting the month with the most birthdays..."
-max_birthday_months = JOIN months_count BY $1, max_birthday_count BY $0 USING 'replicated';
+max_birthday_months = JOIN months_count BY $1, max_birthday_count BY $0;
 
 
 -- we just want to know the month
