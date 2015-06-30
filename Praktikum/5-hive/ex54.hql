@@ -1,5 +1,4 @@
 -- Average Likes of user 
-
 -- hive -f ex54.hql
 
 SELECT COUNT(likes.predicate) / COUNT(DISTINCT users.subject) AS average_likes

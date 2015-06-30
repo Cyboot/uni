@@ -1,5 +1,4 @@
 -- Determine the top-K popular persons
-
 -- hive -f ex55.hql -hiveconf k=3
 
 

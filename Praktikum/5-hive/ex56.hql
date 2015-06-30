@@ -1,5 +1,4 @@
 -- How many posts a user have created
-
 -- hive -f ex56.hql
 
 SELECT creations.subject as user, COUNT(creations.object) 

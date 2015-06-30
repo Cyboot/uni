@@ -1,8 +1,13 @@
 package ex3;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.pig.ExecType;
 import org.apache.pig.PigServer;
 import org.apache.pig.backend.executionengine.ExecException;
@@ -15,6 +20,7 @@ import org.apache.pig.backend.executionengine.ExecException;
 public class TransitiveClosure {
 	private String		currentIn;
 	private String		currentOut;
+	private String		orignalIn;
 	private final int	maxIterations;
 	private int			currentIterationIndex;
 	private PigServer	pigServer;
@@ -24,6 +30,7 @@ public class TransitiveClosure {
 		pigServer = new PigServer(ExecType.LOCAL);
 
 		currentIn = input;
+		orignalIn = input;
 		currentOut = "tmp-0";
 		this.maxIterations = iterations;
 	}
@@ -33,7 +40,9 @@ public class TransitiveClosure {
 		long filesize = -1;
 
 		boolean didBreak = false;
+		int degreeOfSeperaton = 1;
 		for (currentIterationIndex = 0; currentIterationIndex < maxIterations; currentIterationIndex++) {
+			System.out.printf("Current Iteration: %d\n", currentIterationIndex);
 			long fileSizeNew = doIteration();
 
 			if (fileSizeNew == filesize) {
@@ -41,13 +50,13 @@ public class TransitiveClosure {
 				break;
 			}
 			filesize = fileSizeNew;
+			degreeOfSeperaton++;
 		}
 
 		System.out.println("==========================================");
 		System.out.println("============    RESULTS    ===============");
 		System.out.println("==========================================");
 
-		long degreeOfSeperaton = currentIterationIndex + 2;
 
 		if (didBreak) {
 			System.out.println("The maximum degree of separation for this Dataset is: "
@@ -60,16 +69,16 @@ public class TransitiveClosure {
 	}
 
 	private long doIteration() throws IOException {
+		FileUtils.deleteDirectory(new File(currentOut));
 		executeEmbeddedScript();
 		long fileLength = getFileSize();
 
-		// if (currentIterationIndex != 0) {
-		// deleteFilesFromInputDirectory();
-		// }
+		if (currentIterationIndex != 0) {
+			deleteFilesFromInputDirectory();
+		}
 
 		currentIn = currentOut;
 		currentOut = "tmp-" + (currentIterationIndex + 1);
-		pigServer.deleteFile(currentOut);
 
 		return fileLength;
 	}
@@ -79,7 +88,8 @@ public class TransitiveClosure {
 		PigServer pigServer = new PigServer(ExecType.LOCAL);
 
 		HashMap<String, String> parameters = new HashMap<String, String>();
-		parameters.put("input", currentIn);
+		parameters.put("inputOrigin", orignalIn);
+		parameters.put("inputIterate", currentIn);
 		pigServer.registerScript(getClass().getResourceAsStream("/closure.pig"), parameters);
 
 		pigServer.store("distincted", currentOut, "PigStorage(' ')");
@@ -119,7 +129,24 @@ public class TransitiveClosure {
 			System.exit(1);
 		}
 
-		TransitiveClosure transitiveClosure = new TransitiveClosure(args[0], ITERATIONS);
+		String inputPath = "tmp-in/data.nt";
+		FileUtils.deleteDirectory(new File("tmp-in"));
+
+		try {
+			Configuration conf = new Configuration();
+			conf.set("fs.defaultFS", "hdfs://sydney.informatik.privat:8020");
+			conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+			FileSystem fs = FileSystem.get(conf);
+
+			System.out.println("Downloading File " + args[0] + " from HDFS...");
+
+			fs.copyToLocalFile(false, new Path(args[0]), new Path(inputPath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
+		TransitiveClosure transitiveClosure = new TransitiveClosure(inputPath, ITERATIONS);
 		transitiveClosure.start();
 	}
 }
