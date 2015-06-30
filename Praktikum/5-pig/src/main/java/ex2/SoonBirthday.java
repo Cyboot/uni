@@ -31,7 +31,6 @@ public class SoonBirthday extends FilterFunc {
 			}
 
 		} catch (Exception e) {
-			// return true;
 			throw new IOException(e);
 		}
 	}

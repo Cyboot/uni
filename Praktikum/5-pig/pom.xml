@@ -21,6 +21,11 @@
 			<version>0.12.0-cdh5.3.2</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-client</artifactId>
+			<version>2.5.0-cdh5.3.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.4</version>
@@ -88,6 +93,14 @@
 						<version>0.1.42</version>
 					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<configuration>
+					<mainClass>ex3.TransitiveClosure</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

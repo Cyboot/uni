@@ -1,9 +1,12 @@
+-- Determine the top-K popular persons
 
-# Calculate the count of incoming edges per user and report the top-k results
-SELECT object AS user, COUNT(predicate) AS amount FROM sibdata
+-- hive -f ex55.hql -hiveconf k=3
+
+
+SELECT object AS user, COUNT(predicate) AS amount FROM data_6
 
 WHERE predicate = 'foaf:knows'
 
 GROUP BY object
 SORT BY amount DESC
-LIMIT $k;
+LIMIT ${hiveconf:k};

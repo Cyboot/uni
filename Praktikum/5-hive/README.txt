@@ -1,14 +1,15 @@
 ## Pig 
-indata = LOAD '/input/10_4.nt' USING RDFStorage() AS (s,p,o) ;
-STORE indata INTO '/input/hive/10_4' USING PigStorage('\t') ;
+REGISTER 'RDFStorage.jar';
+indata = LOAD '/data/sib/sibdataset200.nt' USING RDFStorage() AS (s,p,o) ;
+STORE indata INTO '/user/schmiedt/sibdataset200_tab' USING PigStorage('\t') ;
 
 
 
 
 # Hive
-CREATE EXTERNAL TABLE data_4 (
+CREATE EXTERNAL TABLE data_6 (
 	subject STRING, 
 	predicate STRING, 
 	object STRING )
 ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
-LOCATION '/input/10_4.tsv';
+LOCATION '/user/schmiedt/sibdataset200_tab';
