@@ -14,10 +14,11 @@ import org.apache.pig.backend.executionengine.ExecException;
 
 /**
  * Usage example: java -cp
- * /opt/cloudera/parcels/CDH-4.6.0-1.cdh4.6.0.p0.26/lib/pig/pig.jar:`hadoop
- * classpath`:closure-1.jar dbis.TransitiveClosure /data/sib/sibdataset2000.nt
+ * /opt/cloudera/parcels/CDH-5.3.1-1.cdh5.3.1.p0.5/lib/pig
+ * /pig.jar:5-pig-1.1-jar-with-dependencies.jar ex3.DegreeOfSeparation
+ * /data/sib/sibdataset200.nt
  */
-public class TransitiveClosure {
+public class DegreeOfSeparation {
 	private String		currentIn;
 	private String		currentOut;
 	private String		orignalIn;
@@ -26,16 +27,19 @@ public class TransitiveClosure {
 	private PigServer	pigServer;
 
 
-	public TransitiveClosure(String input, int iterations) throws ExecException {
+	public DegreeOfSeparation(String input, int iterations) throws ExecException {
 		pigServer = new PigServer(ExecType.LOCAL);
 
 		currentIn = input;
 		orignalIn = input;
 		currentOut = "tmp-0";
-		this.maxIterations = iterations;
+		maxIterations = iterations;
 	}
 
-	// Do the steps iterations-times
+	/**
+	 * Do multiple Iterations to find transitive friendships. It will
+	 * automatically stop if there are no more friendships are found.
+	 */
 	public void start() throws IOException {
 		long filesize = -1;
 
@@ -45,6 +49,8 @@ public class TransitiveClosure {
 			System.out.printf("Current Iteration: %d\n", currentIterationIndex);
 			long fileSizeNew = doIteration();
 
+			// if the size of the output file did not change --> we found all
+			// transitive friendships --> stop
 			if (fileSizeNew == filesize) {
 				didBreak = true;
 				break;
@@ -68,6 +74,15 @@ public class TransitiveClosure {
 
 	}
 
+	/**
+	 * <pre>
+	 * do one iteration:
+	 *    - delete the outputDir
+	 *    - execute the embedded Pig-Script
+	 *    - store the results of the script
+	 *    - return the filesize of the current output
+	 * </pre>
+	 */
 	private long doIteration() throws IOException {
 		FileUtils.deleteDirectory(new File(currentOut));
 		executeEmbeddedScript();
@@ -83,7 +98,13 @@ public class TransitiveClosure {
 		return fileLength;
 	}
 
-	// Execute the embedded script transforming the contents of in/* to out/*.
+	/**
+	 * <pre>
+	 * executes the embedded script
+	 *    - Input:  currentIn, orignalIn
+	 *    - Output: currentOut
+	 * </pre>
+	 */
 	private void executeEmbeddedScript() throws IOException {
 		PigServer pigServer = new PigServer(ExecType.LOCAL);
 
@@ -96,8 +117,7 @@ public class TransitiveClosure {
 	}
 
 	/**
-	 * Returns the sum of bytes that are occupied by the files in the given
-	 * directory.
+	 * get the file size of <b>currentOut</b>
 	 */
 	private long getFileSize() throws IOException {
 		String[] files = pigServer.listPaths(currentOut);
@@ -123,7 +143,7 @@ public class TransitiveClosure {
 	}
 
 	public static void main(String[] args) throws IOException {
-		final int ITERATIONS = 7;
+		final int MAX_ITERATIONS = 7;
 		if (args.length < 1) {
 			System.err.println("Usage: TransitiveClosure <input>");
 			System.exit(1);
@@ -138,6 +158,7 @@ public class TransitiveClosure {
 			conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
 			FileSystem fs = FileSystem.get(conf);
 
+			System.out.println("\n\n");
 			System.out.println("Downloading File " + args[0] + " from HDFS...");
 
 			fs.copyToLocalFile(false, new Path(args[0]), new Path(inputPath));
@@ -145,8 +166,10 @@ public class TransitiveClosure {
 			e.printStackTrace();
 		}
 
+		System.out.println("Starting the iterations to find the maximum degree of seperaton,");
+		System.out.println("stoping after a maximum of " + MAX_ITERATIONS + " iterations...\n");
 
-		TransitiveClosure transitiveClosure = new TransitiveClosure(inputPath, ITERATIONS);
+		DegreeOfSeparation transitiveClosure = new DegreeOfSeparation(inputPath, MAX_ITERATIONS);
 		transitiveClosure.start();
 	}
 }
