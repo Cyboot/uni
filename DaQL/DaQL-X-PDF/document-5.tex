@@ -1,0 +1,141 @@
+\documentclass{article}
+\usepackage{relsize}
+
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{graphicx}
+ 
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Exercise Sheet 5}
+\rhead{Tim Schmiedl}
+\rfoot{Page \thepage}
+
+\lstset{ 
+    language=SQL, % choose the language of the code
+    basicstyle=\footnotesize,
+    frame=single, 
+    keywordstyle=\bfseries, % style for keywords
+}
+
+\begin{document}
+\title{Data Analysis and Query Languages \\
+ Exercise Sheet 5}
+\date{\today}
+\author{Tim Schmiedl} 
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Exercise 1}
+
+$(R\bowtie^{1,2,3'}_{3=1'})^*$:\\
+\\
+\begin{tabular}{|c|c|c|}
+\hline
+1 & 2 & 3'\\
+\hline
+St. Andrews & Bus Op 1 & London\\
+\hline
+St. Andrews & Bus Op 1 & Brussels\\
+\hline
+Edinburgh & Train Op 1 & Brussels\\
+\hline
+Train Op 1 & part\_of & NatExpress\\
+\hline
+\end{tabular}\\
+\\
+\\
+$(\bowtie^{1',2,3}_{1=2'}R)^*$:\\
+\\
+\begin{tabular}{|c|c|c|}
+\hline
+1' & 2 & 3\\
+\hline
+St. Andrews & part\_of & NatExpress\\
+\hline
+Edinburgh & part\_of & EastCost\\
+\hline
+London & part\_of & Eurostar\\
+\hline
+\end{tabular}\\
+\\
+\\
+Reach $_{\to}$ defined by Left Kleene Closure: $(\bowtie^{1',2,3}_{3'=1}R)^*$\\
+
+\vspace{2cm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Exercise 2}
+
+
+
+\vspace{2cm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Exercise 3}
+\subsection*{a)}
+For evaluation results see \textbf{I, II, III} in excercise \textbf{c)}.\\\\
+Generally speaking the values for MAE and RMSE seems to improve for higher
+\textit{MinSimilarity}. This seems to be logical as now only more similar
+items/users are considered.\\
+Also Pearson-correlation seems to work better than cosine similarity.
+
+\subsection*{b)}
+u: user with the rating to predict\\
+i: neighbors of user u\\
+maxN: maximum of neighbors to consider \\
+\\
+sim(u, i): similarity between u and i\\
+avg(u): average rating of user u\\
+rating(u): rating for user u\\
+\\
+$
+rating(u) = avg(u) + \frac{\sum\limits_{i=0}^{maxN} (rating(i) - avg(i)) *
+sim(u, i)} {\sum\limits_{i=0}^{maxN} |sim(u, i) | }
+$
+
+\subsection*{c)}
+Changes see code.\\
+\\
+Generally the item based approach seems to work a little better, especially for
+MAE and RMSE. Therefore see the following evaluation results.
+\vspace{1cm}\\
+\paragraph{I)}
+Cosine=true, MinSim=0.8, MinOverlap=3, MinNeighbors=3, Neighbors=25\\
+\begin{tabular}{| l | l | l | l |}
+  \hline          
+& UserBased & ItemBased  \\\hline
+MAE & 0.801 & 0.792 \\
+RMSE & 1.018 & 1.0 \\
+Precision & 0.303 & 0.313 \\
+Recall & 0.688 & 0.685 \\
+  \hline  
+\end{tabular}
+\vspace{1cm}\\
+\paragraph{II)}
+Cosine=false, MinSim=0.2, MinOverlap=5, MinNeighbors=5, Neighbors=25\\
+\begin{tabular}{| l | l | l | l |}
+  \hline          
+& UserBased & ItemBased  \\\hline
+MAE & 0.795 & 0.754 \\
+RMSE & 1.024 & 0.969 \\
+Precision & 0.349 & 0.354 \\
+Recall & 0.666 & 0.624 \\
+  \hline  
+\end{tabular}
+\vspace{1cm}\\
+\paragraph{III)}
+Cosine=false, MinSim=0.9, MinOverlap=5, MinNeighbors=5, Neighbors=25\\
+\begin{tabular}{| l | l | l | l |}
+  \hline          
+& UserBased & ItemBased  \\\hline
+MAE & 0.177 & 0.71 \\
+RMSE & 0.228 & 0.978 \\
+Precision & 0.04 & 0.105 \\
+Recall & 0.002 & 0.018 \\
+  \hline  
+\end{tabular}
+\end{document}
