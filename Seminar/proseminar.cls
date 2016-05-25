@@ -1452,7 +1452,7 @@
 \def\crdata#1{\global\acmcopyr{#1}}
 \def\permission#1{\global\boilerplate{#1}}
 %
-\global\boilerplate={Seminar ''Verteilte Datenbanken'', WS 2011/2012\\~}
+\global\boilerplate={Seminar ''Web Science '', SS 2016\\~}
 \newtoks\copyrightetc
 \global\copyrightetc{}
 \toappear{\the\boilerplate\par

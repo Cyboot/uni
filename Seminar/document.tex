@@ -24,9 +24,7 @@ Tim Schmiedl\\
 
 * propagating news and information about developing events 
 
-
-
-
+% =========================
 
 \subsection*{Current Situation \& Potential}
 + new ranking strategy that considers popularity of tweets
@@ -38,8 +36,7 @@ situations
 information often spreads faster and to a wider audience than what traditional news
 media sources can achieve.
 
-
-
+% =========================
 
 \subsection*{Problems}
 + This ranking method, however, has not taken into account content relevance or the twitter account.
@@ -54,8 +51,7 @@ media sources can achieve.
 
 * NO DISTINCTION between news / chat
 
-
-
+% =========================
 
 \subsection*{Goals of the Papers}
 + In this paper,  a method to rank the tweets  based on their content relevance to the query
@@ -69,7 +65,9 @@ media sources can achieve.
 * aid them in the process of discovering reliable information.  achieved in an automatic way using features extracted from information cascades
 
 
-
+% =========================
+% =========================
+% =========================
 
 
 \section{Twitter Case Study}
@@ -81,11 +79,12 @@ media sources can achieve.
 
 *  Twitter reaction: Information propagation behavior \& False rumor propagation
 
-\section{Retrieving and Labeling of Data}
 
+% =========================
+% =========================
+% =========================
 
-
-\section{Ranking of Tweets}
+\section{Proposed Method: Ranking of \\Tweets}
 + method of P2: An Empirical Study on Learning to Rank of Tweets
 
 + Learning to Rank: data-driven approach
@@ -100,7 +99,7 @@ media sources can achieve.
 
 + Features for Ranking: Content relevance features, Twitter specific features, Account authority features
 
-\paragraph{Content relevance features}
+\subsubsection*{Content relevance features}
 
 + three differen content relevance features
 
@@ -110,20 +109,173 @@ media sources can achieve.
 
 + Length: number of words
 
-\paragraph{Content relevance features}
+\subsubsection*{Twitter Specific Features}
++ URL \& URL count
+
++ Retweet Count
+
++ Hash Tag Score
+
++ Reply
+
++ OOV (Words out of vocabulary)
+
+\subsubsection*{Account Authority Features}
++ There are three important relations between users in Twitter: follow, retweet, and mention. 
+
++ user are more authoritative: more followers, been mentioned in more tweets, listed in more lists and retweeted by more important users
+
++ tweet is more likly to be informative if posted or retweeted by authoritative user
+
++ Scores: Follower, Mention, List, Popularity (computed by PageRank)
+
+% =========================
+% =========================
+% =========================
+
+\section{Proposed Method: Prediction\\ Model for Tweets}
+* method of P1: Predicting information credibility in time-sensitive social media
+
+* The main focus credibility of time-sensitive information, in particular on current news events. 
+
+* newsworthiness of a discussion topic, and that of determining its credibility, are equally important
 
 
-\section{Prediction Model for Tweets}
+\subsection{Retrieving and Labeling of Data}
+* information cascade, which is composed of all of the messages which usually accompany newsworthy events
+
+* detected by Twitter Monitor (keyword-based query), detection of events see Mathioudakis and Koudas, 2010
+
+* 2 month monitoring, keep topics with at most 10.000 tweets = 2.500 topics w  1,873,000 messages (initial topic data)
 
 
+\subsubsection*{Newsworthyness}
+* first step seperate newsworthy topics vs conversation/chat etc.: manual data labeleling procress, Crowdsourcing with Mechanical Turk
+
+* human editor label Data as: NEWS / Chat / Unsure
+
+* short summary sentence for the topic, reduce the effect of click spammers
+
+* Result:  35.6 (136 cases) UNSURE, 29.5 percent NEWS (113 cases), 34.9 percent CHAT (134 cases).
+
+\subsubsection*{Credibility}
+* second round: newsworthy topics should be rated in credibility
+
+* input is the output of the automatic classifier based on the data extracted in the first step
+
+* 747 topics with NEWS label presented to human evaluator for judgement
+
+* 4 different credibility classes: "almost certainly true" (306 cases), "likely to be false" 31.8 percent (237 cases), "almost certainly false" 8.6
+percent (65 cases), 18.6 percent (139 cases) uncertain.
+
+\subsection{Prediction Model for Tweets}
+* main hypothesis is that the level of newsworthiness and credibility can be estimated automatically.
+
+\subsubsection*{Automatic discovery of newsworthy topics}
+* labeled data as training set for different learning schemes. Bayes Net best for the scenario (Random forest comparable results)
+
+* different factors show credible:
+
+* 1. reactions and emotion, opions, negative/positive sentiments 
+
+* 2. certainty, question info or not?
+
+* 3. sources cited, URLs, popular domain
+
+* 4. propagation characteristics, which user, how many follower etc.
+
+* Feature subsets: Text-only, User subset, Topic subset, Propagation subset
+
+* Text: length of tweet, sentiment-based features, URLs, Twitter-specific: hashtags, user mentions (20 features)
+
+* User: aggregated properties of authors like \#friends \#followers (7 features)
+
+* Topic: most frequent URL, most frequent hashtag, most frequent user mention, and most frequent author (4 features)
+
+*  the propagation-based features, fraction of re-tweets, total number of tweets (7 features)
+
+\begin{figure}[h]
+\centering
+\epsfig{file=img/p1_table_feature_subset.png, width=0.45\textwidth}
+\caption{Results for different feature subsets}
+\end{figure}
+
+\subsubsection*{Credibility prediction}
+* how to automatically assign a credibility level (or score) to a topic deemed newsworthy by our previous classifier
+
+*  binary classification:  CREDIBLE , NOT-CREDIBLE 47.2/52.8 percent. In total, these topics involve 165,312 tweets
+
+*  study how different learning algorithms perform in particular learning scenario
+
+*  predictability of the problem is very difficult, with very moderated k-statistic values (see Evaluation)
+
+* Feature selection:  evaluate 684 subsets, best results with 16 features
+
+* fraction of tweets having a positive/negative sentiment; 
+
+* fraction of tweets with URL, URL top 10.000 urls
+
+* tweets containing:  question mark, exclamation mark, first- /second-person pronoun, emoticons
+
+% =========================
+% =========================
+% =========================
 
 \section{Evaluation}
+\subsection{Predicting information credibility in time-sensitive social media}
 
+\subsubsection*{Credibility}
+*  predictability of the problem is very difficult, with very moderated k-statistic values
 
+* main conclusions are that misclassification of not-credible topics as credible is significant, but recall rates are quite acceptable.
 
-\section{Related Work}
+* features positive for credibility: more friends, more URLs + urls in popular 10.000, longer in general, negative sentiments
 
+* features negative for credibility: positive polarity, more question and exclamation marks, first and third-persion pronouns
 
+% =========================
+
+\subsection{An Empirical Study on Learning to Rank of Tweets}
+\subsubsection*{Dataset}
++ 20 query terms on CrowdEye (5 persons, 5 locations, 5 products and 5 movie names)
+
++ 159,298 tweets
+
++ 500 tweets/topic evaluated by human editor: labeled with grade 4 judgements 
+
++ Excellent  20.9 \% ; Good  10.9\%;  Fair 16.9\%; Bad 51.3\% 
+
+\subsubsection*{Results}
++ different methods tested in Five-fold cross-validation of tweets in 16 queries: chronological order, account  authority,  and  content  relevance + combinded
+\begin{figure}[h]
+\centering
+\epsfig{file=img/p2_results.png, width=0.45\textwidth}
+\caption{Performance of Four Ranking Methods}
+\end{figure}
+
++ evaluation of the Feature Selection: which are the best features?
+
++ Combined set of features with best results: URL, Sum\_mention, First\_List, Length, and Important\_follower
+
++ tested with leave out one, results in figure 3
+
++ URL is best feature, other features on its own are not significant
+
+\begin{figure}[h]
+\centering
+\epsfig{file=img/p2_results_features.png, width=0.45\textwidth}
+\caption{Importance of Each Feature}
+\end{figure}
+
+% =========================
+% =========================
+% =========================
+
+%\section{Related Work}
+
+% =========================
+% =========================
+% =========================
 
 \section{Conclusion}
 
