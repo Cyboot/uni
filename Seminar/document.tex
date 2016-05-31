@@ -129,65 +129,66 @@ As the proposed method is tested on twitter it also relys on some of the Tweet-s
 % =========================
 
 \section{Proposed Method: Prediction\\ Model for Tweets}
-* method of P1: Predicting information credibility in time-sensitive social media
+P1 proposes a method to automatically distinguish between different typs of messages in time-sensitive social media like on Twitter.
+The paper follows a supervised learning approach for the task of automatic classification of credible news events. A first classifier decides if an information cascade corresponds to a newsworthy event. Then a second classifier decides if this cascade can be considered credible or not.
 
-* The main focus credibility of time-sensitive information, in particular on current news events. 
-
-* newsworthiness of a discussion topic, and that of determining its credibility, are equally important
-
+% In Section 4 we present the process of creating a labeled data set of newsworthy events for credibility assessment. This procedure is performed using crowdsourcing tools
 
 \subsection{Retrieving and Labeling of Data}
-* information cascade, which is composed of all of the messages which usually accompany newsworthy events
+It should be noted that the work of P1 is based on previous works and is an information cascade, which is composed of all of the messages which usually accompany newsworthy events. This means that only aggregated values of a topic are computed and compared, not on user or message level.
 
-* detected by Twitter Monitor (keyword-based query), detection of events see Mathioudakis and Koudas, 2010
+For the collection of data on Twitter they used Twitter Monitor, which detects sharp increases (bursts) in the frequency of sets of keywords found in messages. It provides a keyword-based query to filter messages to generate a subset of messages who caused the event detector to trigger.
+During their 2 month of monitoring twitter, they collected, after some rough filtering, more than 2.500 topics with ofter 1.873.000 messages in total.
 
-* 2 month monitoring, keep topics with at most 10.000 tweets = 2.500 topics w 1,873,000 messages (initial topic data)
+\subsubsection*{Newsworthiness}
+The first step was to  separate newsworthy topics amoungst all the collected data. The task hereby was to distinguish between conversation or chat messages which have little importance outside a reduced circle of friends and newsworthy topics with the potential to be of interest to a borad set of people.
 
+For the labeling process the authors of P1 used human editors and explored the crowdsourcing tool Mechanical Turk for the characterization of topics.
+The human editors were asked if most of the messages were spreading news about a specific event (labeld as class NEWS) or mostly comments or conversation (labeld as class CHAT). To  reduce the effect of click spammers in the evaluation system the evaluators were asked to provide a sshort summary sentence of the topic.
 
-\subsubsection*{Newsworthyness}
-* first step seperate newsworthy topics vs conversation/chat etc.: manual data labeleling procress, Crowdsourcing with Mechanical Turk
+In this process P1 selected randomly 383 topics with 221.279 in total. From this 383 topics 34.9 percent were labeld as CHAT, 29.5 percent as NEWS and 35.6 percent remained as UNSURE.
 
-* human editor label Data as: NEWS / Chat / Unsure
-
-* short summary sentence for the topic, reduce the effect of click spammers
-
-* Result: 35.6 (136 cases) UNSURE, 29.5 percent NEWS (113 cases), 34.9 percent CHAT (134 cases).
 
 \subsubsection*{Credibility}
-* second round: newsworthy topics should be rated in credibility
+After the classification according to newsworthiness the topics in the NEWS class, aka the newsworthy topics, should be rated in a credibility aspect.
+This second round of manual label takes the output of the previous manual classification as well as data from the automatic classifier build using the manually labeled data as input. With the use of the automatic classifier P1 was able to expand the amount of newsworithy topics to 747 cases.
 
-* input is the output of the automatic classifier based on the data extracted in the first step
+The topics consisting of many tweets were again presented to a human evaluator for judgement. Again they were asked via an Mechanical Turk interface to rate the topics according to for topics: "almost certainly true", "likely to be false", "almost certainly false" or "uncertain". To reduce the effect of spammers they were again asked to provide a short justification sentence. 
 
-* 747 topics with NEWS label presented to human evaluator for judgement
-
-* 4 different credibility classes: "almost certainly true" (306 cases), "likely to be false" 31.8 percent (237 cases), "almost certainly false" 8.6
-percent (65 cases), 18.6 percent (139 cases) uncertain.
+The result of the credibility classes were as follows:
+\begin{itemize}
+\item 306 cases were "almost certainly true", 41 percent
+\item 237 cases were "likely to be false", 31.8 percent
+\item only 65 cases were "almost certainly false", 8.6 percent
+\item 139 cases were "uncertain", 18.6 percent
+\end{itemize}
 
 \subsection{Prediction Model for Tweets}
-* main hypothesis is that the level of newsworthiness and credibility can be estimated automatically.
+The main hypothesis of P1 is that the level of newsworthiness and credibility can be estimated automatically. To accomplish that task they build to different classifier. In the following two sections it is described which factors are useful to establish  information credibility and which features are most useful for automatic estimation of newsworthiness and credibility.
+
+%We believe that there are several factors that can be observed in the social media platform itself that are useful to establish information credibility. These factors include:
+%* 1. reactions and emotion, opions, negative/positive sentiments 
+%* 2. certainty, question info or not?
+%* 3. sources cited, URLs, popular domain
+%* 4. propagation characteristics, which user, how many follower etc.
 
 \subsubsection*{Automatic discovery of newsworthy topics}
-* labeled data as training set for different learning schemes. Bayes Net best for the scenario (Random forest comparable results)
+To train the supervised classifiers to determine if a set of tweets describes a newsworthy event or not the labeled data of the supervised training phase is uesed. As a reminder the labels consider the three classes NEWS, CHAT, UNSURE. Preliminary evaluations showed a negative effect of the UNSURE label, therefore it was decided to remove instances with the UNSURE label completly form the training data set.
 
-* different factors show credible:
+\paragraph{Learning scheme}
+P1 tested different machine learning schemes to run on the data, they included Naive Bayes, Bayes Net, Logistic Regression, and Random Forest. The results of the comparison showed that Bayes Net was the best learning scheme in this scenario, although Random Forest performed almost equally well.
 
-* 1. reactions and emotion, opions, negative/positive sentiments 
+\paragraph{Feature subset}
+After the testing of the different learning schemes P1 studied how different features  contribute in the prediction of newsworthy topics.
+The following subsets were investigated:
 
-* 2. certainty, question info or not?
-
-* 3. sources cited, URLs, popular domain
-
-* 4. propagation characteristics, which user, how many follower etc.
-
-* Feature subsets: Text-only, User subset, Topic subset, Propagation subset
-
-* Text: length of tweet, sentiment-based features, URLs, Twitter-specific: hashtags, user mentions (20 features)
-
-* User: aggregated properties of authors like \#friends \#followers (7 features)
-
-* Topic: most frequent URL, most frequent hashtag, most frequent user mention, and most frequent author (4 features)
-
-* the propagation-based features, fraction of re-tweets, total number of tweets (7 features)
+\begin{itemize}
+\item \b{Text-only subset} considers all the features of the message text. This includes for example the average length of the tweets,
+sentiment-based features, features related to URLs or twitter-specific features like hashtags or user mentions. In total 20 different features are contained in this subset.
+\item \b{User subset} considers all of the features which represent the social network of users. This includes metrics like number of friends or number of followers. This subset contains the seven features.
+\item \b{Topic subset}  considers all of the topic features which include the fraction of tweets that contain one of these four elements (at topic level): most frequent URL, most frequent hashtag, most frequent user mention, and most frequent author
+\item \b{Propagation subset} considers the propagation-based features plus the fraction of re-tweets and the total number of tweets. This subset contains the seven different features.
+\end{itemize}
 
 \begin{figure}[h]
 \centering
@@ -195,14 +196,63 @@ percent (65 cases), 18.6 percent (139 cases) uncertain.
 \caption{Results for different feature subsets}
 \end{figure}
 
+\paragraph{Feature selection}
+With the manually labeled test data P1 were able to compare the effects of different feature subsets on the test data. A small part of the results of this comparision is shown in Figure \ref{fig:boxNews}.
+
+\begin{figure}[h]
+\centering
+\epsfig{file=img/p1_box_news.png, width=0.45\textwidth}
+\caption{Boxplots depiction the distribution of features best separateing newsworthy and chat topics}
+\label{fig:boxNews}
+\end{figure}
+
+The analysis shown in Figure \ref{fig:boxNews} shows eight different features and their effect on newsworthiness. It is shown that authors with a description in their profile are more likly to propagate chat. 
+Topics which have longer tweets tend to be more related to news topics. Newsworthy topics also share more URLs which belong to the top-100 most popular domains but contains less frown emoticons than chat related topics, which might be quite intuitive.
+Also, news topics tend to have less hashtags than chat, and contain more URLs in general.
+
+
 \subsubsection*{Credibility prediction}
-* how to automatically assign a credibility level (or score) to a topic deemed newsworthy by our previous classifier
+The task of the second classifier is to assign a credibility level (or score) to a topic deemed newsworthy by the previous classifier.
 
-* binary classification: CREDIBLE , NOT-CREDIBLE 47.2/52.8 percent. In total, these topics involve 165,312 tweets
+\paragraph{Data selection}
+The manual labeling process introduced 4 types of classes concerning credibility of topics:  "almost certainly true"," likely to be false",  "almost certainly false" and "uncertain". To train the classifier this problem was reduced to a binary classification were topics with the almost certainly true label are assigned to a new class CREDIBLE and all others combined in the class NON-CREDIBLE.
+In total there were 152 topic instances of class CREDIBLE and 136 in the class NON-CREDIBLE which correspond to a class balance of 47.2/52.8 percent. The topics consists of  165,312 tweets in total. 
 
-* study how different learning algorithms perform in particular learning scenario
 
-* predictability of the problem is very difficult, with very moderated k-statistic values (see Evaluation)
+\paragraph{Learning scheme}
+Again there was a need for a lerning scheme for the training of the classifier. Simular to the previous classifier different learning schemes were tested to check the performance on the credibility assesment. The results of the best schemes, Random forest, Logistic and Meta leraning are pictured in Figure \ref{fig:schemeCredibility}.
+
+\begin{figure}[h]
+\centering
+\epsfig{file=img/p1_scheme_credibility.png, width=0.45\textwidth}
+\caption{Results of different lerning algorithms with respect credibility assessment}
+\label{fig:schemeCredibility}
+\end{figure}
+
+As the results shows the predictability of the problem seems to be very difficult. Especially the misclassification of not-credible topics as credible is significant and the moderate kappa-statistic values indicate that improvements over a random predictor are limited.
+
+\paragraph{Feature selection}
+Analogous to the detection of newsworthiness the credibility classifier was tested on different features and feature subsets. Some of these features are shown with their corresponding boxplots in Figure \ref{fig:boxCredibility}:
+
+\begin{itemize}
+\item 
+\item 
+\item 
+\item 
+\item 
+\item 
+\end{itemize}
+
+
+\begin{figure}[h]
+\centering
+\epsfig{file=img/p1_scheme_credibility.png, width=0.45\textwidth}
+\caption{Results of different lerning algorithms with respect credibility assessment}
+\label{fig:boxCredibility}
+\end{figure}
+
+
+
 
 * Feature selection: evaluate 684 subsets, best results with 16 features
 
@@ -211,6 +261,10 @@ percent (65 cases), 18.6 percent (139 cases) uncertain.
 * fraction of tweets with URL, URL top 10.000 urls
 
 * tweets containing: question mark, exclamation mark, first- /second-person pronoun, emoticons
+
+
+
+
 
 % =========================
 % =========================
