@@ -235,19 +235,22 @@ As the results shows the predictability of the problem seems to be very difficul
 Analogous to the detection of newsworthiness the credibility classifier was tested on different features and feature subsets. Some of these features are shown with their corresponding boxplots in Figure \ref{fig:boxCredibility}:
 
 \begin{itemize}
-\item 
-\item 
-\item 
-\item 
-\item 
-\item 
+\item AVG\_STAT\_CNT, the average number of tweets posted by authors of the tweets in the topic in the past
+\item FR\_SENT\_POS, the fraction of tweets having a positive sentiment
+\item FR\_SENT\_NEG, the fraction of tweets having a negative sentiment
+\item FR\_EMOT\_SMILE, the fraction of tweets containing a “smiling” emoticons
+\item FR\_PRON\_FIRST, the fraction of tweets containing a first-person pronoun
+\item FR\_PRON\_THIRD, the fraction of tweets containing a third-person pronoun
+\item FR\_TWEETS\_URL, the fraction of tweets containing a URL
+\item FR\_POP\_DOM\_TOP\_10000, the fraction of URLs pointing to a domain among the top 10,000 most visited ones
+\item FR\_TWEETS\_QUEST\_EXCL\_MARK, the fraction of tweets containing a question or an exclamation mark
 \end{itemize}
 
 
 \begin{figure}[h]
 \centering
-\epsfig{file=img/p1_scheme_credibility.png, width=0.45\textwidth}
-\caption{Results of different lerning algorithms with respect credibility assessment}
+\epsfig{file=img/p1_box_credibility.png, width=0.45\textwidth}
+\caption{Boxplots dipicting distribution of different features, A represents credible, B represents non-credible topics}
 \label{fig:boxCredibility}
 \end{figure}
 
