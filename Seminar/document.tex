@@ -116,13 +116,21 @@ As the proposed method is tested on twitter it also relys on some of the Tweet-s
 \end{itemize}
 
 \subsubsection*{Account Authority Features}
-+ There are three important relations between users in Twitter: follow, retweet, and mention. 
+There are three important relations between users in Twitter: follow, retweet, and mention. 
+In general user are seen as more authoritative if they have more followers, been mentioned in more tweets, listed in more lists and retweeted by more important users.
 
-+ user are more authoritative: more followers, been mentioned in more tweets, listed in more lists and retweeted by more important users
+The main assumption here is that tweets are more likly to be informative if posted or retweeted by authoritative user.
 
-+ tweet is more likly to be informative if posted or retweeted by authoritative user
+To compute the authority of the user, P2 uses four different scores:
+\begin{itemize}
+\item \b{Follower score} number of followers a user has.
+\item \b{Mention score} number of times a user is referred to in tweets.
+\item \b{List score} number of lists a user appears in
+\item \b{Popularity score} computed by PageRank algorithm (Page et al., 1999) based on retweet relations.
+\end{itemize}
 
-+ Scores: Follower, Mention, List, Popularity (computed by PageRank)
+
+
 
 % =========================
 % =========================
@@ -279,34 +287,39 @@ In contrast to credible topics, authors of tweets classified as non-credible con
 
 \subsection{An Empirical Study on Learning to Rank of Tweets}
 \subsubsection*{Dataset}
-+ 20 query terms on CrowdEye (5 persons, 5 locations, 5 products and 5 movie names)
+To test the proposed method the authors of P2 analyzed hot searches on CrowsEye within a week and collected the messages of 20 of the most frequent searched query terms. The terms included 5 persons 5 persons, 5 locations, 5 products and 5 movie names. 
+In total there were 159,298 tweets captured in the time between Mach 25, 2010 and April 2, 2010.
 
-+ 159,298 tweets
+For the generation of a test dataset 500 tweets of each query was labeled by a human editor. The evaluators could apply four judgments grades on the tweets depending on their relevance to the search query. 
+The distribution of the grades were as follows: Excellent 20.9 \% ; Good 10.9\%; Fair 16.9\%; Bad 51.3\%.
 
-+ 500 tweets/topic evaluated by human editor: labeled with grade 4 judgements 
-
-+ Excellent 20.9 \% ; Good 10.9\%; Fair 16.9\%; Bad 51.3\% 
 
 \subsubsection*{Results}
-+ different methods tested in Five-fold cross-validation of tweets in 16 queries: chronological order, account authority, and content relevance + combinded
+For comparision the authors of P2 used the Normalized Discount Cumulative Gain (NDCG) metric, which is common to measure the quality of rankings.
+
+The ranking model, RankSVM, was tested on different types of feature subsets. The main types were 
+The main types of feature subsets proposed by the the authors are chronological order, account authority, and content relevance. Figure \ref{fig:ranking} shows the result of these rankings individually and also the combined or full set of features which is denoted as RankSVM\_Full.
+
 \begin{figure}[h]
 \centering
 \epsfig{file=img/p2_results.png, width=0.45\textwidth}
 \caption{Performance of Four Ranking Methods}
+\label{fig:ranking}
 \end{figure}
 
-+ evaluation of the Feature Selection: which are the best features?
+It is clearly visible that content relevance is the worst type, which should not come as a surprise as it is essential a re-ranking of the results of the Twitter search. It is also shown that account authority is useful for ranking tweet relevance, as it outperforms ranking through chonological order and compete with the model trained with all the features.
 
-+ Combined set of features with best results: URL, Sum\_mention, First\_List, Length, and Important\_follower
+In the next part of the evaluation the authors of P2 tried to find out which feature as well as which combination of features showed the best results.
+To complete this evaluation a greedy feature selection method was used to find the best feature cojunction whichs outperforms RankSVM\_full. The best feature conjunction was found to be composed of the features URL, Sum\_mention, First\_List, Length, and Important\_follower and denoted as RankSVM\_Best. It outperforms RankSVM\_full by about 15,3 \% at NDCG@10.
 
-+ tested with leave out one, results in figure 3
-
-+ URL is best feature, other features on its own are not significant
+In the final evaluation it was tested which of the six features in particular had the most significant effect on RankSVM\_Best. Here the authors of P2 evaluate the importance of each feature by the decrement of performance when removing the feature measured from RankSVM\_Best. 
+Figure \ref{fig:p2_resultFeature} shows that only the feature URL has a significant effect.
 
 \begin{figure}[h]
 \centering
 \epsfig{file=img/p2_results_features.png, width=0.45\textwidth}
 \caption{Importance of Each Feature}
+\label{fig:p2_resultFeature}
 \end{figure}
 
 % =========================
