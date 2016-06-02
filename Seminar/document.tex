@@ -307,13 +307,52 @@ In contrast to credible topics, authors of tweets classified as non-credible con
 % =========================
 
 \section{Comparision of the papers}
+Both papers, P1 and P2, study the information propagated via micro-blogging especially on Twitter. They try to get more that just the text information on messages or tweets by considering additional features like the authors or the propagation of tweets.
+
+\paragraph{Goals of the papers}
+Both paper try to get additional information on tweets and compositions of tweets by looking at meta-information and analysis of different features.
+P2 tries to find relevant tweets to a given topic. For that the authors proposed a ranking model which assigns a score for relevance for each tweet given a topic.
+P1 has two different goals, first they try to find topics (compositions of many tweets) which are newsworthy in an automatic manner to then present to a second classifier, which rates the credibility of the newsworthy topics.
+
+\paragraph{Similarities and differences}
+As the topic of both papers is in the same area, they explore some similar techniques and consider similar features. Both papers classify the types of features in a similar way; text related features like lenght of messages as well as the presens of URLs, user features like the number of friends, but also twitter-specific features like hashtags or user mentions.
+
+Apart from the sligthly different goals there are also some differences in the approce of the authors of P1 and P2. P1 doesn't consider single tweets as own entities but aggregate many tweets into a unit and study the resulting information cascades. The classifier built by the authors of P1 use binary classification (Newsworthy vs Chat or Credible vs Non-Credibile).
+The smallest unit in P2 are the text-messages itself, they are not classified in two classes but are rated in a continously manner for their relevance given a topic.
+
+\paragraph{Results}
+Both papers did extensive evaluation of their methods, they come to the conclusion that different features have more or less influence on the relevance, respectively newsworthiness and credibility. Especially the presents of URLs seem to increase the quality of a tweet, it seems that the constriction of 140 characters in a tweet limits the expression of interesting information quite significantly. Also the effect of longer messages in general suggest the intuitiv notion that longer text contain more information than shorter text.
+
+% author feature: not so intuitiv but work also
+
+\paragraph{Paper review}
+Both paper collect messages from twitter not directly from the news stream but through different tools. P1 uses Twitter Monitor whereas P2 uses query searches form CrowdEye.
+That is an issue because the tools already uses different query and search filters to find and aggregate tweets for a given search query. As a result the messages obtained through the tools are already pre-filtered in a way which might influence the results of the presented methods.
+This is very apparent in P2 and the content-relevance feature which shows siginifcant worse results then other types of features. 
+
+P1 uses binary classification for the assessment of newsworthiness and credibility. As the author already mention in their evaluation chapter, this does often not reflect real life scenarios. Often it is hard even for a human to decide weather a topic is newsworthy or not as well as if certain information is totally credible or not.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 % =========================
 % =========================
 % =========================
-
-\section{Conclusion}
 
 
 
