@@ -51,9 +51,9 @@ As a result of the big variety of content and different kinds of users it is ver
 % =========================
 
 \subsection*{Goals of the Papers}
-The primary element of this report are the two papers...
+The primary element of this report are the two papers P1 and P2.
 
-In P2\cite{P2} they propose a method to rank tweets based on their content relevance to a given query. They use different set of features to find out weather a tweet is interesting for a user. Their \i{learning to rank} algorithm considers content relevance as well as account authority and twitter-specific features to rank tweets. In their evaluation they find out that especially if a URL is present in the tweet improves the relevance as well as that just the number of followers to an account doesn't directly correlates to bigger relevances of tweets from that author.
+P2\cite{P2} proposes a method to rank tweets based on their content relevance to a given query. They use different set of features to find out weather a tweet is interesting for a user. Their \i{learning to rank} algorithm considers content relevance as well as account authority and twitter-specific features to rank tweets. In their evaluation they find out that especially if a URL is present in the tweet improves the relevance as well as that just the number of followers to an account doesn't directly correlates to bigger relevances of tweets from that author.
 
 In P1\cite{P1} the authors had a the main focus on the credibility of time-sensitive information, in particular on current news events. In a previous step they also try to automatically assess the newsworthiness of a discussion topic. This is to differenciate between the chatter and news related messages circulating on twitter in unsorted way. Both newsworthiness and credibility play an equally important role in this paper.
 
@@ -63,13 +63,34 @@ In P1\cite{P1} the authors had a the main focus on the credibility of time-sensi
 
 
 \section{Twitter Case Study}
-* from P1: Predicting information credibility in time-sensitive social media
+P1 presents a case study about information propagation during a crisis event on twitte. The authors describe differences in how a sample of confirmed news and false rumors propagate in the aftermath of the 2010 Earthquake in Chile. This case study provides some valuable insight into credibility characteristics in microblogging.
 
-* earthquake that hit Chile on February 2010
 
-* Event characterization
+\paragraph{Event characterization}
+On Saturday, February 27, 2010 at 03:34 local time an earthquake occured just off the coast of the Maule region of Chile. It reached a magnitude of 8.8 on the Richter scale and lasted for 90 seconds and is therefor one of the ten strongest earthquakes ever recorded in history. Minuites after the earthquake, a
+tsunami reached the Chilean shores. Nearly 560 people died and more than two million people were directly affected by the crisis.
 
-* Twitter reaction: Information propagation behavior \& False rumor propagation
+In the hours and days after this earthquake, Twitter was used to post time-critical information about tsunami alerts, missing people, deceased people, available services, interrupted services, road conditions, functioning gas stations, among other emerging topics related to the catastrophe. After the earthquake, bloggers published first-hand accounts on how they used twitter during the emergency\cite{p1previouswork}.
+
+
+\paragraph{Reactions and Rumors}
+The earthquake reached the level of trending topic in Twitter a few hours after the event. The authors of P1 collected public tweets concerning the topic by searching for specific keywords and hashtags as well as time zones (time zone of Santiago GMT-04:00). In total they collected over 4.700.000 twets from over 700.000 different users  which registered an average of 1,018 followers and 227 followees at the time of the earthquake. 
+Figure Figure \ref{fig:p1propgation} shows that tweets with the term "earthquake" are propagated through the social network.
+
+\begin{figure}[h]
+\centering
+\epsfig{file=img/p1_propgation.png, width=0.45\textwidth}
+\caption{Trend propagation}
+\label{fig:p1propgation}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\epsfig{file=img/p1_rumors.png, width=0.45\textwidth}
+\caption{Number of "affirms" and "Denies" of truths and false rumors}
+\label{fig:p1rumors}
+\end{figure}
+
 
 
 % =========================
