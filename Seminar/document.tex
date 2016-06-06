@@ -51,11 +51,11 @@ As a result of the big variety of content and different kinds of users it is ver
 % =========================
 
 \subsection*{Goals of the Papers}
-The primary element of this report are the two papers P1 and P2.
+The primary element of this report are the two papers Castillo \i{et al.} and Duan \i{et al.}.
 
-P2\cite{P2} proposes a method to rank tweets based on their content relevance to a given query. They use different set of features to find out weather a tweet is interesting for a user. Their \i{learning to rank} algorithm considers content relevance as well as account authority and twitter-specific features to rank tweets. In their evaluation they find out that especially if a URL is present in the tweet improves the relevance as well as that just the number of followers to an account doesn't directly correlates to bigger relevances of tweets from that author.
+Duan \i{et al.}\cite{P2} proposes a method to rank tweets based on their content relevance to a given query. They use different set of features to find out weather a tweet is interesting for a user. Their \i{learning to rank} algorithm considers content relevance as well as account authority and twitter-specific features to rank tweets. In their evaluation they find out that especially if a URL is present in the tweet improves the relevance as well as that just the number of followers to an account doesn't directly correlates to bigger relevances of tweets from that author.
 
-In P1\cite{P1} the authors had a the main focus on the credibility of time-sensitive information, in particular on current news events. In a previous step they also try to automatically assess the newsworthiness of a discussion topic. This is to differentiate between the chatter and news related messages circulating on twitter in unsorted way. Both newsworthiness and credibility play an equally important role in this paper.
+In Castillo \i{et al.}\cite{P1} the authors had a the main focus on the credibility of time-sensitive information, in particular on current news events. In a previous step they also try to automatically assess the newsworthiness of a discussion topic. This is to differentiate between the chatter and news related messages circulating on twitter in unsorted way. Both newsworthiness and credibility play an equally important role in this paper.
 
 % =========================
 % =========================
@@ -63,7 +63,7 @@ In P1\cite{P1} the authors had a the main focus on the credibility of time-sensi
 
 
 \section{Twitter Case Study}
-P1 presents a case study about information propagation during a crisis event on twitter. The authors describe differences in how a sample of confirmed news and false rumors propagate in the aftermath of the 2010 Earthquake in Chile. This case study provides some valuable insight into credibility characteristics in microblogging.
+Castillo \i{et al.} presents a case study about information propagation during a crisis event on twitter. The authors describe differences in how a sample of confirmed news and false rumors propagate in the aftermath of the 2010 Earthquake in Chile. This case study provides some valuable insight into credibility characteristics in microblogging.
 
 
 \paragraph{Event characterization}
@@ -74,7 +74,7 @@ In the hours and days after this earthquake, Twitter was used to post time-criti
 
 
 \paragraph{Reactions and Rumors}
-The earthquake reached the level of trending topic in Twitter a few hours after the event. The authors of P1 collected public tweets concerning the topic by searching for specific keywords and hashtags as well as time zones (time zone of Santiago GMT-04:00). In total they collected over 4.700.000 tweets from over 700.000 different users  which registered an average of 1,018 followers and 227 followers at the time of the earthquake. 
+The earthquake reached the level of trending topic in Twitter a few hours after the event. The authors of Castillo \i{et al.} collected public tweets concerning the topic by searching for specific keywords and hashtags as well as time zones (time zone of Santiago GMT-04:00). In total they collected over 4.700.000 tweets from over 700.000 different users  which registered an average of 1,018 followers and 227 followers at the time of the earthquake. 
 Figure Figure \ref{fig:p1propgation} shows that tweets with the term "earthquake" are propagated through the social network.
 
 \begin{figure}[h]
@@ -83,6 +83,13 @@ Figure Figure \ref{fig:p1propgation} shows that tweets with the term "earthquake
 \caption{Trend propagation}
 \label{fig:p1propgation}
 \end{figure}
+
+
+One of the main ideas of the case study was to study if and how rumors, in particular false rumors, spread in social media. Therefore the credibility of information on Twitter was analyzed. To compare conformed truths with rumors, the authors manually searched some relevant cases of valid news item as well as important cases of rumors which emerged during the crisis but were later confirmed to be false.
+Figure \ref{fig:p1rumors} shows some statistics about rumors and confirmed truths.
+
+The main conclusion the authors of Castillo \i{et al.} extracted from this experiment is that false rumors tend to be
+questioned much more than confirmed truths, which is encouraging as it provided at least one feature that could be used for an automatic classifier. 
 
 \begin{figure}[h]
 \centering
@@ -98,7 +105,7 @@ Figure Figure \ref{fig:p1propgation} shows that tweets with the term "earthquake
 % =========================
 
 \section{Proposed Method: Ranking of \\Tweets}
-This section describes the method of ranking of tweets introduced in P2. 
+This section describes the method of ranking of tweets introduced in Duan \i{et al.}. 
 Their \textit{learning to Rank} method is a data-driven approach to assign a score to tweet. 
 For training the ranking model the RankSVM\cite{ranksvm} algorithm is used.
 
@@ -115,7 +122,7 @@ The learning to rank system used three types of features: Content relevance feat
 
 \subsubsection*{Content relevance features}
 The content relevance features refer to those features which describe the content relevance between queries and tweets.
-P1 uses three different types of content relevance:
+Castillo \i{et al.} uses three different types of content relevance:
 
 \begin{itemize}
 \item \b{Okapi BM25}\cite{okapi} score measures the relevance between query and tweet. It considers the length of a tweet, the average length of tweets and the Inverse Document Frequency.
@@ -142,7 +149,7 @@ In general user are seen as more authoritative if they have more followers, been
 
 The main assumption here is that tweets are more likely to be informative if posted or retweeted by authoritative user.
 
-To compute the authority of the user, P2 uses four different scores:
+To compute the authority of the user, Duan \i{et al.} uses four different scores:
 \begin{itemize}
 \item \b{Follower score} number of followers a user has.
 \item \b{Mention score} number of times a user is referred to in tweets.
@@ -152,7 +159,7 @@ To compute the authority of the user, P2 uses four different scores:
 
 \subsection*{Evaluation}
 \subsubsection*{Dataset}
-To test the proposed method the authors of P2 analyzed hot searches on CrowsEye within a week and collected the messages of 20 of the most frequent searched query terms. The terms included 5 persons 5 persons, 5 locations, 5 products and 5 movie names. 
+To test the proposed method the authors of Duan \i{et al.} analyzed hot searches on CrowsEye within a week and collected the messages of 20 of the most frequent searched query terms. The terms included 5 persons 5 persons, 5 locations, 5 products and 5 movie names. 
 In total there were 159,298 tweets captured in the time between Mach 25, 2010 and April 2, 2010.
 
 For the generation of a test dataset 500 tweets of each query was labeled by a human editor. The evaluators could apply four judgments grades on the tweets depending on their relevance to the search query. 
@@ -160,7 +167,7 @@ The distribution of the grades were as follows: Excellent 20.9 \% ; Good 10.9\%;
 
 
 \subsubsection*{Results}
-For comparison the authors of P2 used the Normalized Discount Cumulative Gain (NDCG) metric, which is common to measure the quality of rankings.
+For comparison the authors of Duan \i{et al.} used the Normalized Discount Cumulative Gain (NDCG) metric, which is common to measure the quality of rankings.
 
 The ranking model, RankSVM, was tested on different types of feature subsets. The main types were 
 The main types of feature subsets proposed by the the authors are chronological order, account authority, and content relevance. Figure \ref{fig:ranking} shows the result of these rankings individually and also the combined or full set of features which is denoted as RankSVM\_Full.
@@ -174,10 +181,10 @@ The main types of feature subsets proposed by the the authors are chronological 
 
 It is clearly visible that content relevance is the worst type, which should not come as a surprise as it is essential a re-ranking of the results of the Twitter search. It is also shown that account authority is useful for ranking tweet relevance, as it outperforms ranking through chronological order and compete with the model trained with all the features.
 
-In the next part of the evaluation the authors of P2 tried to find out which feature as well as which combination of features showed the best results.
+In the next part of the evaluation the authors of Duan \i{et al.} tried to find out which feature as well as which combination of features showed the best results.
 To complete this evaluation a greedy feature selection method was used to find the best feature conjunction which outperforms RankSVM\_full. The best feature conjunction was found to be composed of the features URL, Sum\_mention, First\_List, Length, and Important\_follower and denoted as RankSVM\_Best. It outperforms RankSVM\_full by about 15,3 \% at NDCG@10.
 
-In the final evaluation it was tested which of the six features in particular had the most significant effect on RankSVM\_Best. Here the authors of P2 evaluate the importance of each feature by the decrement of performance when removing the feature measured from RankSVM\_Best. 
+In the final evaluation it was tested which of the six features in particular had the most significant effect on RankSVM\_Best. Here the authors of Duan \i{et al.} evaluate the importance of each feature by the decrement of performance when removing the feature measured from RankSVM\_Best. 
 Figure \ref{fig:p2_resultFeature} shows that only the feature URL has a significant effect.
 
 \begin{figure}[h]
@@ -193,13 +200,13 @@ Figure \ref{fig:p2_resultFeature} shows that only the feature URL has a signific
 % =========================
 
 \section{Proposed Method: Prediction\\ Model for Tweets}
-P1 proposes a method to automatically distinguish between different types of messages in time-sensitive social media like on Twitter.
+Castillo \i{et al.} proposes a method to automatically distinguish between different types of messages in time-sensitive social media like on Twitter.
 The paper follows a supervised learning approach for the task of automatic classification of credible news events. A first classifier decides if an information cascade corresponds to a newsworthy event. Then a second classifier decides if this cascade can be considered credible or not.
 
 % In Section 4 we present the process of creating a labeled data set of newsworthy events for credibility assessment. This procedure is performed using crowdsourcing tools
 
 \subsection{Retrieving and Labeling of Data}
-It should be noted that the work of P1 is based on previous works and is an information cascade, which is composed of all of the messages which usually accompany newsworthy events. This means that only aggregated values of a topic are computed and compared, not on user or message level.
+It should be noted that the work of Castillo \i{et al.} is based on previous works and is an information cascade, which is composed of all of the messages which usually accompany newsworthy events. This means that only aggregated values of a topic are computed and compared, not on user or message level.
 
 For the collection of data on Twitter they used Twitter Monitor\cite{twittermonitor}, which detects sharp increases (bursts) in the frequency of sets of keywords found in messages. It provides a keyword-based query to filter messages to generate a subset of messages who caused the event detector to trigger.
 During their 2 month of monitoring twitter, they collected, after some rough filtering, more than 2.500 topics with ofter 1.873.000 messages in total.
@@ -207,15 +214,15 @@ During their 2 month of monitoring twitter, they collected, after some rough fil
 \subsubsection*{Newsworthiness}
 The first step was to  separate newsworthy topics amongst all the collected data. The task hereby was to distinguish between conversation or chat messages which have little importance outside a reduced circle of friends and newsworthy topics with the potential to be of interest to a broader set of people.
 
-For the labeling process the authors of P1 used human editors and explored the crowdsourcing tool Mechanical Turk for the characterization of topics.
-The human editors were asked if most of the messages were spreading news about a specific event (labeled as class NEWS) or mostly comments or conversation (labeld as class CHAT). To  reduce the effect of click spammers in the evaluation system the evaluators were asked to provide a short summary sentence of the topic.
+For the labeling process the authors of Castillo \i{et al.} used human editors and explored the crowdsourcing tool Mechanical Turk for the characterization of topics.
+The human editors were asked if most of the messages were spreading news about a specific event (labeled as class NEWS) or mostly comments or conversation (labeled as class CHAT). To  reduce the effect of click spammers in the evaluation system the evaluators were asked to provide a short summary sentence of the topic.
 
-In this process P1 selected randomly 383 topics with 221.279 in total. From this 383 topics 34.9 percent were labeled as CHAT, 29.5 percent as NEWS and 35.6 percent remained as UNSURE.
+In this process Castillo \i{et al.} selected randomly 383 topics with 221.279 in total. From this 383 topics 34.9 percent were labeled as CHAT, 29.5 percent as NEWS and 35.6 percent remained as UNSURE.
 
 
 \subsubsection*{Credibility}
 After the classification according to newsworthiness the topics in the NEWS class, aka the newsworthy topics, should be rated in a credibility aspect.
-This second round of manual label takes the output of the previous manual classification as well as data from the automatic classifier build using the manually labeled data as input. With the use of the automatic classifier P1 was able to expand the amount of newsworthy topics to 747 cases.
+This second round of manual label takes the output of the previous manual classification as well as data from the automatic classifier build using the manually labeled data as input. With the use of the automatic classifier Castillo \i{et al.} was able to expand the amount of newsworthy topics to 747 cases.
 
 The topics consisting of many tweets were again presented to a human evaluator for judgment. Again they were asked via an Mechanical Turk interface to rate the topics according to for topics: "almost certainly true", "likely to be false", "almost certainly false" or "uncertain". To reduce the effect of spammers they were again asked to provide a short justification sentence. 
 
@@ -228,7 +235,7 @@ The result of the credibility classes were as follows:
 \end{itemize}
 
 \subsection{Prediction Model for Tweets}
-The main hypothesis of P1 is that the level of newsworthiness and credibility can be estimated automatically. To accomplish that task they build to different classifier. In the following two sections it is described which factors are useful to establish  information credibility and which features are most useful for automatic estimation of newsworthiness and credibility.
+The main hypothesis of Castillo \i{et al.} is that the level of newsworthiness and credibility can be estimated automatically. To accomplish that task they build to different classifier. In the following two sections it is described which factors are useful to establish  information credibility and which features are most useful for automatic estimation of newsworthiness and credibility.
 
 %We believe that there are several factors that can be observed in the social media platform itself that are useful to establish information credibility. These factors include:
 %* 1. reactions and emotion, opions, negative/positive sentiments 
@@ -237,13 +244,13 @@ The main hypothesis of P1 is that the level of newsworthiness and credibility ca
 %* 4. propagation characteristics, which user, how many follower etc.
 
 \subsubsection*{Automatic discovery of newsworthy topics}
-To train the supervised classifiers to determine if a set of tweets describes a newsworthy event or not the labeled data of the supervised training phase is uesed. As a reminder the labels consider the three classes NEWS, CHAT, UNSURE. Preliminary evaluations showed a negative effect of the UNSURE label, therefore it was decided to remove instances with the UNSURE label completely form the training data set.
+To train the supervised classifiers to determine if a set of tweets describes a newsworthy event or not the labeled data of the supervised training phase is used. As a reminder the labels consider the three classes NEWS, CHAT, UNSURE. Preliminary evaluations showed a negative effect of the UNSURE label, therefore it was decided to remove instances with the UNSURE label completely form the training data set.
 
 \paragraph{Learning scheme}
-P1 tested different machine learning schemes to run on the data, they included Naive Bayes, Bayes Net, Logistic Regression, and Random Forest. The results of the comparison showed that Bayes Net was the best learning scheme in this scenario, although Random Forest performed almost equally well.
+Castillo \i{et al.} tested different machine learning schemes to run on the data, they included Naive Bayes, Bayes Net, Logistic Regression, and Random Forest. The results of the comparison showed that Bayes Net was the best learning scheme in this scenario, although Random Forest performed almost equally well.
 
 \paragraph{Feature subset}
-After the testing of the different learning schemes P1 studied how different features  contribute in the prediction of newsworthy topics.
+After the testing of the different learning schemes Castillo \i{et al.} studied how different features  contribute in the prediction of newsworthy topics.
 The following subsets were investigated:
 
 \begin{itemize}
@@ -261,7 +268,7 @@ sentiment-based features, features related to URLs or twitter-specific features 
 \end{figure}
 
 \paragraph{Feature selection}
-With the manually labeled test data P1 were able to compare the effects of different feature subsets on the test data. A small part of the results of this comparision is shown in Figure \ref{fig:boxNews}.
+With the manually labeled test data Castillo \i{et al.} were able to compare the effects of different feature subsets on the test data. A small part of the results of this comparision is shown in Figure \ref{fig:boxNews}.
 
 \begin{figure}[h]
 \centering
@@ -328,18 +335,18 @@ In contrast to credible topics, authors of tweets classified as non-credible con
 % =========================
 
 \section{Comparision of the papers}
-Both papers, P1 and P2, study the information propagated via microblogging especially on Twitter. They try to get more that just the text information on messages or tweets by considering additional features like the authors or the propagation of tweets.
+Both papers, Castillo \i{et al.} and Duan \i{et al.}, study the information propagated via microblogging especially on Twitter. They try to get more that just the text information on messages or tweets by considering additional features like the authors or the propagation of tweets.
 
 \paragraph{Goals of the papers}
 Both paper try to get additional information on tweets and compositions of tweets by looking at meta-information and analysis of different features.
-P2 tries to find relevant tweets to a given topic. For that the authors proposed a ranking model which assigns a score for relevance for each tweet given a topic.
-P1 has two different goals, first they try to find topics (compositions of many tweets) which are newsworthy in an automatic manner to then present to a second classifier, which rates the credibility of the newsworthy topics.
+Duan \i{et al.} tries to find relevant tweets to a given topic. For that the authors proposed a ranking model which assigns a score for relevance for each tweet given a topic.
+Castillo \i{et al.} has two different goals, first they try to find topics (compositions of many tweets) which are newsworthy in an automatic manner to then present to a second classifier, which rates the credibility of the newsworthy topics.
 
 \paragraph{Similarities and differences}
 As the topic of both papers is in the same area, they explore some similar techniques and consider similar features. Both papers classify the types of features in a similar way; text related features like length of messages as well as the presents of URLs, user features like the number of friends, but also twitter-specific features like hashtags or user mentions.
 
-Apart from the slightly different goals there are also some differences in the approach of the authors of P1 and P2. P1 doesn't consider single tweets as own entities but aggregate many tweets into a unit and study the resulting information cascades. The classifier built by the authors of P1 use binary classification (Newsworthy vs Chat or Credible vs Non-Credibile).
-The smallest unit in P2 are the text-messages itself, they are not classified in two classes but are rated in a continuously manner for their relevance given a topic.
+Apart from the slightly different goals there are also some differences in the approach of the authors of Castillo \i{et al.} and Duan \i{et al.}. Castillo \i{et al.} doesn't consider single tweets as own entities but aggregate many tweets into a unit and study the resulting information cascades. The classifier built by the authors of Castillo \i{et al.} use binary classification (Newsworthy vs Chat or Credible vs Non-Credible).
+The smallest unit in Duan \i{et al.} are the text-messages itself, they are not classified in two classes but are rated in a continuously manner for their relevance given a topic.
 
 \paragraph{Results}
 Both papers did extensive evaluation of their methods, they come to the conclusion that different features have more or less influence on the relevance, respectively newsworthiness and credibility. Especially the presents of URLs seem to increase the quality of a tweet, it seems that the constriction of 140 characters in a tweet limits the expression of interesting information quite significantly. Also the effect of longer messages in general suggest the intuitive notion that longer text contain more information than shorter text.
@@ -347,11 +354,11 @@ Both papers did extensive evaluation of their methods, they come to the conclusi
 % author feature: not so intuitiv but work also
 
 \paragraph{Paper review}
-Both paper collect messages from twitter not directly from the news stream but through different tools. P1 uses Twitter Monitor whereas P2 uses query searches form CrowdEye.
+Both paper collect messages from twitter not directly from the news stream but through different tools. Castillo \i{et al.} uses Twitter Monitor whereas Duan \i{et al.} uses query searches form CrowdEye.
 That is an issue because the tools already uses different query and search filters to find and aggregate tweets for a given search query. As a result the messages obtained through the tools are already pre-filtered in a way which might influence the results of the presented methods.
-This is very apparent in P2 and the content-relevance feature which shows significant worse results then other types of features. 
+This is very apparent in Duan \i{et al.} and the content-relevance feature which shows significant worse results then other types of features. 
 
-P1 uses binary classification for the assessment of newsworthiness and credibility. As the author already mention in their evaluation chapter, this does often not reflect real life scenarios. Often it is hard even for a human to decide weather a topic is newsworthy or not as well as if certain information is totally credible or not.
+Castillo \i{et al.} uses binary classification for the assessment of newsworthiness and credibility. As the author already mention in their evaluation chapter, this does often not reflect real life scenarios. Often it is hard even for a human to decide weather a topic is newsworthy or not as well as if certain information is totally credible or not.
 
 
 
